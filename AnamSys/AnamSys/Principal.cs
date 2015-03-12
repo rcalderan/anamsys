@@ -18,7 +18,7 @@ namespace AnamSys
     {
         public bool debug_mode = true;
         private Classes.Database db = new Classes.Database();
-        private GroupBox[] boxes;
+        private Control[] boxes;
 
         System.Globalization.CultureInfo pt_Br = new System.Globalization.CultureInfo("pt-BR");
 
@@ -31,7 +31,7 @@ namespace AnamSys
         public principalForm()
         {
             InitializeComponent();
-            GroupBox[] gbs = { conGb };
+            Control[] gbs = { conGb, cad1Pn };
             boxes = gbs;
         }
 
@@ -44,7 +44,7 @@ namespace AnamSys
         {
             try
             {
-                mostraGb(conGb);
+                mostraGb(cad1Pn);
                 conCadTp.Select();
             }
             catch(Exception erro)
@@ -56,13 +56,13 @@ namespace AnamSys
 
         private void mostraGb()
         {
-            foreach (GroupBox g in boxes)
+            foreach (Control g in boxes)
                 g.Hide();
         }
-        
-        private void mostraGb(GroupBox gb)
+
+        private void mostraGb(Control gb)
         {
-            foreach (GroupBox g in boxes)
+            foreach (Control g in boxes)
                 if (g == gb)
                     gb.Show();
                 else
@@ -647,7 +647,8 @@ namespace AnamSys
             {
                 if (MessageBox.Show("Deseja Salvar?", "Salvar?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    if (db.proximo("paciente", "id") == cad1IdMtb.Text)
+                    string prox = db.proximo("paciente", "id");
+                    if (prox == cad1IdMtb.Text)
                     {
                         string query = "INSERT INTO paciente values(" + cad1IdMtb.Text + ",'" +
                             cad1NomeTb.Text + "','" +
@@ -668,7 +669,9 @@ namespace AnamSys
                         limpaPaciente();
                     }
                     else
+                    {
                         MessageBox.Show("Para Atualizar o cadastro, utize o botão \"Atualizar\"");
+                    }
                 }
             }
             catch (Exception erro)
@@ -1561,6 +1564,123 @@ namespace AnamSys
                     else
                         MessageBox.Show("Formato incorreto!");
                 }
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void cad1ProxLv_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int prox = Convert.ToInt32(db.proximo("paciente", "id")),atual = Convert.ToInt32(cad1IdMtb.Text);
+                atual++;
+                if (atual< prox)
+                {
+                    cad1IdMtb.Text = atual.ToString();
+                    carregaPaciente(atual.ToString());
+                }
+                else
+                    limpaPaciente();
+
+
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void cad1AntLb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int prox = Convert.ToInt32(db.proximo("paciente", "id")), atual = Convert.ToInt32(cad1IdMtb.Text);
+                atual--;
+                if (0 != atual)
+                {
+                    
+                    cad1IdMtb.Text = atual.ToString();
+                    carregaPaciente(atual.ToString());
+                }
+
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void cad1Pn_VisibleChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (cad1Pn.Visible)
+                {
+                    Point loc = new Point(principalForm.ActiveForm.Width / 2 - cad1Pn.Width / 2, principalForm.ActiveForm.Height / 2 - cad1Pn.Height / 2);
+                    cad1Pn.Location = loc;
+                }
+
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void RecizeAppWindow()
+        {
+            try
+            {
+                Point loc;
+                foreach (Control c in boxes)
+                {
+                    if (c.Visible)
+                    {
+                        if (principalForm.ActiveForm.Width < c.Width)
+                            principalForm.ActiveForm.Width = c.Width;
+
+                        if (principalForm.ActiveForm.Height < c.Height)
+                            principalForm.ActiveForm.Height = c.Height;
+
+                        loc = new Point(principalForm.ActiveForm.Width / 2 - c.Width / 2, principalForm.ActiveForm.Height / 2 - c.Height / 2);
+                        c.Location = loc;
+                    }
+                }
+
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void principalForm_Resize(object sender, EventArgs e)
+        {
+            try
+            {
+                RecizeAppWindow();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void cad1ConsultasBt_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+
             }
             catch (Exception err)
             {

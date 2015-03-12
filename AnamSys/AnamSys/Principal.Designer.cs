@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.cadastrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pacienteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,14 +65,17 @@
             this.conConXLb = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.conCadTp = new System.Windows.Forms.TabPage();
-            this.panel9 = new System.Windows.Forms.Panel();
+            this.cad1Pn = new System.Windows.Forms.Panel();
+            this.cad1AntLb = new System.Windows.Forms.Label();
+            this.cad1ProxLv = new System.Windows.Forms.Label();
             this.cadNascDtp = new System.Windows.Forms.DateTimePicker();
             this.label9 = new System.Windows.Forms.Label();
             this.conConTp = new System.Windows.Forms.TabPage();
             this.conDetailsPn = new System.Windows.Forms.Panel();
             this.conDetParCh = new System.Windows.Forms.CheckBox();
+            this.label54 = new System.Windows.Forms.Label();
             this.conDetNomeLb = new System.Windows.Forms.Label();
+            this.conDetIdLb = new System.Windows.Forms.Label();
             this.conDetParPn = new System.Windows.Forms.Panel();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -84,7 +87,7 @@
             this.panel11 = new System.Windows.Forms.Panel();
             this.conDetLpLb = new System.Windows.Forms.Label();
             this.conDetXLb = new System.Windows.Forms.Label();
-            this.conDetIdLb = new System.Windows.Forms.Label();
+            this.label52 = new System.Windows.Forms.Label();
             this.panel10 = new System.Windows.Forms.Panel();
             this.conDataDtp = new System.Windows.Forms.DateTimePicker();
             this.conHoraCb = new System.Windows.Forms.ComboBox();
@@ -96,7 +99,11 @@
             this.conDetAddLb = new System.Windows.Forms.Label();
             this.label55 = new System.Windows.Forms.Label();
             this.panel12 = new System.Windows.Forms.Panel();
+            this.conDetFormaCb = new System.Windows.Forms.ComboBox();
             this.ConDetPgCh = new System.Windows.Forms.CheckBox();
+            this.label57 = new System.Windows.Forms.Label();
+            this.label56 = new System.Windows.Forms.Label();
+            this.label53 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
             this.conDetValorTb = new System.Windows.Forms.TextBox();
             this.conNovoBt = new System.Windows.Forms.Button();
@@ -209,17 +216,11 @@
             this.label38 = new System.Windows.Forms.Label();
             this.conLpLb = new System.Windows.Forms.Label();
             this.conXLb = new System.Windows.Forms.Label();
-            this.conDetFormaCb = new System.Windows.Forms.ComboBox();
-            this.label53 = new System.Windows.Forms.Label();
-            this.label52 = new System.Windows.Forms.Label();
-            this.label54 = new System.Windows.Forms.Label();
-            this.label56 = new System.Windows.Forms.Label();
-            this.label57 = new System.Windows.Forms.Label();
+            this.cad1ConsultasBt = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.conGb.SuspendLayout();
             this.tabControl1.SuspendLayout();
-            this.conCadTp.SuspendLayout();
-            this.panel9.SuspendLayout();
+            this.cad1Pn.SuspendLayout();
             this.conConTp.SuspendLayout();
             this.conDetailsPn.SuspendLayout();
             this.conDetParPn.SuspendLayout();
@@ -268,7 +269,7 @@
             // pacienteToolStripMenuItem
             // 
             this.pacienteToolStripMenuItem.Name = "pacienteToolStripMenuItem";
-            this.pacienteToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.pacienteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.pacienteToolStripMenuItem.Text = "Paciente";
             this.pacienteToolStripMenuItem.Click += new System.EventHandler(this.pacienteToolStripMenuItem_Click);
             // 
@@ -321,9 +322,9 @@
             // cad1DeletaBt
             // 
             this.cad1DeletaBt.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cad1DeletaBt.Location = new System.Drawing.Point(889, 513);
+            this.cad1DeletaBt.Location = new System.Drawing.Point(534, 310);
             this.cad1DeletaBt.Name = "cad1DeletaBt";
-            this.cad1DeletaBt.Size = new System.Drawing.Size(75, 31);
+            this.cad1DeletaBt.Size = new System.Drawing.Size(75, 25);
             this.cad1DeletaBt.TabIndex = 3;
             this.cad1DeletaBt.Text = "Deleta";
             this.cad1DeletaBt.UseVisualStyleBackColor = true;
@@ -332,9 +333,9 @@
             // cad1NovoBt
             // 
             this.cad1NovoBt.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cad1NovoBt.Location = new System.Drawing.Point(444, 513);
+            this.cad1NovoBt.Location = new System.Drawing.Point(278, 310);
             this.cad1NovoBt.Name = "cad1NovoBt";
-            this.cad1NovoBt.Size = new System.Drawing.Size(75, 31);
+            this.cad1NovoBt.Size = new System.Drawing.Size(75, 25);
             this.cad1NovoBt.TabIndex = 3;
             this.cad1NovoBt.Text = "Novo";
             this.cad1NovoBt.UseVisualStyleBackColor = true;
@@ -343,9 +344,9 @@
             // cad1AtualizaBt
             // 
             this.cad1AtualizaBt.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cad1AtualizaBt.Location = new System.Drawing.Point(23, 513);
+            this.cad1AtualizaBt.Location = new System.Drawing.Point(22, 310);
             this.cad1AtualizaBt.Name = "cad1AtualizaBt";
-            this.cad1AtualizaBt.Size = new System.Drawing.Size(75, 31);
+            this.cad1AtualizaBt.Size = new System.Drawing.Size(75, 25);
             this.cad1AtualizaBt.TabIndex = 3;
             this.cad1AtualizaBt.Text = "Atualiza";
             this.cad1AtualizaBt.UseVisualStyleBackColor = true;
@@ -354,7 +355,7 @@
             // cad1UfTb
             // 
             this.cad1UfTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cad1UfTb.Location = new System.Drawing.Point(543, 166);
+            this.cad1UfTb.Location = new System.Drawing.Point(556, 166);
             this.cad1UfTb.MaxLength = 2;
             this.cad1UfTb.Name = "cad1UfTb";
             this.cad1UfTb.Size = new System.Drawing.Size(53, 26);
@@ -363,7 +364,7 @@
             // cad1CidadeTb
             // 
             this.cad1CidadeTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cad1CidadeTb.Location = new System.Drawing.Point(308, 166);
+            this.cad1CidadeTb.Location = new System.Drawing.Point(321, 166);
             this.cad1CidadeTb.Name = "cad1CidadeTb";
             this.cad1CidadeTb.Size = new System.Drawing.Size(229, 26);
             this.cad1CidadeTb.TabIndex = 2;
@@ -372,7 +373,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(536, 151);
+            this.label6.Location = new System.Drawing.Point(549, 151);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(40, 13);
             this.label6.TabIndex = 0;
@@ -381,7 +382,7 @@
             // cad1ObsTb
             // 
             this.cad1ObsTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cad1ObsTb.Location = new System.Drawing.Point(9, 207);
+            this.cad1ObsTb.Location = new System.Drawing.Point(22, 207);
             this.cad1ObsTb.Multiline = true;
             this.cad1ObsTb.Name = "cad1ObsTb";
             this.cad1ObsTb.Size = new System.Drawing.Size(587, 86);
@@ -391,7 +392,7 @@
             // cad1BairroTb
             // 
             this.cad1BairroTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cad1BairroTb.Location = new System.Drawing.Point(9, 166);
+            this.cad1BairroTb.Location = new System.Drawing.Point(22, 166);
             this.cad1BairroTb.Name = "cad1BairroTb";
             this.cad1BairroTb.Size = new System.Drawing.Size(286, 26);
             this.cad1BairroTb.TabIndex = 2;
@@ -400,7 +401,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(304, 151);
+            this.label5.Location = new System.Drawing.Point(317, 151);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(40, 13);
             this.label5.TabIndex = 0;
@@ -410,7 +411,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(6, 194);
+            this.label10.Location = new System.Drawing.Point(19, 194);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(70, 13);
             this.label10.TabIndex = 0;
@@ -419,7 +420,7 @@
             // cad1EnderecoTb
             // 
             this.cad1EnderecoTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cad1EnderecoTb.Location = new System.Drawing.Point(9, 122);
+            this.cad1EnderecoTb.Location = new System.Drawing.Point(22, 122);
             this.cad1EnderecoTb.Name = "cad1EnderecoTb";
             this.cad1EnderecoTb.Size = new System.Drawing.Size(587, 26);
             this.cad1EnderecoTb.TabIndex = 2;
@@ -428,7 +429,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(6, 151);
+            this.label4.Location = new System.Drawing.Point(19, 151);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(34, 13);
             this.label4.TabIndex = 0;
@@ -437,7 +438,7 @@
             // cad1NomeTb
             // 
             this.cad1NomeTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cad1NomeTb.Location = new System.Drawing.Point(8, 76);
+            this.cad1NomeTb.Location = new System.Drawing.Point(21, 76);
             this.cad1NomeTb.Name = "cad1NomeTb";
             this.cad1NomeTb.Size = new System.Drawing.Size(483, 26);
             this.cad1NomeTb.TabIndex = 2;
@@ -446,7 +447,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(6, 109);
+            this.label3.Location = new System.Drawing.Point(19, 109);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(53, 13);
             this.label3.TabIndex = 0;
@@ -455,7 +456,7 @@
             // cad1RgMtb
             // 
             this.cad1RgMtb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cad1RgMtb.Location = new System.Drawing.Point(249, 34);
+            this.cad1RgMtb.Location = new System.Drawing.Point(262, 34);
             this.cad1RgMtb.Mask = "0000000000";
             this.cad1RgMtb.Name = "cad1RgMtb";
             this.cad1RgMtb.Size = new System.Drawing.Size(98, 26);
@@ -464,7 +465,7 @@
             // cad1CpfMtb
             // 
             this.cad1CpfMtb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cad1CpfMtb.Location = new System.Drawing.Point(93, 34);
+            this.cad1CpfMtb.Location = new System.Drawing.Point(106, 34);
             this.cad1CpfMtb.Mask = "00000000000";
             this.cad1CpfMtb.Name = "cad1CpfMtb";
             this.cad1CpfMtb.Size = new System.Drawing.Size(107, 26);
@@ -474,7 +475,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(246, 22);
+            this.label8.Location = new System.Drawing.Point(259, 22);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(23, 13);
             this.label8.TabIndex = 0;
@@ -483,7 +484,7 @@
             // cad1IdMtb
             // 
             this.cad1IdMtb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cad1IdMtb.Location = new System.Drawing.Point(8, 34);
+            this.cad1IdMtb.Location = new System.Drawing.Point(21, 34);
             this.cad1IdMtb.Mask = "00000";
             this.cad1IdMtb.Name = "cad1IdMtb";
             this.cad1IdMtb.Size = new System.Drawing.Size(35, 26);
@@ -495,7 +496,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(90, 22);
+            this.label7.Location = new System.Drawing.Point(103, 22);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(27, 13);
             this.label7.TabIndex = 0;
@@ -505,7 +506,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(5, 62);
+            this.label2.Location = new System.Drawing.Point(18, 62);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 0;
@@ -515,7 +516,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(5, 21);
+            this.label1.Location = new System.Drawing.Point(13, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(18, 13);
             this.label1.TabIndex = 0;
@@ -525,15 +526,15 @@
             // 
             this.conGb.Controls.Add(this.conConXLb);
             this.conGb.Controls.Add(this.label15);
-            this.conGb.Controls.Add(this.tabControl1);
             this.conGb.Controls.Add(this.conLpLb);
             this.conGb.Controls.Add(this.conXLb);
+            this.conGb.Controls.Add(this.tabControl1);
             this.conGb.Location = new System.Drawing.Point(12, 27);
             this.conGb.Name = "conGb";
             this.conGb.Size = new System.Drawing.Size(1010, 684);
             this.conGb.TabIndex = 2;
             this.conGb.TabStop = false;
-            this.conGb.Text = "Paciente";
+            this.conGb.Text = "Consulta";
             this.conGb.Visible = false;
             this.conGb.VisibleChanged += new System.EventHandler(this.conGb_VisibleChanged);
             // 
@@ -561,7 +562,6 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.conCadTp);
             this.tabControl1.Controls.Add(this.conConTp);
             this.tabControl1.Controls.Add(this.conPlanoTp);
             this.tabControl1.Controls.Add(this.conAvalTp);
@@ -574,52 +574,69 @@
             this.tabControl1.Size = new System.Drawing.Size(1004, 665);
             this.tabControl1.TabIndex = 9;
             // 
-            // conCadTp
+            // cad1Pn
             // 
-            this.conCadTp.Controls.Add(this.panel9);
-            this.conCadTp.Controls.Add(this.cad1DeletaBt);
-            this.conCadTp.Controls.Add(this.cad1NovoBt);
-            this.conCadTp.Controls.Add(this.cad1AtualizaBt);
-            this.conCadTp.Location = new System.Drawing.Point(4, 22);
-            this.conCadTp.Name = "conCadTp";
-            this.conCadTp.Size = new System.Drawing.Size(996, 639);
-            this.conCadTp.TabIndex = 5;
-            this.conCadTp.Text = "Identificação Pessoal";
-            this.conCadTp.UseVisualStyleBackColor = true;
+            this.cad1Pn.BackColor = System.Drawing.Color.LightGray;
+            this.cad1Pn.Controls.Add(this.cad1ConsultasBt);
+            this.cad1Pn.Controls.Add(this.cad1AntLb);
+            this.cad1Pn.Controls.Add(this.cad1DeletaBt);
+            this.cad1Pn.Controls.Add(this.cad1ProxLv);
+            this.cad1Pn.Controls.Add(this.cad1NovoBt);
+            this.cad1Pn.Controls.Add(this.cadNascDtp);
+            this.cad1Pn.Controls.Add(this.cad1AtualizaBt);
+            this.cad1Pn.Controls.Add(this.cad1IdMtb);
+            this.cad1Pn.Controls.Add(this.label3);
+            this.cad1Pn.Controls.Add(this.cad1NomeTb);
+            this.cad1Pn.Controls.Add(this.label1);
+            this.cad1Pn.Controls.Add(this.cad1UfTb);
+            this.cad1Pn.Controls.Add(this.cad1RgMtb);
+            this.cad1Pn.Controls.Add(this.label6);
+            this.cad1Pn.Controls.Add(this.label4);
+            this.cad1Pn.Controls.Add(this.cad1CidadeTb);
+            this.cad1Pn.Controls.Add(this.cad1EnderecoTb);
+            this.cad1Pn.Controls.Add(this.label2);
+            this.cad1Pn.Controls.Add(this.cad1CpfMtb);
+            this.cad1Pn.Controls.Add(this.label10);
+            this.cad1Pn.Controls.Add(this.label7);
+            this.cad1Pn.Controls.Add(this.label9);
+            this.cad1Pn.Controls.Add(this.label8);
+            this.cad1Pn.Controls.Add(this.cad1ObsTb);
+            this.cad1Pn.Controls.Add(this.label5);
+            this.cad1Pn.Controls.Add(this.cad1BairroTb);
+            this.cad1Pn.Location = new System.Drawing.Point(249, 30);
+            this.cad1Pn.Name = "cad1Pn";
+            this.cad1Pn.Size = new System.Drawing.Size(627, 389);
+            this.cad1Pn.TabIndex = 4;
+            this.cad1Pn.Visible = false;
+            this.cad1Pn.VisibleChanged += new System.EventHandler(this.cad1Pn_VisibleChanged);
             // 
-            // panel9
+            // cad1AntLb
             // 
-            this.panel9.BackColor = System.Drawing.Color.LightGray;
-            this.panel9.Controls.Add(this.cadNascDtp);
-            this.panel9.Controls.Add(this.cad1IdMtb);
-            this.panel9.Controls.Add(this.label3);
-            this.panel9.Controls.Add(this.cad1NomeTb);
-            this.panel9.Controls.Add(this.label1);
-            this.panel9.Controls.Add(this.cad1UfTb);
-            this.panel9.Controls.Add(this.cad1RgMtb);
-            this.panel9.Controls.Add(this.label6);
-            this.panel9.Controls.Add(this.label4);
-            this.panel9.Controls.Add(this.cad1CidadeTb);
-            this.panel9.Controls.Add(this.cad1EnderecoTb);
-            this.panel9.Controls.Add(this.label2);
-            this.panel9.Controls.Add(this.cad1CpfMtb);
-            this.panel9.Controls.Add(this.label10);
-            this.panel9.Controls.Add(this.label7);
-            this.panel9.Controls.Add(this.label9);
-            this.panel9.Controls.Add(this.label8);
-            this.panel9.Controls.Add(this.cad1ObsTb);
-            this.panel9.Controls.Add(this.label5);
-            this.panel9.Controls.Add(this.cad1BairroTb);
-            this.panel9.Location = new System.Drawing.Point(3, 3);
-            this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(607, 301);
-            this.panel9.TabIndex = 4;
+            this.cad1AntLb.AutoSize = true;
+            this.cad1AntLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cad1AntLb.Location = new System.Drawing.Point(1, 37);
+            this.cad1AntLb.Name = "cad1AntLb";
+            this.cad1AntLb.Size = new System.Drawing.Size(19, 20);
+            this.cad1AntLb.TabIndex = 4;
+            this.cad1AntLb.Text = "<";
+            this.cad1AntLb.Click += new System.EventHandler(this.cad1AntLb_Click);
+            // 
+            // cad1ProxLv
+            // 
+            this.cad1ProxLv.AutoSize = true;
+            this.cad1ProxLv.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cad1ProxLv.Location = new System.Drawing.Point(55, 37);
+            this.cad1ProxLv.Name = "cad1ProxLv";
+            this.cad1ProxLv.Size = new System.Drawing.Size(19, 20);
+            this.cad1ProxLv.TabIndex = 4;
+            this.cad1ProxLv.Text = ">";
+            this.cad1ProxLv.Click += new System.EventHandler(this.cad1ProxLv_Click);
             // 
             // cadNascDtp
             // 
             this.cadNascDtp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cadNascDtp.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.cadNascDtp.Location = new System.Drawing.Point(391, 34);
+            this.cadNascDtp.Location = new System.Drawing.Point(404, 34);
             this.cadNascDtp.Name = "cadNascDtp";
             this.cadNascDtp.Size = new System.Drawing.Size(100, 26);
             this.cadNascDtp.TabIndex = 3;
@@ -628,7 +645,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(388, 22);
+            this.label9.Location = new System.Drawing.Point(401, 22);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(104, 13);
             this.label9.TabIndex = 0;
@@ -687,6 +704,16 @@
             this.conDetParCh.UseVisualStyleBackColor = true;
             this.conDetParCh.Visible = false;
             // 
+            // label54
+            // 
+            this.label54.AutoSize = true;
+            this.label54.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label54.Location = new System.Drawing.Point(3, 115);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(91, 17);
+            this.label54.TabIndex = 3;
+            this.label54.Text = "Consulta N°: ";
+            // 
             // conDetNomeLb
             // 
             this.conDetNomeLb.AutoSize = true;
@@ -697,12 +724,22 @@
             this.conDetNomeLb.TabIndex = 3;
             this.conDetNomeLb.Text = "Nome do Paciente";
             // 
+            // conDetIdLb
+            // 
+            this.conDetIdLb.AutoSize = true;
+            this.conDetIdLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.conDetIdLb.Location = new System.Drawing.Point(89, 111);
+            this.conDetIdLb.Name = "conDetIdLb";
+            this.conDetIdLb.Size = new System.Drawing.Size(81, 25);
+            this.conDetIdLb.TabIndex = 0;
+            this.conDetIdLb.Text = "Numero";
+            // 
             // conDetParPn
             // 
             this.conDetParPn.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.conDetParPn.Controls.Add(this.button2);
             this.conDetParPn.Controls.Add(this.button1);
-            this.conDetParPn.Location = new System.Drawing.Point(424, 178);
+            this.conDetParPn.Location = new System.Drawing.Point(373, 178);
             this.conDetParPn.Name = "conDetParPn";
             this.conDetParPn.Size = new System.Drawing.Size(88, 73);
             this.conDetParPn.TabIndex = 80;
@@ -820,15 +857,15 @@
             this.conDetXLb.Text = "X";
             this.conDetXLb.Click += new System.EventHandler(this.conDetXLb_Click);
             // 
-            // conDetIdLb
+            // label52
             // 
-            this.conDetIdLb.AutoSize = true;
-            this.conDetIdLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.conDetIdLb.Location = new System.Drawing.Point(89, 111);
-            this.conDetIdLb.Name = "conDetIdLb";
-            this.conDetIdLb.Size = new System.Drawing.Size(81, 25);
-            this.conDetIdLb.TabIndex = 0;
-            this.conDetIdLb.Text = "Numero";
+            this.label52.AutoSize = true;
+            this.label52.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label52.Location = new System.Drawing.Point(181, 2);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(90, 25);
+            this.label52.TabIndex = 0;
+            this.label52.Text = "Consulta";
             // 
             // panel10
             // 
@@ -983,6 +1020,21 @@
             this.panel12.Size = new System.Drawing.Size(466, 105);
             this.panel12.TabIndex = 75;
             // 
+            // conDetFormaCb
+            // 
+            this.conDetFormaCb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.conDetFormaCb.FormattingEnabled = true;
+            this.conDetFormaCb.Items.AddRange(new object[] {
+            "Dinheiro",
+            "Debito",
+            "Cheque",
+            "CreditoAVista",
+            "CreditoParcelado"});
+            this.conDetFormaCb.Location = new System.Drawing.Point(187, 26);
+            this.conDetFormaCb.Name = "conDetFormaCb";
+            this.conDetFormaCb.Size = new System.Drawing.Size(193, 28);
+            this.conDetFormaCb.TabIndex = 79;
+            // 
             // ConDetPgCh
             // 
             this.ConDetPgCh.AutoSize = true;
@@ -994,6 +1046,35 @@
             this.ConDetPgCh.Text = "PG";
             this.ConDetPgCh.UseVisualStyleBackColor = true;
             // 
+            // label57
+            // 
+            this.label57.AutoSize = true;
+            this.label57.Location = new System.Drawing.Point(381, 33);
+            this.label57.Name = "label57";
+            this.label57.Size = new System.Drawing.Size(16, 13);
+            this.label57.TabIndex = 0;
+            this.label57.Text = "->";
+            this.label57.Visible = false;
+            // 
+            // label56
+            // 
+            this.label56.AutoSize = true;
+            this.label56.Location = new System.Drawing.Point(171, 33);
+            this.label56.Name = "label56";
+            this.label56.Size = new System.Drawing.Size(16, 13);
+            this.label56.TabIndex = 0;
+            this.label56.Text = "->";
+            // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(187, 10);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(108, 13);
+            this.label53.TabIndex = 0;
+            this.label53.Text = "Forma de Pagamento";
+            this.label53.Visible = false;
+            // 
             // label24
             // 
             this.label24.AutoSize = true;
@@ -1002,7 +1083,6 @@
             this.label24.Size = new System.Drawing.Size(90, 13);
             this.label24.TabIndex = 0;
             this.label24.Text = "Valor da Consulta";
-            this.label24.Visible = false;
             // 
             // conDetValorTb
             // 
@@ -1012,7 +1092,6 @@
             this.conDetValorTb.Size = new System.Drawing.Size(161, 30);
             this.conDetValorTb.TabIndex = 77;
             this.conDetValorTb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.conDetValorTb.Visible = false;
             this.conDetValorTb.KeyDown += new System.Windows.Forms.KeyEventHandler(this.conDetValorTb_KeyDown);
             // 
             // conNovoBt
@@ -1400,16 +1479,16 @@
             // 
             // chart1
             // 
-            chartArea2.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chart1.Legends.Add(legend2);
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(15, 20);
             this.chart1.Name = "chart1";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chart1.Series.Add(series2);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(1152, 343);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
@@ -2191,90 +2270,36 @@
             this.conXLb.Text = "X";
             this.conXLb.Click += new System.EventHandler(this.conXLb_Click);
             // 
-            // conDetFormaCb
+            // cad1ConsultasBt
             // 
-            this.conDetFormaCb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.conDetFormaCb.FormattingEnabled = true;
-            this.conDetFormaCb.Items.AddRange(new object[] {
-            "Dinheiro",
-            "Debito",
-            "Cheque",
-            "CreditoAVista",
-            "CreditoParcelado"});
-            this.conDetFormaCb.Location = new System.Drawing.Point(187, 26);
-            this.conDetFormaCb.Name = "conDetFormaCb";
-            this.conDetFormaCb.Size = new System.Drawing.Size(193, 28);
-            this.conDetFormaCb.TabIndex = 79;
-            // 
-            // label53
-            // 
-            this.label53.AutoSize = true;
-            this.label53.Location = new System.Drawing.Point(187, 10);
-            this.label53.Name = "label53";
-            this.label53.Size = new System.Drawing.Size(108, 13);
-            this.label53.TabIndex = 0;
-            this.label53.Text = "Forma de Pagamento";
-            this.label53.Visible = false;
-            // 
-            // label52
-            // 
-            this.label52.AutoSize = true;
-            this.label52.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label52.Location = new System.Drawing.Point(181, 2);
-            this.label52.Name = "label52";
-            this.label52.Size = new System.Drawing.Size(90, 25);
-            this.label52.TabIndex = 0;
-            this.label52.Text = "Consulta";
-            // 
-            // label54
-            // 
-            this.label54.AutoSize = true;
-            this.label54.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label54.Location = new System.Drawing.Point(3, 115);
-            this.label54.Name = "label54";
-            this.label54.Size = new System.Drawing.Size(91, 17);
-            this.label54.TabIndex = 3;
-            this.label54.Text = "Consulta N°: ";
-            // 
-            // label56
-            // 
-            this.label56.AutoSize = true;
-            this.label56.Location = new System.Drawing.Point(171, 33);
-            this.label56.Name = "label56";
-            this.label56.Size = new System.Drawing.Size(16, 13);
-            this.label56.TabIndex = 0;
-            this.label56.Text = "->";
-            this.label56.Visible = false;
-            // 
-            // label57
-            // 
-            this.label57.AutoSize = true;
-            this.label57.Location = new System.Drawing.Point(381, 33);
-            this.label57.Name = "label57";
-            this.label57.Size = new System.Drawing.Size(16, 13);
-            this.label57.TabIndex = 0;
-            this.label57.Text = "->";
-            this.label57.Visible = false;
+            this.cad1ConsultasBt.Location = new System.Drawing.Point(22, 345);
+            this.cad1ConsultasBt.Name = "cad1ConsultasBt";
+            this.cad1ConsultasBt.Size = new System.Drawing.Size(587, 31);
+            this.cad1ConsultasBt.TabIndex = 5;
+            this.cad1ConsultasBt.Text = "Consultas";
+            this.cad1ConsultasBt.UseVisualStyleBackColor = true;
+            this.cad1ConsultasBt.Click += new System.EventHandler(this.cad1ConsultasBt_Click);
             // 
             // principalForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1028, 750);
+            this.Controls.Add(this.cad1Pn);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.conGb);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "principalForm";
             this.Text = "AnamSys";
             this.Load += new System.EventHandler(this.principalForm_Load);
+            this.Resize += new System.EventHandler(this.principalForm_Resize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.conGb.ResumeLayout(false);
             this.conGb.PerformLayout();
             this.tabControl1.ResumeLayout(false);
-            this.conCadTp.ResumeLayout(false);
-            this.panel9.ResumeLayout(false);
-            this.panel9.PerformLayout();
+            this.cad1Pn.ResumeLayout(false);
+            this.cad1Pn.PerformLayout();
             this.conConTp.ResumeLayout(false);
             this.conConTp.PerformLayout();
             this.conDetailsPn.ResumeLayout(false);
@@ -2392,7 +2417,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.TabPage conCadTp;
         private System.Windows.Forms.Label conTodasLb;
         private System.Windows.Forms.ComboBox conMinCb;
         private System.Windows.Forms.ComboBox conHoraCb;
@@ -2489,7 +2513,7 @@
         private System.Windows.Forms.Label conDetNomeLb;
         private System.Windows.Forms.TextBox conDetParTotTb;
         private System.Windows.Forms.CheckBox conDetParCh;
-        private System.Windows.Forms.Panel panel9;
+        private System.Windows.Forms.Panel cad1Pn;
         private System.Windows.Forms.DateTimePicker cadNascDtp;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Panel conDetParPn;
@@ -2505,6 +2529,9 @@
         private System.Windows.Forms.Label label54;
         private System.Windows.Forms.Label label57;
         private System.Windows.Forms.Label label56;
+        private System.Windows.Forms.Label cad1AntLb;
+        private System.Windows.Forms.Label cad1ProxLv;
+        private System.Windows.Forms.Button cad1ConsultasBt;
     }
 }
 

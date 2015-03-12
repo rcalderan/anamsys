@@ -20,3 +20,14 @@ C:\Users\noivamodas2\Documents\Visual Studio 2013\Projects\AnamSys\AnamSys\obj\D
 C:\Users\noivamodas2\Documents\Visual Studio 2013\Projects\AnamSys\AnamSys\obj\Debug\AnamSys.principalForm.resources
 C:\Users\noivamodas2\Documents\Visual Studio 2013\Projects\AnamSys\AnamSys\obj\Debug\AnamSys.Properties.Resources.resources
 C:\Users\noivamodas2\Documents\Visual Studio 2013\Projects\AnamSys\AnamSys\obj\Debug\AnamSys.csproj.GenerateResource.Cache
+D:\AnamSys_Repo\AnamSys\AnamSys\bin\Debug\AnamSys.exe.config
+D:\AnamSys_Repo\AnamSys\AnamSys\obj\Debug\AnamSys.exe
+D:\AnamSys_Repo\AnamSys\AnamSys\obj\Debug\AnamSys.pdb
+D:\AnamSys_Repo\AnamSys\AnamSys\bin\Debug\AnamSys.exe
+D:\AnamSys_Repo\AnamSys\AnamSys\bin\Debug\AnamSys.pdb
+D:\AnamSys_Repo\AnamSys\AnamSys\bin\Debug\System.Data.SQLite.dll
+D:\AnamSys_Repo\AnamSys\AnamSys\bin\Debug\System.Data.SQLite.pdb
+D:\AnamSys_Repo\AnamSys\AnamSys\obj\Debug\AnamSys.csprojResolveAssemblyReference.cache
+D:\AnamSys_Repo\AnamSys\AnamSys\obj\Debug\AnamSys.principalForm.resources
+D:\AnamSys_Repo\AnamSys\AnamSys\obj\Debug\AnamSys.Properties.Resources.resources
+D:\AnamSys_Repo\AnamSys\AnamSys\obj\Debug\AnamSys.csproj.GenerateResource.Cache
