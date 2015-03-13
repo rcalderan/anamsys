@@ -19,6 +19,8 @@ namespace AnamSys
         public bool debug_mode = true;
         private Classes.Database db = new Classes.Database();
         private Control[] boxes;
+        private bool isMoving = false;
+        private Point hoverCursorLocation;
 
         System.Globalization.CultureInfo pt_Br = new System.Globalization.CultureInfo("pt-BR");
 
@@ -31,21 +33,16 @@ namespace AnamSys
         public principalForm()
         {
             InitializeComponent();
-            Control[] gbs = { conGb, cad1Pn };
-            boxes = gbs;
+            Control[] paineis = { consultasPn, cad1Pn, finPn, planoPn, avalPn };
+            boxes = paineis;
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void pacienteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
                 mostraGb(cad1Pn);
-                conCadTp.Select();
             }
             catch(Exception erro)
             {
@@ -63,10 +60,22 @@ namespace AnamSys
         private void mostraGb(Control gb)
         {
             foreach (Control g in boxes)
+            {
                 if (g == gb)
                     gb.Show();
                 else
                     g.Hide();
+
+                if (gb.Visible)
+                {
+                    if (principalForm.ActiveForm.Width < gb.Width)
+                        principalForm.ActiveForm.Width = gb.Width;
+                    if (principalForm.ActiveForm.Height < gb.Height)
+                        principalForm.ActiveForm.Height = gb.Height;
+
+                    gb.Location = new Point(principalForm.ActiveForm.Width / 2 - gb.Width / 2, principalForm.ActiveForm.Height / 2 - gb.Height / 2);
+                }
+            }
         }
 
 
@@ -570,6 +579,9 @@ namespace AnamSys
                 conAvalTb.Clear();
                 conPlanoTb.Clear();
                 conPacienteLb.Text = "Nome do Paciente";
+
+                avalNomeLb.Text = "Nome";
+                planoNomeLb.Text = "Nome";
                 listaConsultas();
             }
             catch (Exception erro)
@@ -709,6 +721,8 @@ namespace AnamSys
                     DataRow dr = dt.Rows[0];
                     DateTime nas;
                     cad1NomeTb.Text = dr["nome"].ToString();
+                    avalNomeLb.Text = dr["nome"].ToString();
+                    planoNomeLb.Text = dr["nome"].ToString();
                     cad1RgMtb.Text = dr["rg"].ToString();
                     cad1CpfMtb.Text = dr["cpf"].ToString();
                     cad1EnderecoTb.Text = dr["endereco"].ToString();
@@ -792,7 +806,7 @@ namespace AnamSys
 
         private void consultarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            mostraGb(conGb);
+            mostraGb(consultasPn);
         }
         
         private void conSalvarBt_Click(object sender, EventArgs e)
@@ -820,7 +834,7 @@ namespace AnamSys
                             int.Parse(cad1IdMtb.Text),
                             0,
                             conDetDetTb.Text,
-                            conFichaTp.Text,
+                            conPlanoTb.Text,
                             f,
                             DateTime.Now,
                             data,
@@ -877,18 +891,15 @@ namespace AnamSys
 
         private void agendaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            conGb.Parent.Controls.Add(agentaPn);
-            agentaPn.Location = new Point(1, 1);
         }
 
         private void conConXLb_Click(object sender, EventArgs e)
         {
-            conGb.Hide();
+            mostraGb();
         }
 
         private void label15_Click(object sender, EventArgs e)
         {
-            limpaPaciente();
         }
 
         private void txtAno_KeyDown(object sender, KeyEventArgs e)
@@ -1064,15 +1075,7 @@ namespace AnamSys
             }
 
         }
-
-        private void conGb_VisibleChanged(object sender, EventArgs e)
-        {
-            if (conGb.Visible)
-            {
-                carregaConfig();
-            }
-        }
-
+        
         private void carregaConfig()
         {
             try
@@ -1386,7 +1389,11 @@ namespace AnamSys
             try
             {
                 limpaConsulta();
-                conDetailsPn.Show();
+                if (!conDetailsPn.Visible)
+                    conDetailsPn.Show();
+                else
+                    conDetailsPn.Hide();
+
             }
             catch (Exception err)
             {
@@ -1400,38 +1407,48 @@ namespace AnamSys
 
             try
             {
-                ListViewItem i = (ListViewItem)sender;
-                DataTable dt = db.query("select * from consulta where id=" + i.SubItems[0].Text);
-                if (dt!=null)
+                ListViewItem i = null;
+                foreach (ListViewItem item in conLv.SelectedItems)
                 {
-                    limpaConsulta();
-                    conDetNomeLb.Text = i.SubItems[1].Text;
-                    conDetDetTb.Text = dt.Rows[0]["datelhes"].ToString();
-                    DateTime dia;
-                    if (DateTime.TryParse(i.SubItems[2].Text + ":00", out dia))
+                    i = item;
+                    break;
+                }
+                if (i != null)
+                {
+                    DataTable dt = db.query("select * from consulta where id=" + i.SubItems[0].Text);
+                    if (dt != null)
                     {
-                        conDataDtp.Value = dia;
-                        conHoraCb.Text = dia.Hour.ToString();
-                        conMinCb.Text = dia.ToString("mm");
-                    }
-                    dt = db.query("select * from fatura where paciente=" + dt.Rows[0]["paciente"].ToString()+" order by parcela asc");
-                    if (dt!=null)
-                    {
-                        Double aux_Valor;
-                        if (dt.Rows.Count < 12)
-                            conDetParNup.Value = dt.Rows.Count + 1;
-                        else
-                            conDetParNup.Value = 12;
-                        foreach (DataRow dr in dt.Rows)
+                        limpaConsulta();
+                        conDetIdLb.Text = i.SubItems[0].Text;
+                        conDetNomeLb.Text = i.SubItems[1].Text;
+                        conDetDetTb.Text = dt.Rows[0]["detalhes"].ToString();
+                        DateTime dia;
+                        if (DateTime.TryParse(i.SubItems[2].Text + ":00", out dia))
                         {
-                            if (!double.TryParse(dr["valor"].ToString(),out aux_Valor))
-                                aux_Valor = 0;
-                            conDetParLbox.Items.Add(aux_Valor.ToString("F2"));
+                            conDataDtp.Value = dia;
+                            conHoraCb.Text = dia.Hour.ToString();
+                            conMinCb.Text = dia.ToString("mm");
                         }
-                    }
-                    else
-                    {
-                        conDetParNup.Value = 1;
+                        dt = db.query("select * from fatura where paciente=" + dt.Rows[0]["paciente"].ToString() + " order by parcela asc");
+                        if (dt != null)
+                        {
+                            Double aux_Valor;
+                            if (dt.Rows.Count < 12)
+                                conDetParNup.Value = dt.Rows.Count + 1;
+                            else
+                                conDetParNup.Value = 12;
+                            foreach (DataRow dr in dt.Rows)
+                            {
+                                if (!double.TryParse(dr["valor"].ToString(), out aux_Valor))
+                                    aux_Valor = 0;
+                                conDetParLbox.Items.Add(aux_Valor.ToString("F2"));
+                            }
+                        }
+                        else
+                        {
+                            conDetParNup.Value = 1;
+                        }
+                        conDetailsPn.Show();
                     }
                 }
             }
@@ -1679,8 +1696,225 @@ namespace AnamSys
         {
             try
             {
+                if (carregaPaciente(cad1IdMtb.Text) == "")
+                {
+                    mostraGb(consultasPn);
+                    listaConsultas(cad1IdMtb.Text);
+                }
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
 
+        private void anamneseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
 
+        }
+
+        private void conDetailsPn_VisibleChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (conDetailsPn.Visible)
+                {
+                }
+
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+        private void moveControl(Control c)
+        {
+            try
+            {
+                if (isMoving)
+                {
+                    Control parent = c.Parent;
+                    int x=y=0;
+                    while(parent!=null)
+                    {
+                        x += c.Parent.Location.X;
+                        y += c.Parent.Location.Y;
+                        parent = parent.Parent;
+                    }
+                    c.Location = new Point(MousePosition.X - x - hoverCursorLocation.X, MousePosition.Y - y - hoverCursorLocation.Y);
+                    
+                }
+
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void control_MouseDown(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                isMoving = true;
+                hoverCursorLocation = e.Location;
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+
+                isMoving = false;
+            }
+        }
+
+        private void control_MouseMove(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Control snd = (Control)sender;
+                moveControl(snd);
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void control_MouseUp(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                isMoving = false;
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void conTopPn_MouseUp(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void cad1XLb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                mostraGb();
+
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void cad1LimpaLb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                limpaPaciente();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void finXLb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                mostraGb();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void finLpLb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void planoXLb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                mostraGb();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void avalXLb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                mostraGb();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void planoDeAtendimentoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                mostraGb(planoPn);
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void avaliaçãoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                mostraGb(avalPn);
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void consultasPn_VisibleChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (consultasPn.Visible)
+                {
+                }
             }
             catch (Exception err)
             {
@@ -1692,7 +1926,6 @@ namespace AnamSys
         /*
          * try
             {
-
 
             }
             catch (Exception err)

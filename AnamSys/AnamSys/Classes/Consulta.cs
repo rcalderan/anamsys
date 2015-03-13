@@ -15,7 +15,7 @@ namespace AnamSys.Classes
         private DateTime data;
         private List<int> faturas;
         private string detalhes;
-        private string ficha;
+        private string plano;
         private bool ativa;
 
         public int get_Id() { return this.id; }
@@ -29,8 +29,8 @@ namespace AnamSys.Classes
         public void set_Data(DateTime Data) { this.data = Data; }
         public string get_Detalhes() { return this.detalhes; }
         public void set_Detalhes(string detalhes) { this.detalhes = detalhes; }
-        public string get_Ficha() { return this.ficha; }
-        public void set_Ficha(string Ficha) { this.ficha = Ficha; }
+        public string get_Ficha() { return this.plano; }
+        public void set_Ficha(string Ficha) { this.plano = Ficha; }
         public bool get_Estado() { return this.ativa; }
         public void set_Estado(bool Estado) { this.ativa = Estado; }
 
@@ -62,7 +62,7 @@ namespace AnamSys.Classes
                 this.id = idd;
 
         }
-        public Consulta(int paciente, int anamnese, string avaliacao, string ficha, List<int> faturas, DateTime hoje,DateTime data,bool estadoDaConsulta)
+        public Consulta(int paciente, int anamnese, string avaliacao, string plano, List<int> faturas, DateTime hoje,DateTime data,bool estadoDaConsulta)
         {
             Database conexao = new Database();
             int idd;
@@ -79,7 +79,7 @@ namespace AnamSys.Classes
             this.anamnese = anamnese;
             this.paciente = paciente;
             this.detalhes = avaliacao;
-            this.ficha = ficha;
+            this.plano = plano;
             this.hoje = hoje;
             this.data = data;
             this.ativa = estadoDaConsulta;
@@ -99,11 +99,16 @@ namespace AnamSys.Classes
                         id = 0;
                     else
                         id = idd;
+                    string fats="";
+                    foreach(int f in this.faturas)
+                        fats += f.ToString() + " ";
+                    fats = fats.Trim();
                     string query = "INSERT INTO consulta VALUES("+id.ToString()+"," +
                             paciente + ",'" +
                             hoje.ToString("yyyy-MM-dd HH:mm:ss") + "','" +
+                            fats + "','" +
                             detalhes + "','" +
-                            ficha + "'," +
+                            plano + "'," +
                             anamnese + ",1,'" +
                             data.ToString("yyyy-MM-dd HH:mm:ss") + "')", erro = conexao.comando(query);
                     return erro;
@@ -116,7 +121,7 @@ namespace AnamSys.Classes
                     string query = "UPDATE consulta set paciente="+ paciente + 
                         ",hoje='" + hoje.ToString("yyyy-MM-dd HH:mm:ss") +
                         "',detalhes='" + detalhes + 
-                        "',ficha='" + ficha + 
+                        "',ficha='" + plano + 
                         "',anamnese=" + anamnese + 
                         ",ativa="+ok+
                         ",data='" + data.ToString("yyyy-MM-dd HH:mm:ss") + 
