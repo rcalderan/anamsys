@@ -33,6 +33,7 @@
             this.pacienteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.planoDeAtendimentoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.avaliaçãoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fichaEvolutivaToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.anamneseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.consultarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.anamneseToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -205,6 +206,8 @@
             this.cadNascDtp = new System.Windows.Forms.DateTimePicker();
             this.label9 = new System.Windows.Forms.Label();
             this.consultasPn = new System.Windows.Forms.Panel();
+            this.consultasLLb = new System.Windows.Forms.Label();
+            this.consultasXLb = new System.Windows.Forms.Label();
             this.finPn = new System.Windows.Forms.Panel();
             this.finLpLb = new System.Windows.Forms.Label();
             this.finXLb = new System.Windows.Forms.Label();
@@ -216,7 +219,6 @@
             this.avalXLb = new System.Windows.Forms.Label();
             this.label59 = new System.Windows.Forms.Label();
             this.avalNomeLb = new System.Windows.Forms.Label();
-            this.fichaEvolutivaToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.conDetailsPn.SuspendLayout();
             this.conDetParPn.SuspendLayout();
@@ -283,6 +285,12 @@
             this.avaliaçãoToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.avaliaçãoToolStripMenuItem.Text = "Avaliação";
             this.avaliaçãoToolStripMenuItem.Click += new System.EventHandler(this.avaliaçãoToolStripMenuItem_Click);
+            // 
+            // fichaEvolutivaToolStripMenuItem1
+            // 
+            this.fichaEvolutivaToolStripMenuItem1.Name = "fichaEvolutivaToolStripMenuItem1";
+            this.fichaEvolutivaToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
+            this.fichaEvolutivaToolStripMenuItem1.Text = "Ficha Evolutiva";
             // 
             // anamneseToolStripMenuItem
             // 
@@ -564,7 +572,7 @@
             this.conDetailsPn.Controls.Add(this.conDetAddLb);
             this.conDetailsPn.Controls.Add(this.label55);
             this.conDetailsPn.Controls.Add(this.panel12);
-            this.conDetailsPn.Location = new System.Drawing.Point(214, 3);
+            this.conDetailsPn.Location = new System.Drawing.Point(226, 52);
             this.conDetailsPn.Name = "conDetailsPn";
             this.conDetailsPn.Size = new System.Drawing.Size(467, 427);
             this.conDetailsPn.TabIndex = 75;
@@ -765,6 +773,7 @@
             this.conHoraCb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.conHoraCb.FormattingEnabled = true;
             this.conHoraCb.Items.AddRange(new object[] {
+            "0",
             "1",
             "2",
             "3",
@@ -787,8 +796,7 @@
             "20",
             "21",
             "22",
-            "23",
-            "24"});
+            "23"});
             this.conHoraCb.Location = new System.Drawing.Point(259, 36);
             this.conHoraCb.Name = "conHoraCb";
             this.conHoraCb.Size = new System.Drawing.Size(42, 28);
@@ -896,10 +904,10 @@
             this.conDetFormaCb.FormattingEnabled = true;
             this.conDetFormaCb.Items.AddRange(new object[] {
             "Dinheiro",
-            "Debito",
+            "Débito",
             "Cheque",
-            "CreditoAVista",
-            "CreditoParcelado"});
+            "Crédito à Vista",
+            "Crédito Parcelado"});
             this.conDetFormaCb.Location = new System.Drawing.Point(187, 26);
             this.conDetFormaCb.Name = "conDetFormaCb";
             this.conDetFormaCb.Size = new System.Drawing.Size(193, 28);
@@ -1031,13 +1039,13 @@
             // 
             // label18
             // 
-            this.label18.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.label18.BackColor = System.Drawing.Color.LightSeaGreen;
             this.label18.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label18.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label18.Location = new System.Drawing.Point(123, 262);
+            this.label18.Location = new System.Drawing.Point(269, 262);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(62, 17);
+            this.label18.Size = new System.Drawing.Size(75, 17);
             this.label18.TabIndex = 60;
             this.label18.Text = "Consulta";
             this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1049,7 +1057,7 @@
             this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label17.Location = new System.Drawing.Point(49, 262);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(52, 17);
+            this.label17.Size = new System.Drawing.Size(75, 17);
             this.label17.TabIndex = 60;
             this.label17.Text = "Hoje";
             this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1105,7 +1113,7 @@
             this.label35.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.label35.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label35.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label35.Location = new System.Drawing.Point(134, 48);
+            this.label35.Location = new System.Drawing.Point(135, 48);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(37, 27);
             this.label35.TabIndex = 56;
@@ -1116,7 +1124,7 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(194, 279);
+            this.label12.Location = new System.Drawing.Point(215, 279);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(29, 13);
             this.label12.TabIndex = 68;
@@ -1127,7 +1135,7 @@
             this.label34.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.label34.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label34.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label34.Location = new System.Drawing.Point(176, 48);
+            this.label34.Location = new System.Drawing.Point(178, 48);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(37, 27);
             this.label34.TabIndex = 57;
@@ -1146,7 +1154,7 @@
             this.label33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.label33.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label33.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label33.Location = new System.Drawing.Point(218, 48);
+            this.label33.Location = new System.Drawing.Point(221, 48);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(37, 27);
             this.label33.TabIndex = 58;
@@ -1158,7 +1166,7 @@
             this.label32.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.label32.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label32.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label32.Location = new System.Drawing.Point(260, 48);
+            this.label32.Location = new System.Drawing.Point(264, 48);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(37, 27);
             this.label32.TabIndex = 59;
@@ -1167,10 +1175,11 @@
             // 
             // txtAno
             // 
-            this.txtAno.Location = new System.Drawing.Point(197, 295);
+            this.txtAno.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtAno.Location = new System.Drawing.Point(212, 295);
             this.txtAno.Mask = "0000";
             this.txtAno.Name = "txtAno";
-            this.txtAno.Size = new System.Drawing.Size(45, 20);
+            this.txtAno.Size = new System.Drawing.Size(34, 21);
             this.txtAno.TabIndex = 65;
             this.txtAno.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtAno_KeyDown);
             this.txtAno.Leave += new System.EventHandler(this.txtAno_Leave);
@@ -1205,7 +1214,7 @@
             "10",
             "11",
             "12"});
-            this.cboMes.Location = new System.Drawing.Point(134, 294);
+            this.cboMes.Location = new System.Drawing.Point(149, 294);
             this.cboMes.Name = "cboMes";
             this.cboMes.Size = new System.Drawing.Size(57, 21);
             this.cboMes.TabIndex = 64;
@@ -1225,7 +1234,7 @@
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(146, 279);
+            this.label13.Location = new System.Drawing.Point(162, 279);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(30, 13);
             this.label13.TabIndex = 63;
@@ -1281,11 +1290,11 @@
             this.label16.AutoSize = true;
             this.label16.BackColor = System.Drawing.Color.LightBlue;
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(726, 103);
+            this.label16.Location = new System.Drawing.Point(717, 103);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(148, 20);
+            this.label16.Size = new System.Drawing.Size(166, 20);
             this.label16.TabIndex = 3;
-            this.label16.Text = "Proxima Consulta";
+            this.label16.Text = "Proximas Consultas";
             // 
             // conPlanoAtualizaBt
             // 
@@ -2147,7 +2156,9 @@
             // consultasPn
             // 
             this.consultasPn.BackColor = System.Drawing.Color.PowderBlue;
+            this.consultasPn.Controls.Add(this.consultasLLb);
             this.consultasPn.Controls.Add(this.conDetailsPn);
+            this.consultasPn.Controls.Add(this.consultasXLb);
             this.consultasPn.Controls.Add(this.conPacienteLb);
             this.consultasPn.Controls.Add(this.conNovaBt);
             this.consultasPn.Controls.Add(this.label16);
@@ -2160,6 +2171,28 @@
             this.consultasPn.TabIndex = 77;
             this.consultasPn.Visible = false;
             this.consultasPn.VisibleChanged += new System.EventHandler(this.consultasPn_VisibleChanged);
+            // 
+            // consultasLLb
+            // 
+            this.consultasLLb.AutoSize = true;
+            this.consultasLLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.consultasLLb.Location = new System.Drawing.Point(929, 26);
+            this.consultasLLb.Name = "consultasLLb";
+            this.consultasLLb.Size = new System.Drawing.Size(24, 17);
+            this.consultasLLb.TabIndex = 0;
+            this.consultasLLb.Text = "Lp";
+            this.consultasLLb.Click += new System.EventHandler(this.consultasLLb_Click);
+            // 
+            // consultasXLb
+            // 
+            this.consultasXLb.AutoSize = true;
+            this.consultasXLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.consultasXLb.Location = new System.Drawing.Point(957, 23);
+            this.consultasXLb.Name = "consultasXLb";
+            this.consultasXLb.Size = new System.Drawing.Size(20, 20);
+            this.consultasXLb.TabIndex = 0;
+            this.consultasXLb.Text = "X";
+            this.consultasXLb.Click += new System.EventHandler(this.consultasXLb_Click);
             // 
             // finPn
             // 
@@ -2299,12 +2332,6 @@
             this.avalNomeLb.Size = new System.Drawing.Size(35, 13);
             this.avalNomeLb.TabIndex = 0;
             this.avalNomeLb.Text = "Nome";
-            // 
-            // fichaEvolutivaToolStripMenuItem1
-            // 
-            this.fichaEvolutivaToolStripMenuItem1.Name = "fichaEvolutivaToolStripMenuItem1";
-            this.fichaEvolutivaToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
-            this.fichaEvolutivaToolStripMenuItem1.Text = "Ficha Evolutiva";
             // 
             // principalForm
             // 
@@ -2555,6 +2582,8 @@
         private System.Windows.Forms.Label planoNomeLb;
         private System.Windows.Forms.Label avalNomeLb;
         private System.Windows.Forms.ToolStripMenuItem fichaEvolutivaToolStripMenuItem1;
+        private System.Windows.Forms.Label consultasLLb;
+        private System.Windows.Forms.Label consultasXLb;
     }
 }
 

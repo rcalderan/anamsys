@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AnamSys.Classes
+namespace AnamSys
 {
     class Consulta
     {
@@ -13,11 +13,10 @@ namespace AnamSys.Classes
         private int anamnese;
         private DateTime hoje;
         private DateTime data;
-        private List<int> faturas;
         private string detalhes;
         private string plano;
         private bool ativa;
-
+        
         public int get_Id() { return this.id; }
         public int get_Paciente() { return this.paciente; }
         public void set_Paciente(int paciente) { this.paciente = paciente; }
@@ -29,8 +28,8 @@ namespace AnamSys.Classes
         public void set_Data(DateTime Data) { this.data = Data; }
         public string get_Detalhes() { return this.detalhes; }
         public void set_Detalhes(string detalhes) { this.detalhes = detalhes; }
-        public string get_Ficha() { return this.plano; }
-        public void set_Ficha(string Ficha) { this.plano = Ficha; }
+        public string get_Plano() { return this.plano; }
+        public void set_Plano(string plano) { this.plano = plano; }
         public bool get_Estado() { return this.ativa; }
         public void set_Estado(bool Estado) { this.ativa = Estado; }
 
@@ -41,6 +40,7 @@ namespace AnamSys.Classes
                 dt += i.ToString() + "";
             return dt;
         }
+        /*
         public static List<int> stringStringToList(string faturas)
         {
             List<int> l = new List<int>();
@@ -51,7 +51,7 @@ namespace AnamSys.Classes
                     l.Add(aux);
             return l;
         }
-
+        */
         public Consulta()
         {
             Database conexao = new Database(); 
@@ -62,7 +62,32 @@ namespace AnamSys.Classes
                 this.id = idd;
 
         }
-        public Consulta(int paciente, int anamnese, string avaliacao, string plano, List<int> faturas, DateTime hoje,DateTime data,bool estadoDaConsulta)
+
+        public Consulta(string id)
+        {
+            Database conexao = new Database();
+            int idd;
+            System.Data.DataTable dt = conexao.query("select * from consulta where id=" + id);
+            if (dt==null)
+                if (!int.TryParse(conexao.proximo("consulta", "id"), out idd))
+                    this.id = 0;
+                else
+                    this.id = idd;
+            else
+            {
+                this.id = Convert.ToInt32(id);
+                this.anamnese = Convert.ToInt32(dt.Rows[0]["anamnese"]);
+                this.paciente = Convert.ToInt32(dt.Rows[0]["paciente"]);
+                this.detalhes = dt.Rows[0]["detalhes"].ToString();
+                this.plano = dt.Rows[0]["plano"].ToString();
+                this.hoje = Convert.ToDateTime(dt.Rows[0]["hoje"]);
+                this.data = Convert.ToDateTime(dt.Rows[0]["data"]);
+                this.ativa = true;
+            }
+
+        }
+
+        public Consulta(int paciente, int anamnese, string detalhes, string plano, DateTime hoje,DateTime data,bool estadoDaConsulta)
         {
             Database conexao = new Database();
             int idd;
@@ -78,12 +103,11 @@ namespace AnamSys.Classes
                 this.id = idd;
             this.anamnese = anamnese;
             this.paciente = paciente;
-            this.detalhes = avaliacao;
+            this.detalhes = detalhes;
             this.plano = plano;
             this.hoje = hoje;
             this.data = data;
             this.ativa = estadoDaConsulta;
-            this.faturas = faturas;
         }
 
         public string save()
@@ -99,14 +123,9 @@ namespace AnamSys.Classes
                         id = 0;
                     else
                         id = idd;
-                    string fats="";
-                    foreach(int f in this.faturas)
-                        fats += f.ToString() + " ";
-                    fats = fats.Trim();
                     string query = "INSERT INTO consulta VALUES("+id.ToString()+"," +
                             paciente + ",'" +
                             hoje.ToString("yyyy-MM-dd HH:mm:ss") + "','" +
-                            fats + "','" +
                             detalhes + "','" +
                             plano + "'," +
                             anamnese + ",1,'" +
@@ -135,6 +154,81 @@ namespace AnamSys.Classes
             }
 
         }
+        /*
+        public bool update(Consulta newC)
+        {
+            try
+            {
+                bool updateRequired = false;
+                if (this.id != newC.get_Id())
+                    return false;
+                string query = "update consulta set ";
+                /*
+                this.faturas = faturas;
+
+                if (this.anamnese != newC.get_Anamnese())
+                {
+                    updateRequired = true;
+                    query += "anamnese=" + newC.get_Anamnese() + ",";
+                }
+                if (this.data.CompareTo(newC.get_Data()) != 0)
+                {
+                    updateRequired = true;
+                    query += "data='" + newC.get_Data().ToString("yyyy-MM-dd HH:mm:ss") + "',";
+                }
+                if (this.hoje.CompareTo(newC.get_Hoje()) != 0)
+                {
+                    updateRequired = true;
+                    query += "hoje='" + newC.get_Hoje().ToString("yyyy-MM-dd HH:mm:ss") + "',";
+                }
+                if (this.paciente != newC.get_Paciente())
+                {
+                    updateRequired = true;
+                    query += "paciente='" + newC.get_Paciente() + "',";
+                }
+                if (this.plano != newC.get_Plano())
+                {
+                    updateRequired = true;
+                    query += "plano='" + newC.get_Plano() + "',";
+                }
+                if (this.detalhes != newC.get_Detalhes())
+                {
+                    updateRequired = true;
+                    query += "detalhes='" + newC.get_Detalhes() + "',";
+                }
+                if (this.faturas.Equals(newC.faturas))
+                {
+                    updateRequired = true;
+                    query += "faturas='" + newC.get_Faturas() + "',";
+                }
+                if (this.ativa != newC.get_Estado())
+                {
+                    updateRequired = true;
+                    if (newC.get_Estado())
+                        query += "ativar=1,";
+                    else
+                        query += "ativa=0,";
+                }
+                if (updateRequired)
+                {
+                    if (',' == query[query.Length - 1])
+                        query = query.Substring(0, query.Length - 1);
+                    query += " WHERE id=" + newC.get_Id().ToString();
+                    Database con = new Database();
+                    string res = con.comando(query);
+                    if ("" == res)
+                    {
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+                else
+                    return true;
+            }
+            catch { return false; }
+        }
+*/
 
         public static List<DateTime> todasDatas()
         {

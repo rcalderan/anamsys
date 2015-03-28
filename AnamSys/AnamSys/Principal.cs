@@ -10,14 +10,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 
-
 namespace AnamSys
 {
-  
+     
     public partial class principalForm : Form
     {
         public bool debug_mode = true;
-        private Classes.Database db = new Classes.Database();
+        private Database db = new Database();
         private Control[] boxes;
         private bool isMoving = false;
         private Point hoverCursorLocation;
@@ -33,7 +32,15 @@ namespace AnamSys
         public principalForm()
         {
             InitializeComponent();
-            Control[] paineis = { consultasPn, cad1Pn, finPn, planoPn, avalPn };
+            Control[] paineis = { consultasPn, cad1Pn, finPn, planoPn, avalPn, conDetailsPn };
+            foreach (Control c in paineis)
+            {
+                c.MouseDown += control_MouseDown;
+                c.MouseUp += control_MouseUp;
+                c.MouseMove += control_MouseMove;
+                c.MouseMove += control_MouseMove;
+                c.MouseMove += control_MouseMove;
+            }
             boxes = paineis;
         }
 
@@ -192,7 +199,7 @@ namespace AnamSys
                             y = 0;
 
 
-                            List<DateTime> todasConsultas = Classes.Consulta.todasDatas();
+                            List<DateTime> todasConsultas = Consulta.todasDatas();
                             DateTime aux;
                             foreach (DateTime dt in todasConsultas)
                             {
@@ -241,99 +248,51 @@ namespace AnamSys
 
         private void conCalProx_Click(object sender, EventArgs e)
         {
-            try
-            {
-                Int32 mesAtual, anoAtual;
-                anoAtual = Convert.ToInt32(txtAno.Text);
-                mesAtual = Convert.ToInt32(cboMes.Text);
-                if (mesAtual == 12)
-                {
-                    anoAtual += 1;
-                    mesAtual = 1;
-                    txtAno.Text = anoAtual.ToString();
-                    cboMes.Text = mesAtual.ToString();
-                }
-                else
-                {
-                    mesAtual += 1;
-                    cboMes.Text = mesAtual.ToString();
-                }
-
-                //remove todos os controles do painel
-                panel1.Controls.Clear();
-                Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(CurrentCulture);
-                //exibe o nome completo do mes selecionado
-                labelMes.Text = Application.CurrentCulture.DateTimeFormat.GetMonthName(mesAtual);
-                Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-za");
-                Int32 Dayz = DateTime.DaysInMonth(Convert.ToInt32(txtAno.Text), Convert.ToInt32(cboMes.Text));
-                VerificaDia();
-                for (Int32 i = 1; i < Dayz + 1; i++)
-                {
-                    ndayz += 1;
-
-                    lblDayz = new Label();
-                    lblDayz.Text = i.ToString();
-                    lblDayz.BorderStyle = BorderStyle.Fixed3D;
-                    lblDayz.Click += calDiaClick;
-                    Int32 mon = Convert.ToInt32(cboMes.Text);
-                    Int32 year = Convert.ToInt32(txtAno.Text);
-                    if ((i == DateTime.Now.Day) && (mon == DateTime.Now.Month) && (year == DateTime.Now.Year))
-                    {
-                        //o dia atual deve ser destacado com cor diferente
-                        lblDayz.BackColor = Color.Green;
-
-                    }
-                    else if (ndayz == 01)
-                    {
-                        lblDayz.BackColor = Color.LightSalmon;
-                    }
-                    else
-                    {
-                        //define a cor dos outros dias do mes
-                        lblDayz.BackColor = Color.Aquamarine;
-                    }
-                    lblDayz.Font = label31.Font;
-                    lblDayz.SetBounds(x, y, 37, 27);
-
-                    x += 42;
-                    if (ndayz == 7)
-                    {
-                        x = 0;
-                        ndayz = 0;
-                        y += 29;
-                    }
-                    panel1.Controls.Add(lblDayz);
-                }
-                x = 0;
-                ndayz = 0;
-                y = 0;
-            }
-            catch (FormatException)
-            {
-                MessageBox.Show("data inválida");
-                txtAno.Focus();
-            }
+            avancaMes(1);
         }
         private void conCalPrev_Click(object sender, EventArgs e)
+        {
+            avancaMes(-1);
+        }
+
+        private void avancaMes(int av)
         {
             try
             {
                 Int32 mesAtual, anoAtual;
                 anoAtual = Convert.ToInt32(txtAno.Text);
                 mesAtual = Convert.ToInt32(cboMes.Text);
-                if (mesAtual == 1)
+
+                if (av * (-1) > 0)
                 {
-                    anoAtual -= 1;
-                    mesAtual = 12;
-                    txtAno.Text = anoAtual.ToString();
-                    cboMes.Text = mesAtual.ToString();
+                    if (mesAtual == 1)
+                    {
+                        anoAtual -= 1;
+                        mesAtual = 12;
+                        txtAno.Text = anoAtual.ToString();
+                        cboMes.Text = mesAtual.ToString();
+                    }
+                    else
+                    {
+                        mesAtual -= 1;
+                        cboMes.Text = mesAtual.ToString();
+                    }
                 }
                 else
                 {
-                    mesAtual -= 1;
-                    cboMes.Text = mesAtual.ToString();
+                    if (mesAtual == 12)
+                    {
+                        anoAtual += 1;
+                        mesAtual = 1;
+                        txtAno.Text = anoAtual.ToString();
+                        cboMes.Text = mesAtual.ToString();
+                    }
+                    else
+                    {
+                        mesAtual += 1;
+                        cboMes.Text = mesAtual.ToString();
+                    }
                 }
-
                 //remove all the controls in the panel
                 panel1.Controls.Clear();
                 Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(CurrentCulture);
@@ -342,14 +301,29 @@ namespace AnamSys
                 Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-za");
                 Int32 Dayz = DateTime.DaysInMonth(Convert.ToInt32(txtAno.Text), Convert.ToInt32(cboMes.Text));
                 VerificaDia();
+                List<DateTime> cList = new List<DateTime>();
+                DateTime auxDt;
+                string query = "select data from consultas where data>='" + txtAno.Text + "-" + cboMes.Text + "-1' and data<='" + txtAno.Text + "-" + cboMes.Text + "-31'";
+                DataTable dt = db.query(query);
+                if (dt != null)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        auxDt = Convert.ToDateTime(dr["data"]);
+                        auxDt = new DateTime(auxDt.Year, auxDt.Month, auxDt.Day);
+                        cList.Add(auxDt);
+                    }
+                }
                 for (Int32 i = 1; i < Dayz + 1; i++)
                 {
                     ndayz += 1;
-
+                    auxDt = new DateTime(anoAtual, mesAtual, i);
                     lblDayz = new Label();
                     lblDayz.Click += calDiaClick;
                     lblDayz.Text = i.ToString();
+                    lblDayz.Name = "conDia" + i.ToString() + "Lb";
                     lblDayz.BorderStyle = BorderStyle.Fixed3D;
+
                     Int32 mon = Convert.ToInt32(cboMes.Text);
                     Int32 year = Convert.ToInt32(txtAno.Text);
                     if ((i == DateTime.Now.Day) && (mon == DateTime.Now.Month) && (year == DateTime.Now.Year))
@@ -365,6 +339,11 @@ namespace AnamSys
                     {
                         //set this color for other days in the selected month
                         lblDayz.BackColor = Color.Aquamarine;
+                    }
+
+                    if (cList.Exists(element => element == auxDt))
+                    {
+                        lblDayz.BackColor = Color.LightSeaGreen;
                     }
                     lblDayz.Font = label31.Font;
                     lblDayz.SetBounds(x, y, 37, 27);
@@ -401,6 +380,7 @@ namespace AnamSys
                     }
 
                 label.BorderStyle = BorderStyle.FixedSingle;
+                MessageBox.Show(label.Name);
                 /*Control[] lbs = panel1.Controls.Find("calSelectedLb", true);
                 if (lbs.Length > 0)
                 {
@@ -598,8 +578,8 @@ namespace AnamSys
             {
                 if (MessageBox.Show("Deseja atualizar dados?", "Atualizar?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    Classes.Paciente estePaciente = new Classes.Paciente(int.Parse(cad1IdMtb.Text));
-                    Classes.Paciente newPaciente = new Classes.Paciente(int.Parse(cad1IdMtb.Text));
+                    Paciente estePaciente = new Paciente(int.Parse(cad1IdMtb.Text));
+                    Paciente newPaciente = new Paciente(int.Parse(cad1IdMtb.Text));
                     newPaciente.set_nome(cad1NomeTb.Text);
                     newPaciente.set_cpf(cad1CpfMtb.Text);
                     newPaciente.set_rg(cad1RgMtb.Text);
@@ -715,12 +695,13 @@ namespace AnamSys
         {
             try
             {
-                DataTable dt = db.query("Select * from paciente where id='" + cad1IdMtb.Text + "'");
+                DataTable dt = db.query("Select * from paciente where id='" + codigo + "'");
                 if (dt != null)
                 {
                     DataRow dr = dt.Rows[0];
                     DateTime nas;
                     cad1NomeTb.Text = dr["nome"].ToString();
+                    cad1IdMtb.Text = codigo;
                     avalNomeLb.Text = dr["nome"].ToString();
                     planoNomeLb.Text = dr["nome"].ToString();
                     cad1RgMtb.Text = dr["rg"].ToString();
@@ -735,12 +716,12 @@ namespace AnamSys
                         cadNascDtp.Value = DateTime.Today;
                     cad1ObsTb.Text = dr["obs"].ToString();
                     conPlanoTb.Text = dr["plano"].ToString();
-                    conPacienteLb.Text = "Nome: ( " + cad1IdMtb.Text + " ) - " + cad1NomeTb.Text;
-                    conDetNomeLb.Text = cad1NomeTb.Text;
+                    conPacienteLb.Text = cad1IdMtb.Text + " - " + cad1NomeTb.Text;
+                    conDetNomeLb.Text = cad1IdMtb.Text + " - "+ cad1NomeTb.Text;
                     dt = db.query("Select * from consulta where id=" + cad1IdMtb.Text);
                     conLv.Items.Clear();
                     conFinPacienteLb.Text = conPacienteLb.Text;
-                    listaConsultas(cad1IdMtb.Text);
+                    listaConsultas(codigo);
                     return "";
                 }
                 else
@@ -818,24 +799,28 @@ namespace AnamSys
                     MessageBox.Show("Valor da Consulta incorreto.");
                     return;
                 }
-                if (conDetFormaCb.Text=="")
+                if (!conDetFormaCb.Items.Contains(conDetFormaCb.Text))
                 {
+                    conDetFormaCb.Text = "";
                     MessageBox.Show("Selecione a forma de pagamento");
                     return;
                 }
-                if (null != db.query("select id from paciente where id=" + cad1IdMtb.Text))
+                string id="";
+                if (-1 != conDetNomeLb.Text.IndexOf(" "))
                 {
-                    DataTable dt = db.query("select id from contrato where id=" + conDetIdLb.Text);
+                    id = conDetNomeLb.Text.Substring(0, conDetNomeLb.Text.IndexOf(" "));
+                }
+                if (null != db.query("select id from paciente where id=" + id))
+                {
+                    DataTable dt = db.query("select id from consulta where id=" + conDetIdLb.Text);
                     if (null == dt)
                     {
-                        List<int> f = new List<int>();
                         DateTime data = new DateTime(conDataDtp.Value.Year, conDataDtp.Value.Month, conDataDtp.Value.Day, int.Parse(conHoraCb.Text), int.Parse(conMinCb.Text), 0);
-                        Classes.Consulta novaConsulta = new Classes.Consulta(
+                        Consulta novaConsulta = new Consulta(
                             int.Parse(cad1IdMtb.Text),
                             0,
                             conDetDetTb.Text,
                             conPlanoTb.Text,
-                            f,
                             DateTime.Now,
                             data,
                             true);
@@ -848,27 +833,48 @@ namespace AnamSys
                             double val;
                             if (!double.TryParse(conDetValorTb.Text, out val))
                                 val = 0;
-                            Classes.Fatura fat = new Classes.Fatura(novaConsulta.get_Id(), 0, novaConsulta.get_Data(), val, conDetFormaCb.SelectedIndex, conDetParCh.Checked);
-                            
-                            if ((debug_mode) && (fat.get_Id()==-1))
+                            Fatura fat = new Fatura(novaConsulta.get_Id(), 0, novaConsulta.get_Data(), val, Financeiro.FormaDePagamento.GetFromId(conDetFormaCb.SelectedIndex), conDetParCh.Checked);
+
+                            if ((debug_mode) && (fat.get_Id() == -1))
                                 MessageBox.Show("Erro ao criar nova Fatura: id= -1");
                             else
+                            {
                                 MessageBox.Show("A consulta de " + cad1NomeTb.Text + " foi marcada para " + data.ToShortDateString() + " às " + conHoraCb.Text + ":" + conMinCb.Text);
+                            }
                         }
-                        listaConsultas(cad1IdMtb.Text);
+                        listaConsultas();
                     }
                     else
                     {//atualizar consulta
                         DateTime data = new DateTime(conDataDtp.Value.Year, conDataDtp.Value.Month, conDataDtp.Value.Day, int.Parse(conHoraCb.Text), int.Parse(conMinCb.Text), 0);
-                        Classes.Fatura old = new Classes.Fatura(dt.Rows[0]["id"].ToString());
-                        //if (old.load(int.Parse(conDetIdLb.Text))
+                        Consulta novaConsulta = new Consulta(dt.Rows[0]["id"].ToString()), old = new Consulta(dt.Rows[0]["id"].ToString());
 
-
+                        novaConsulta.set_Data(data);
+                        novaConsulta.set_Detalhes(conDetDetTb.Text);
+                        string erro=novaConsulta.save();
+                        if (erro != "")
+                        {
+                            MessageBox.Show("erro ao atualizar dados da consulta");
+                        }
+                        else
+                        {
+                            Fatura fatura = new Fatura(novaConsulta.get_Id(), 0, data, Double.Parse(conDetValorTb.Text), Financeiro.FormaDePagamento.GetFromId(conDetFormaCb.SelectedIndex), true);
+                            if (fatura.get_Id() != -1)
+                            {
+                                erro = fatura.save();
+                                if (erro != "")
+                                    MessageBox.Show("Erro ao salvar fatura...");
+                            }
+                            else
+                            {
+                                MessageBox.Show("erro aou faturar...");
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Cadastre seu paciente primeiro.");
+                    mostraGb(cad1Pn);
                 }
 
             }
@@ -1112,7 +1118,7 @@ namespace AnamSys
                             conTaxEsteCh.Enabled = false;
                             conTaxNameLb.Text = dr["nome"].ToString();
                             conTaxName2Tb.Text = dr["Nome"].ToString();
-                            taxasVal = Classes.Fatura.stringStringToDoubleArray(dr["taxas"].ToString());
+                            taxasVal = Fatura.stringStringToDoubleArray(dr["taxas"].ToString());
                             for (int i = 0; i < 13; i++)
                             {
                                 taxesTb = conTaxPn.Controls.Find("conTx" + i.ToString() + "Tb", false);
@@ -1168,7 +1174,7 @@ namespace AnamSys
                     }
                     conTaxName2Tb.Text = dr["Nome"].ToString();
                     conTaxNameLb.Text = dr["nome"].ToString();
-                    taxasVal = Classes.Fatura.stringStringToDoubleArray(dr["taxas"].ToString());
+                    taxasVal = Fatura.stringStringToDoubleArray(dr["taxas"].ToString());
                     for (int i = 0; i < 13; i++)
                     {
                         taxesTb = conTaxPn.Controls.Find("conTx" + i.ToString() + "Tb", false);
@@ -1269,13 +1275,13 @@ namespace AnamSys
                 DataTable dt = db.query("select id from paciente where id=" + cad1IdMtb.Text);
                 if (dt != null)
                 {
-                    Classes.Paciente oldP = new Classes.Paciente(int.Parse(cad1IdMtb.Text));
+                    Paciente oldP = new Paciente(int.Parse(cad1IdMtb.Text));
                     string oldPlano = oldP.get_plano();
                     if (oldPlano != conPlanoTb.Text)
                     {
                         if (DialogResult.Yes == MessageBox.Show("Deseja salvar alterações?", "Salvar?", MessageBoxButtons.YesNo))
                         {
-                            Classes.Paciente newP = new Classes.Paciente(int.Parse(cad1IdMtb.Text));
+                            Paciente newP = new Paciente(int.Parse(cad1IdMtb.Text));
                             newP.set_plano(conPlanoTb.Text);
                             if (!oldP.update(newP))
                             {
@@ -1304,13 +1310,13 @@ namespace AnamSys
                 DataTable dt = db.query("select id from paciente where id=" + cad1IdMtb.Text);
                 if (dt != null)
                 {
-                    Classes.Paciente oldP = new Classes.Paciente(int.Parse(cad1IdMtb.Text));
+                    Paciente oldP = new Paciente(int.Parse(cad1IdMtb.Text));
                     string oldPlano = oldP.get_plano();
                     if (oldPlano != conPlanoTb.Text)
                     {
                         if (DialogResult.Yes == MessageBox.Show("Deseja salvar alterações?", "Salvar?", MessageBoxButtons.YesNo))
                         {
-                            Classes.Paciente newP = new Classes.Paciente(int.Parse(cad1IdMtb.Text));
+                            Paciente newP = new Paciente(int.Parse(cad1IdMtb.Text));
                             newP.set_plano(conPlanoTb.Text);
                             if (!oldP.update(newP))
                             {
@@ -1374,7 +1380,13 @@ namespace AnamSys
         {
             try
             {
-
+                conDetIdLb.Text = db.proximo("consulta", "id");
+                conDataDtp.Value = DateTime.Now;
+                conHoraCb.SelectedIndex = conDataDtp.Value.Hour;
+                conDetDetTb.Clear();
+                conDetFormaCb.Text = "Dinheiro";
+                conDetValorTb.Text = "0";
+                conDetParCh.Checked = false;
 
             }
             catch (Exception err)
@@ -1419,11 +1431,16 @@ namespace AnamSys
                     if (dt != null)
                     {
                         limpaConsulta();
+                        if (carregaPaciente(dt.Rows[0]["paciente"].ToString()) != "")
+                        {
+                            MessageBox.Show("Erro. Paciente (" + i.SubItems[1].Text + ") " + i.SubItems[1].Text + " NÃO não encontrado, favor cadastre novamente!");
+                            mostraGb(cad1Pn);
+                            return;
+                        }
                         conDetIdLb.Text = i.SubItems[0].Text;
-                        conDetNomeLb.Text = i.SubItems[1].Text;
                         conDetDetTb.Text = dt.Rows[0]["detalhes"].ToString();
                         DateTime dia;
-                        if (DateTime.TryParse(i.SubItems[2].Text + ":00", out dia))
+                        if (DateTime.TryParse(dt.Rows[0]["data"].ToString(), out dia))
                         {
                             conDataDtp.Value = dia;
                             conHoraCb.Text = dia.Hour.ToString();
@@ -1720,6 +1737,13 @@ namespace AnamSys
             {
                 if (conDetailsPn.Visible)
                 {
+                    string s = carregaPaciente(cad1IdMtb.Text);
+                    if ( s!= "")
+                    {
+                        limpaPaciente();
+                        mostraGb(cad1Pn);
+                    }
+                        
                 }
 
             }
@@ -1737,13 +1761,14 @@ namespace AnamSys
                 {
                     Control parent = c.Parent;
                     int x=y=0;
-                    while(parent!=null)
+                    //bool root = boxes.Contains<Control>(parent);
+                    while(parent!=null)//&&(!root))
                     {
                         x += c.Parent.Location.X;
                         y += c.Parent.Location.Y;
                         parent = parent.Parent;
                     }
-                    c.Location = new Point(MousePosition.X - x - hoverCursorLocation.X, MousePosition.Y - y - hoverCursorLocation.Y);
+                    c.Location = new Point(MousePosition.X - x - hoverCursorLocation.X-8, MousePosition.Y - y - hoverCursorLocation.Y-30);
                     
                 }
 
@@ -1915,6 +1940,33 @@ namespace AnamSys
                 if (consultasPn.Visible)
                 {
                 }
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void consultasLLb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                limpaConsulta();
+                listaConsultas();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void consultasXLb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                mostraGb();
             }
             catch (Exception err)
             {

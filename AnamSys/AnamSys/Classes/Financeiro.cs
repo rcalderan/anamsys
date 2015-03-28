@@ -4,10 +4,112 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AnamSys.Classes
+namespace AnamSys
 {
     class Financeiro
     {
+        public struct FormaDePagamento
+        {
+            private int Id;
+            private string Name;
+
+            private FormaDePagamento(int id, string name)
+            {
+                this.Id = id;
+                this.Name = name;
+            }
+
+
+
+            public static FormaDePagamento Dinheiro 
+            { 
+                get 
+                {
+                    FormaDePagamento din = new FormaDePagamento(0, "Dinheiro");
+                    return din; 
+                } 
+            }
+            public static FormaDePagamento Debito
+            {
+                get
+                {
+                    FormaDePagamento deb = new FormaDePagamento(1, "Débito");
+                    return deb;
+                }
+            }
+            public static FormaDePagamento Cheque 
+            { 
+                get
+                {
+                    FormaDePagamento forma = new FormaDePagamento(2, "Cheque");
+                    return forma;
+                } 
+            }
+            public static FormaDePagamento CreditoAVista 
+            {
+                get
+                {
+                    FormaDePagamento forma = new FormaDePagamento(3, "Crédito à Vista");
+                    return forma;
+                } 
+            }
+            public static FormaDePagamento CreditoParcelado 
+            { 
+                get
+                {
+                    FormaDePagamento forma = new FormaDePagamento(4, "Crédito Parcelado");
+                    return forma;
+                } 
+            }
+
+            public static FormaDePagamento None
+            {
+                get
+                {
+                    FormaDePagamento forma = new FormaDePagamento(-1, "Forma Desconhecida");
+                    return forma;
+                }
+            }
+
+            public static int GetId(FormaDePagamento forma)
+            {
+                if (forma.Equals(Dinheiro))
+                    return Dinheiro.Id;
+                else
+                    if (forma.Equals(Debito))
+                        return Debito.Id;
+                    else
+                        if (forma.Equals(Cheque))
+                            return Cheque.Id;
+                        else
+                            if (forma.Equals(CreditoAVista))
+                                return CreditoAVista.Id;
+                            else
+                                if (forma.Equals(CreditoParcelado))
+                                    return CreditoParcelado.Id;
+                                else
+                                    return None.Id;
+            }
+
+            public static FormaDePagamento GetFromId(int id)
+            {
+                switch(id)
+                {
+                    case 0:
+                        return Dinheiro;
+                    case 1:
+                        return Debito;
+                    case 2:
+                        return Cheque;
+                    case 3:
+                        return CreditoAVista;
+                    case 4:
+                        return CreditoParcelado;
+                    default:
+                        return None;
+                }
+            }
+        }
     }
     
     class Fatura: Financeiro
@@ -17,13 +119,13 @@ namespace AnamSys.Classes
         private DateTime data;
         private DateTime hoje;
         private double valor;
-        private int forma;
+        private FormaDePagamento forma;
         private int parcela;
         private bool pendencia;
 
         public int get_Id() { return this.id; }
         public int get_Consulta() { return this.consulta; }
-        public int get_Forma() { return this.forma; }
+        public FormaDePagamento get_Forma() { return this.forma; }
         public int get_Parcela() { return this.parcela; }
         public double get_Valor() { return this.valor; }
 
@@ -32,12 +134,12 @@ namespace AnamSys.Classes
         public bool get_Pendencia() { return this.pendencia; }
 
 
-        public Fatura(int Consulta, int Parcela, DateTime Data, double Valor, int Forma, bool Pendencia)
+        public Fatura(int Consulta, int Parcela, DateTime Data, double Valor, FormaDePagamento Forma, bool Pendencia)
         {
             try
             {//new Classes.Fatura(novaConsulta.get_Id(), 0, novaConsulta.get_Data(), val, conDetFormaCb.SelectedIndex, conDetParCh.Checked);
                 Database conexao = new Database();
-                System.Data.DataTable dt = conexao.query("select id from fatura where consulta=" + Consulta.ToString()+" and parcela="+Parcela.ToString());
+                System.Data.DataTable dt = conexao.query("select * from fatura where consulta=" + Consulta.ToString()+" and parcela="+Parcela.ToString());
                 if (dt == null)
                 {//novo
                     DateTime hj = DateTime.Now;
@@ -50,9 +152,7 @@ namespace AnamSys.Classes
                              Parcela.ToString() + ",'" +
                              Pendencia.ToString() + "','" +
                              hj.ToString("yyyy-MM-dd HH:mm:ss") + "')", erro = conexao.comando(query);
-                    if (erro != "")
-                        this.id = -1;
-                    else
+                    if (erro == "")
                     {
                         this.id = int.Parse(novoId);
                         this.consulta = Consulta;
@@ -62,6 +162,36 @@ namespace AnamSys.Classes
                         this.forma = Forma;
                         this.pendencia = Pendencia;
                         this.hoje = hj;
+                    }
+                    else
+                        this.id = -1; 
+                }
+                else
+                {
+                    string erro,pend,query = "update fatura set data='" + Data.ToString("yyyy-MM-dd HH:mm:ss") + 
+                        "',valor='" + Valor + 
+                        "',forma='" + Forma.ToString() + ",'";
+                    if (Pendencia)
+                        pend =  "1";
+                    else
+                        pend = "0";
+                    query += "', pendencia ='"+pend+"' WHERE id='" + dt.Rows[0]["id"].ToString() + "' and parcela='" + parcela.ToString() + "'";
+                    erro = conexao.comando(query);
+
+                    DateTime aux = new DateTime(1111, 11, 11);
+                    DateTime.TryParse(dt.Rows[0]["Hoje"].ToString(), out aux);
+                    this.id = int.Parse(dt.Rows[0]["id"].ToString());
+                    this.consulta = Consulta;
+                    this.parcela = Parcela;
+                    this.data = Data;
+                    this.valor = Valor;
+                    this.forma = Forma;
+                    this.pendencia = Pendencia;
+                    this.hoje = aux;
+                    if (erro != "")
+                    {
+                        System.Windows.Forms.MessageBox.Show("erro ao atualizar fatura... contate o programador...");
+                        this.id = -1;
                     }
                 }
             }
@@ -80,15 +210,13 @@ namespace AnamSys.Classes
                 if (dt != null)
                 {
                     this.id = int.Parse(dt.Rows[0]["id"].ToString());
-
                     this.consulta = int.Parse(dt.Rows[0]["consulta"].ToString());
                     this.data = DateTime.Parse(dt.Rows[0]["data"].ToString());
+                    this.hoje = DateTime.Parse(dt.Rows[0]["hoje"].ToString());
                     this.valor = double.Parse(dt.Rows[0]["valor"].ToString());
-
-                    this.forma = int.Parse(dt.Rows[0]["forma"].ToString());
+                    this.forma = Financeiro.FormaDePagamento.GetFromId(int.Parse(dt.Rows[0]["forma"].ToString()));
                     this.parcela = int.Parse(dt.Rows[0]["parcela"].ToString());
                     this.pendencia = bool.Parse(dt.Rows[0]["pendendia"].ToString());
-                    this.hoje = DateTime.Parse(dt.Rows[0]["hoje"].ToString());
                 }
                 else
                     this.id = -1;
@@ -98,7 +226,7 @@ namespace AnamSys.Classes
                 this.id = -1;
             }
         }
-
+        
         public bool load(int id)
         {
             try
@@ -115,7 +243,7 @@ namespace AnamSys.Classes
                     this.data = DateTime.Parse(dt.Rows[0]["data"].ToString());
                     this.valor = double.Parse(dt.Rows[0]["valor"].ToString());
 
-                    this.forma = int.Parse(dt.Rows[0]["forma"].ToString());
+                    this.forma = Financeiro.FormaDePagamento.GetFromId(int.Parse(dt.Rows[0]["forma"].ToString()));
                     this.parcela = int.Parse(dt.Rows[0]["parcela"].ToString());
                     this.pendencia = bool.Parse(dt.Rows[0]["pendendia"].ToString());
                     this.hoje = DateTime.Parse(dt.Rows[0]["hoje"].ToString());
@@ -140,7 +268,7 @@ namespace AnamSys.Classes
             }
             return taxes;
         }
-
+        /*
         public bool update(Fatura newF)
         {
             try
@@ -176,6 +304,32 @@ namespace AnamSys.Classes
             }
             catch { return false; }
         }
+        */
+        public bool updatefromList(List<int> faturas)
+        {
+            try
+            {
+                string query = "select * from faturas where";
+                foreach(int f in faturas)
+                {
+                    query += " id=" + f.ToString()+" or";
+                }
+                if (query.LastIndexOf("or") != -1)
+                    query = query.Substring(0, query.Length - 3);
+                Database con = new Database();
+                System.Data.DataTable dt = con.query(query);
+                if (dt!=null)
+                {
+
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public string save()
         {
             try
@@ -185,20 +339,38 @@ namespace AnamSys.Classes
                 else
                 {
                     Database conexao = new Database();
-                    System.Data.DataTable dt = conexao.query("select id from fatura where id=" + this.id.ToString());
+                    System.Data.DataTable dt = conexao.query("select * from fatura where consulta='" + this.consulta+"' and parcela ='"+this.get_Parcela().ToString()+"'");
                     if (dt == null)
                     {//novo
-                       string query = "INSERT INTO fatura VALUES(" + this.id.ToString() + "," +
+                       string prox_id = conexao.proximo("fatura","id");
+                       string query = "INSERT INTO fatura VALUES(" + prox_id + "," +
                                 this.consulta + ",'" +
                                 this.data.ToString("yyyy-MM-dd HH:mm:ss") + "','" +
-                                this.valor + "'," +
-                                this.forma.ToString() + "," +
-                                this.parcela.ToString() + ",'" +
-                                this.pendencia.ToString() + "','" +
-                                this.hoje.ToString("yyyy-MM-dd HH:mm:ss") + "')", erro = conexao.comando(query);
-                        return erro;
+                                this.valor + "','" +
+                                Financeiro.FormaDePagamento.GetId(this.forma) + "'," +
+                                this.parcela.ToString() + ",'";
+                        if (this.pendencia)
+                            query+="1";
+                        else
+                            query+="0";
+                        query+= "','" +this.hoje.ToString("yyyy-MM-dd HH:mm:ss") + "')";
+                        return conexao.comando(query);
                     }
-                    return "";
+                    else
+                    {
+                        string query = "UPDATE fatura SET data='" + this.data.ToString("yyyy-MM-dd HH:mm:ss") +
+                            "',valor='" + this.valor +
+                            "',forma='" + this.forma.ToString() +
+                            "',consulta='" + this.consulta.ToString() +
+                            ",'" + this.hoje.ToString("yyyy-MM-dd HH:mm:ss") +
+                            ",pendencia='";
+                        if (this.pendencia)
+                            query += "1'";
+                        else
+                            query += "0'";
+                        query+=" WHERE id='" + dt.Rows[0]["id"].ToString() + "'";
+                        return conexao.comando(query);
+                    }
                 }
             }
             catch(Exception e)
@@ -208,35 +380,7 @@ namespace AnamSys.Classes
         }
     }
 
-    struct FormaDePagamento
-    {
-        private static Dictionary<int, string> formas = new Dictionary<int, string>()
-        {
-            {0,"Dinheiro"},
-            {1,"Debito"},
-            {2,"Cheque"},
-            {3,"CreditoAVista"},
-            {4,"CreditoParcelado"}
-        };
-        static string Dinheiro = formas[0];
-        static string Debito = formas[1];
-        static string Cheque = formas[2];
-        static string CreditoAVista = formas[3];
-        static string CreditoParcelado = formas[4];
-
-        static int getFormaCode(string forma)
-        {
-            try
-            {
-                foreach (var pair in formas)
-                    if (pair.Value == forma)
-                        return pair.Key;
-                return -1;
-            }
-            catch { return -1; }
-
-        }
-    }
+    
 
     /*
      
