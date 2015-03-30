@@ -31,3 +31,7 @@ D:\AnamSys_Repo\AnamSys\AnamSys\obj\Debug\AnamSys.csprojResolveAssemblyReference
 D:\AnamSys_Repo\AnamSys\AnamSys\obj\Debug\AnamSys.principalForm.resources
 D:\AnamSys_Repo\AnamSys\AnamSys\obj\Debug\AnamSys.Properties.Resources.resources
 D:\AnamSys_Repo\AnamSys\AnamSys\obj\Debug\AnamSys.csproj.GenerateResource.Cache
+D:\AnamSys_Repo\AnamSys\AnamSys\bin\Debug\AnamSys.exe.manifest
+D:\AnamSys_Repo\AnamSys\AnamSys\bin\Debug\AnamSys.application
+D:\AnamSys_Repo\AnamSys\AnamSys\obj\Debug\AnamSys.exe.manifest
+D:\AnamSys_Repo\AnamSys\AnamSys\obj\Debug\AnamSys.application

@@ -262,7 +262,6 @@ namespace AnamSys
                 Int32 mesAtual, anoAtual;
                 anoAtual = Convert.ToInt32(txtAno.Text);
                 mesAtual = Convert.ToInt32(cboMes.Text);
-
                 if (av * (-1) > 0)
                 {
                     if (mesAtual == 1)
@@ -293,6 +292,7 @@ namespace AnamSys
                         cboMes.Text = mesAtual.ToString();
                     }
                 }
+
                 //remove all the controls in the panel
                 panel1.Controls.Clear();
                 Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(CurrentCulture);
@@ -303,11 +303,12 @@ namespace AnamSys
                 VerificaDia();
                 List<DateTime> cList = new List<DateTime>();
                 DateTime auxDt;
-                string query = "select data from consultas where data>='" + txtAno.Text + "-" + cboMes.Text + "-1' and data<='" + txtAno.Text + "-" + cboMes.Text + "-31'";
-                DataTable dt = db.query(query);
-                if (dt != null)
+                string query = "select * from consulta";// where data>='" + anoAtual.ToString() + "-" + mesAtual + "-1' and data<='" + anoAtual.ToString() + "-" + mesAtual + "-31'";
+
+                DataTable marcadas = db.query(query);
+                if (marcadas != null)
                 {
-                    foreach (DataRow dr in dt.Rows)
+                    foreach (DataRow dr in marcadas.Rows)
                     {
                         auxDt = Convert.ToDateTime(dr["data"]);
                         auxDt = new DateTime(auxDt.Year, auxDt.Month, auxDt.Day);
@@ -496,7 +497,21 @@ namespace AnamSys
                 //exibe o ano atual no textbox
                 txtAno.Text = DateTime.Now.Year.ToString();
                 //chama a função 
-                VerificaDia();
+                VerificaDia(); 
+                List<DateTime> cList = new List<DateTime>();
+                DateTime auxDt;
+                string query = "select * from consulta";// where data>='" + anoAtual.ToString() + "-" + mesAtual + "-1' and data<='" + anoAtual.ToString() + "-" + mesAtual + "-31'";
+
+                DataTable marcadas = db.query(query);
+                if (marcadas != null)
+                {
+                    foreach (DataRow dr in marcadas.Rows)
+                    {
+                        auxDt = Convert.ToDateTime(dr["data"]);
+                        auxDt = new DateTime(auxDt.Year, auxDt.Month, auxDt.Day);
+                        cList.Add(auxDt);
+                    }
+                }
                 for (Int32 i = 1; i < Dayz + 1; i++)
                 {
                     ndayz += 1;
@@ -765,7 +780,17 @@ namespace AnamSys
         {
             try 
             {
-
+                Image im;
+                string path = Application.StartupPath;
+                MessageBox.Show(path);
+                string[] imgs = System.IO.Directory.GetFiles(path,"*.jpg"); 
+                foreach(string str in imgs)
+                {
+                    MessageBox.Show(str);
+                    im = Image.FromFile(str);
+                    e.Graphics.DrawImage(im, 0, 0);
+                }
+                //;
             }
             catch(Exception err)
             {
@@ -858,12 +883,14 @@ namespace AnamSys
                         }
                         else
                         {
-                            Fatura fatura = new Fatura(novaConsulta.get_Id(), 0, data, Double.Parse(conDetValorTb.Text), Financeiro.FormaDePagamento.GetFromId(conDetFormaCb.SelectedIndex), true);
+                            Fatura fatura = new Fatura(novaConsulta.get_Id(), 0, data, Double.Parse(conDetValorTb.Text), Financeiro.FormaDePagamento.GetFromId(conDetFormaCb.SelectedIndex), conDetParCh.Checked);
                             if (fatura.get_Id() != -1)
                             {
                                 erro = fatura.save();
                                 if (erro != "")
                                     MessageBox.Show("Erro ao salvar fatura...");
+                                else
+                                    MessageBox.Show("Alterações realizadas com sucesso!");
                             }
                             else
                             {
@@ -1446,24 +1473,43 @@ namespace AnamSys
                             conHoraCb.Text = dia.Hour.ToString();
                             conMinCb.Text = dia.ToString("mm");
                         }
-                        dt = db.query("select * from fatura where paciente=" + dt.Rows[0]["paciente"].ToString() + " order by parcela asc");
+                        dt = db.query("select * from fatura where consulta=" + i.SubItems[0].Text + " order by parcela asc");
                         if (dt != null)
                         {
                             Double aux_Valor;
-                            if (dt.Rows.Count < 12)
+                            int index;
+                            bool pg;
+                            /*if (dt.Rows.Count < 12)
+                            {
                                 conDetParNup.Value = dt.Rows.Count + 1;
+                            }
                             else
+                            {
                                 conDetParNup.Value = 12;
+                            }
                             foreach (DataRow dr in dt.Rows)
                             {
                                 if (!double.TryParse(dr["valor"].ToString(), out aux_Valor))
                                     aux_Valor = 0;
                                 conDetParLbox.Items.Add(aux_Valor.ToString("F2"));
-                            }
+                            } */
+                            string test = dt.Rows[0]["valor"].ToString();
+                            if (!double.TryParse(dt.Rows[0]["valor"].ToString(), out aux_Valor))
+                                aux_Valor = 0;
+                            if (!int.TryParse(dt.Rows[0]["forma"].ToString(), out index))
+                                index = 0;
+                            if (!bool.TryParse(dt.Rows[0]["pendencia"].ToString(), out pg))
+                                pg = false;
+                            conDetValorTb.Text = aux_Valor.ToString("F2");
+                            conDetFormaCb.SelectedIndex = index;
+                            ConDetPgCh.Checked = pg;
                         }
                         else
                         {
                             conDetParNup.Value = 1;
+                            conDetValorTb.Text = "0.0";
+                            conDetFormaCb.SelectedIndex = 0;
+                            ConDetPgCh.Checked = false;
                         }
                         conDetailsPn.Show();
                     }

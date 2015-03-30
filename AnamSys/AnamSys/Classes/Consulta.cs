@@ -140,7 +140,7 @@ namespace AnamSys
                     string query = "UPDATE consulta set paciente="+ paciente + 
                         ",hoje='" + hoje.ToString("yyyy-MM-dd HH:mm:ss") +
                         "',detalhes='" + detalhes + 
-                        "',ficha='" + plano + 
+                        "',plano='" + plano + 
                         "',anamnese=" + anamnese + 
                         ",ativa="+ok+
                         ",data='" + data.ToString("yyyy-MM-dd HH:mm:ss") + 

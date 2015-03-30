@@ -19,7 +19,10 @@ namespace AnamSys
                 this.Name = name;
             }
 
-
+            public int get_Id()
+            {
+                return this.Id;
+            }
 
             public static FormaDePagamento Dinheiro 
             { 
@@ -143,14 +146,18 @@ namespace AnamSys
                 if (dt == null)
                 {//novo
                     DateTime hj = DateTime.Now;
-                    string novoId = conexao.proximo("fatura", "id");
+                    string novoId = conexao.proximo("fatura", "id"),pg;
+                    if (pendencia)
+                        pg = "1";
+                    else
+                        pg = "0";
                     string query = "INSERT INTO fatura VALUES(" + novoId + "," +
                              Consulta.ToString() + ",'" +
                              Data.ToString("yyyy-MM-dd HH:mm:ss") + "','" +
                              Valor + "'," +
-                             Forma.ToString() + "," +
+                             Forma.get_Id() + "," +
                              Parcela.ToString() + ",'" +
-                             Pendencia.ToString() + "','" +
+                             pg + "','" +
                              hj.ToString("yyyy-MM-dd HH:mm:ss") + "')", erro = conexao.comando(query);
                     if (erro == "")
                     {
@@ -170,12 +177,12 @@ namespace AnamSys
                 {
                     string erro,pend,query = "update fatura set data='" + Data.ToString("yyyy-MM-dd HH:mm:ss") + 
                         "',valor='" + Valor + 
-                        "',forma='" + Forma.ToString() + ",'";
+                        "',forma='" + Forma.get_Id() + "'";
                     if (Pendencia)
                         pend =  "1";
                     else
                         pend = "0";
-                    query += "', pendencia ='"+pend+"' WHERE id='" + dt.Rows[0]["id"].ToString() + "' and parcela='" + parcela.ToString() + "'";
+                    query += ", pendencia ='"+pend+"' WHERE id='" + dt.Rows[0]["id"].ToString() + "' and parcela='" + parcela.ToString() + "'";
                     erro = conexao.comando(query);
 
                     DateTime aux = new DateTime(1111, 11, 11);
@@ -360,10 +367,9 @@ namespace AnamSys
                     {
                         string query = "UPDATE fatura SET data='" + this.data.ToString("yyyy-MM-dd HH:mm:ss") +
                             "',valor='" + this.valor +
-                            "',forma='" + this.forma.ToString() +
+                            "',forma='" + this.forma.get_Id() +
                             "',consulta='" + this.consulta.ToString() +
-                            ",'" + this.hoje.ToString("yyyy-MM-dd HH:mm:ss") +
-                            ",pendencia='";
+                            "',pendencia='";
                         if (this.pendencia)
                             query += "1'";
                         else
