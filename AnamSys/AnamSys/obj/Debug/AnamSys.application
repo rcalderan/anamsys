@@ -7,14 +7,14 @@
     <framework targetVersion="4.5.1" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="AnamSys.exe.manifest" size="4142">
+    <dependentAssembly dependencyType="install" codebase="AnamSys.exe.manifest" size="4143">
       <assemblyIdentity name="AnamSys.exe" version="1.0.0.2" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>+d9vEIaG6SmPWYblbywoncxJI5WdAS5VzVJpPHg5yoI=</dsig:DigestValue>
+        <dsig:DigestValue>g8WMXVX7nRZXCe4Cdilej++GQj1iJeyDJhr7BWUDSnw=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

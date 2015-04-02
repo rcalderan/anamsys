@@ -219,6 +219,22 @@
             this.avalXLb = new System.Windows.Forms.Label();
             this.label59 = new System.Windows.Forms.Label();
             this.avalNomeLb = new System.Windows.Forms.Label();
+            this.EvoPn = new System.Windows.Forms.Panel();
+            this.evoInsDadoTb = new System.Windows.Forms.Label();
+            this.evoInsPn = new System.Windows.Forms.Panel();
+            this.evoInserirBt = new System.Windows.Forms.Button();
+            this.evoInsUnidadeUd = new System.Windows.Forms.NumericUpDown();
+            this.evoInsDataDtp = new System.Windows.Forms.DateTimePicker();
+            this.evoInsTipo = new System.Windows.Forms.ComboBox();
+            this.evoDataCb = new System.Windows.Forms.ComboBox();
+            this.label60 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.evoNomeTb = new System.Windows.Forms.TextBox();
+            this.evoPacienteMtb = new System.Windows.Forms.MaskedTextBox();
+            this.evoLpLb = new System.Windows.Forms.Label();
+            this.evoXLb = new System.Windows.Forms.Label();
+            this.panel9 = new System.Windows.Forms.Panel();
+            this.label62 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.conDetailsPn.SuspendLayout();
             this.conDetParPn.SuspendLayout();
@@ -239,6 +255,10 @@
             this.finPn.SuspendLayout();
             this.planoPn.SuspendLayout();
             this.avalPn.SuspendLayout();
+            this.EvoPn.SuspendLayout();
+            this.evoInsPn.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.evoInsUnidadeUd)).BeginInit();
+            this.panel9.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -307,29 +327,29 @@
             // consultarToolStripMenuItem
             // 
             this.consultarToolStripMenuItem.Name = "consultarToolStripMenuItem";
-            this.consultarToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.consultarToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.consultarToolStripMenuItem.Text = "Consultas";
             this.consultarToolStripMenuItem.Click += new System.EventHandler(this.consultarToolStripMenuItem_Click);
             // 
             // anamneseToolStripMenuItem1
             // 
             this.anamneseToolStripMenuItem1.Name = "anamneseToolStripMenuItem1";
-            this.anamneseToolStripMenuItem1.Size = new System.Drawing.Size(153, 22);
+            this.anamneseToolStripMenuItem1.Size = new System.Drawing.Size(187, 22);
             this.anamneseToolStripMenuItem1.Text = "Anamnese";
             this.anamneseToolStripMenuItem1.Click += new System.EventHandler(this.anamneseToolStripMenuItem1_Click);
             // 
             // faturarToolStripMenuItem
             // 
             this.faturarToolStripMenuItem.Name = "faturarToolStripMenuItem";
-            this.faturarToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.faturarToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.faturarToolStripMenuItem.Text = "Faturar";
             this.faturarToolStripMenuItem.Click += new System.EventHandler(this.faturarToolStripMenuItem_Click);
             // 
             // fichaEvolutivaToolStripMenuItem
             // 
             this.fichaEvolutivaToolStripMenuItem.Name = "fichaEvolutivaToolStripMenuItem";
-            this.fichaEvolutivaToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.fichaEvolutivaToolStripMenuItem.Text = "Ficha Evolutiva";
+            this.fichaEvolutivaToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.fichaEvolutivaToolStripMenuItem.Text = "Evolução do Paciente";
             this.fichaEvolutivaToolStripMenuItem.Click += new System.EventHandler(this.fichaEvolutivaToolStripMenuItem_Click);
             // 
             // agendaToolStripMenuItem
@@ -2333,17 +2353,199 @@
             this.avalNomeLb.TabIndex = 0;
             this.avalNomeLb.Text = "Nome";
             // 
+            // EvoPn
+            // 
+            this.EvoPn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.EvoPn.Controls.Add(this.panel9);
+            this.EvoPn.Controls.Add(this.evoInsPn);
+            this.EvoPn.Controls.Add(this.evoDataCb);
+            this.EvoPn.Controls.Add(this.label60);
+            this.EvoPn.Controls.Add(this.label15);
+            this.EvoPn.Controls.Add(this.evoNomeTb);
+            this.EvoPn.Controls.Add(this.evoPacienteMtb);
+            this.EvoPn.Controls.Add(this.evoLpLb);
+            this.EvoPn.Controls.Add(this.evoXLb);
+            this.EvoPn.Location = new System.Drawing.Point(13, 40);
+            this.EvoPn.Name = "EvoPn";
+            this.EvoPn.Size = new System.Drawing.Size(861, 350);
+            this.EvoPn.TabIndex = 79;
+            this.EvoPn.Visible = false;
+            this.EvoPn.VisibleChanged += new System.EventHandler(this.EvoPn_VisibleChanged);
+            // 
+            // evoInsDadoTb
+            // 
+            this.evoInsDadoTb.AutoSize = true;
+            this.evoInsDadoTb.BackColor = System.Drawing.Color.Silver;
+            this.evoInsDadoTb.Location = new System.Drawing.Point(116, 51);
+            this.evoInsDadoTb.Name = "evoInsDadoTb";
+            this.evoInsDadoTb.Size = new System.Drawing.Size(71, 13);
+            this.evoInsDadoTb.TabIndex = 3;
+            this.evoInsDadoTb.Text = "Inserir dado >";
+            this.evoInsDadoTb.Click += new System.EventHandler(this.evoInsDadoTb_Click);
+            // 
+            // evoInsPn
+            // 
+            this.evoInsPn.BackColor = System.Drawing.Color.Silver;
+            this.evoInsPn.Controls.Add(this.evoInserirBt);
+            this.evoInsPn.Controls.Add(this.evoInsUnidadeUd);
+            this.evoInsPn.Controls.Add(this.evoInsDataDtp);
+            this.evoInsPn.Location = new System.Drawing.Point(227, 133);
+            this.evoInsPn.Name = "evoInsPn";
+            this.evoInsPn.Size = new System.Drawing.Size(338, 53);
+            this.evoInsPn.TabIndex = 5;
+            this.evoInsPn.Visible = false;
+            // 
+            // evoInserirBt
+            // 
+            this.evoInserirBt.Location = new System.Drawing.Point(249, 16);
+            this.evoInserirBt.Name = "evoInserirBt";
+            this.evoInserirBt.Size = new System.Drawing.Size(75, 26);
+            this.evoInserirBt.TabIndex = 3;
+            this.evoInserirBt.Text = "Inserir";
+            this.evoInserirBt.UseVisualStyleBackColor = true;
+            this.evoInserirBt.Click += new System.EventHandler(this.evoInserirBt_Click);
+            // 
+            // evoInsUnidadeUd
+            // 
+            this.evoInsUnidadeUd.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.evoInsUnidadeUd.Location = new System.Drawing.Point(9, 14);
+            this.evoInsUnidadeUd.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.evoInsUnidadeUd.Name = "evoInsUnidadeUd";
+            this.evoInsUnidadeUd.Size = new System.Drawing.Size(66, 27);
+            this.evoInsUnidadeUd.TabIndex = 2;
+            // 
+            // evoInsDataDtp
+            // 
+            this.evoInsDataDtp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.evoInsDataDtp.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.evoInsDataDtp.Location = new System.Drawing.Point(106, 14);
+            this.evoInsDataDtp.Name = "evoInsDataDtp";
+            this.evoInsDataDtp.Size = new System.Drawing.Size(112, 26);
+            this.evoInsDataDtp.TabIndex = 1;
+            // 
+            // evoInsTipo
+            // 
+            this.evoInsTipo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.evoInsTipo.FormattingEnabled = true;
+            this.evoInsTipo.Items.AddRange(new object[] {
+            "Repetições",
+            "Segundos",
+            "Minutos"});
+            this.evoInsTipo.Location = new System.Drawing.Point(84, 4);
+            this.evoInsTipo.Name = "evoInsTipo";
+            this.evoInsTipo.Size = new System.Drawing.Size(103, 28);
+            this.evoInsTipo.TabIndex = 0;
+            this.evoInsTipo.Text = "Repetições";
+            // 
+            // evoDataCb
+            // 
+            this.evoDataCb.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.evoDataCb.FormattingEnabled = true;
+            this.evoDataCb.Location = new System.Drawing.Point(737, 42);
+            this.evoDataCb.Name = "evoDataCb";
+            this.evoDataCb.Size = new System.Drawing.Size(104, 28);
+            this.evoDataCb.Sorted = true;
+            this.evoDataCb.TabIndex = 4;
+            // 
+            // label60
+            // 
+            this.label60.AutoSize = true;
+            this.label60.Location = new System.Drawing.Point(82, 26);
+            this.label60.Name = "label60";
+            this.label60.Size = new System.Drawing.Size(35, 13);
+            this.label60.TabIndex = 3;
+            this.label60.Text = "Nome";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(24, 27);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(18, 13);
+            this.label15.TabIndex = 3;
+            this.label15.Text = "ID";
+            // 
+            // evoNomeTb
+            // 
+            this.evoNomeTb.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.evoNomeTb.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.evoNomeTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.evoNomeTb.Location = new System.Drawing.Point(83, 42);
+            this.evoNomeTb.Name = "evoNomeTb";
+            this.evoNomeTb.Size = new System.Drawing.Size(645, 27);
+            this.evoNomeTb.TabIndex = 2;
+            this.evoNomeTb.KeyDown += new System.Windows.Forms.KeyEventHandler(this.evoNomeTb_KeyDown);
+            // 
+            // evoPacienteMtb
+            // 
+            this.evoPacienteMtb.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.evoPacienteMtb.Location = new System.Drawing.Point(25, 42);
+            this.evoPacienteMtb.Mask = "00000";
+            this.evoPacienteMtb.Name = "evoPacienteMtb";
+            this.evoPacienteMtb.Size = new System.Drawing.Size(51, 27);
+            this.evoPacienteMtb.TabIndex = 1;
+            this.evoPacienteMtb.ValidatingType = typeof(int);
+            this.evoPacienteMtb.KeyDown += new System.Windows.Forms.KeyEventHandler(this.evoPacienteMtb_KeyDown);
+            // 
+            // evoLpLb
+            // 
+            this.evoLpLb.AutoSize = true;
+            this.evoLpLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.evoLpLb.Location = new System.Drawing.Point(808, 12);
+            this.evoLpLb.Name = "evoLpLb";
+            this.evoLpLb.Size = new System.Drawing.Size(24, 17);
+            this.evoLpLb.TabIndex = 0;
+            this.evoLpLb.Text = "Lp";
+            this.evoLpLb.Click += new System.EventHandler(this.evoLpLb_Click);
+            // 
+            // evoXLb
+            // 
+            this.evoXLb.AutoSize = true;
+            this.evoXLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.evoXLb.Location = new System.Drawing.Point(833, 9);
+            this.evoXLb.Name = "evoXLb";
+            this.evoXLb.Size = new System.Drawing.Size(21, 20);
+            this.evoXLb.TabIndex = 0;
+            this.evoXLb.Text = "X";
+            this.evoXLb.Click += new System.EventHandler(this.evoXLb_Click);
+            // 
+            // panel9
+            // 
+            this.panel9.BackColor = System.Drawing.Color.Silver;
+            this.panel9.Controls.Add(this.evoInsTipo);
+            this.panel9.Controls.Add(this.label62);
+            this.panel9.Controls.Add(this.evoInsDadoTb);
+            this.panel9.Location = new System.Drawing.Point(25, 104);
+            this.panel9.Name = "panel9";
+            this.panel9.Size = new System.Drawing.Size(200, 100);
+            this.panel9.TabIndex = 6;
+            // 
+            // label62
+            // 
+            this.label62.AutoSize = true;
+            this.label62.BackColor = System.Drawing.Color.Silver;
+            this.label62.Location = new System.Drawing.Point(5, 8);
+            this.label62.Name = "label62";
+            this.label62.Size = new System.Drawing.Size(73, 13);
+            this.label62.TabIndex = 3;
+            this.label62.Text = "Tipo de Teste";
+            // 
             // principalForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1028, 662);
+            this.Controls.Add(this.EvoPn);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.consultasPn);
             this.Controls.Add(this.finPn);
             this.Controls.Add(this.cad1Pn);
             this.Controls.Add(this.avalPn);
             this.Controls.Add(this.planoPn);
+            this.Controls.Add(this.consultasPn);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "principalForm";
             this.Text = "AnamSys";
@@ -2386,6 +2588,12 @@
             this.planoPn.PerformLayout();
             this.avalPn.ResumeLayout(false);
             this.avalPn.PerformLayout();
+            this.EvoPn.ResumeLayout(false);
+            this.EvoPn.PerformLayout();
+            this.evoInsPn.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.evoInsUnidadeUd)).EndInit();
+            this.panel9.ResumeLayout(false);
+            this.panel9.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2584,6 +2792,22 @@
         private System.Windows.Forms.ToolStripMenuItem fichaEvolutivaToolStripMenuItem1;
         private System.Windows.Forms.Label consultasLLb;
         private System.Windows.Forms.Label consultasXLb;
+        private System.Windows.Forms.Panel EvoPn;
+        private System.Windows.Forms.Label evoXLb;
+        private System.Windows.Forms.Label label60;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox evoNomeTb;
+        private System.Windows.Forms.MaskedTextBox evoPacienteMtb;
+        private System.Windows.Forms.Label evoLpLb;
+        private System.Windows.Forms.ComboBox evoDataCb;
+        private System.Windows.Forms.Label evoInsDadoTb;
+        private System.Windows.Forms.Panel evoInsPn;
+        private System.Windows.Forms.Button evoInserirBt;
+        private System.Windows.Forms.NumericUpDown evoInsUnidadeUd;
+        private System.Windows.Forms.DateTimePicker evoInsDataDtp;
+        private System.Windows.Forms.ComboBox evoInsTipo;
+        private System.Windows.Forms.Panel panel9;
+        private System.Windows.Forms.Label label62;
     }
 }
 

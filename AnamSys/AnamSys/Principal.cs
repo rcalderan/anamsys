@@ -32,7 +32,7 @@ namespace AnamSys
         public principalForm()
         {
             InitializeComponent();
-            Control[] paineis = { consultasPn, cad1Pn, finPn, planoPn, avalPn, conDetailsPn };
+            Control[] paineis = { consultasPn, cad1Pn, finPn, planoPn, avalPn, conDetailsPn, EvoPn };
             foreach (Control c in paineis)
             {
                 c.MouseDown += control_MouseDown;
@@ -782,15 +782,14 @@ namespace AnamSys
             {
                 Image im;
                 string path = Application.StartupPath;
-                MessageBox.Show(path);
+                float y = 0;
                 string[] imgs = System.IO.Directory.GetFiles(path,"*.jpg"); 
                 foreach(string str in imgs)
                 {
-                    MessageBox.Show(str);
                     im = Image.FromFile(str);
-                    e.Graphics.DrawImage(im, 0, 0);
+                    e.Graphics.DrawImage(im, 0, y);
+                    y += im.Height;
                 }
-                //;
             }
             catch(Exception err)
             {
@@ -919,7 +918,15 @@ namespace AnamSys
 
         private void fichaEvolutivaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            try 
+            {
+                mostraGb(EvoPn);
+            }
+            catch (Exception erro)
+            {
+                if (debug_mode)
+                    MessageBox.Show("Caugth: " + erro.Message);
+            }
         }
 
         private void agendaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2021,6 +2028,171 @@ namespace AnamSys
             }
         }
 
+        private void evoXLb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                mostraGb();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void EvoPn_VisibleChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (EvoPn.Visible)
+                {
+                    string query = "SELECT id,nome FROM paciente";
+                    string[] data;
+                    DataTable pts = db.query(query);
+                    if (pts!=null)
+                    {
+                        data = new string[pts.Rows.Count];
+                        var source = new AutoCompleteStringCollection();
+                        List<string> l = new List<string>();
+                        foreach(DataRow r in pts.Rows)
+                            l.Add(r["nome"].ToString());
+                        source.AddRange(l.ToArray());
+                        evoNomeTb.AutoCompleteCustomSource = source;
+                    }
+                    pts = db.query("select data from evolucao group by data asc");
+                    if (pts != null)
+                    {
+                        data = new string[pts.Rows.Count];
+                        DateTime aux;
+                        for (int i = 0; i < pts.Rows.Count; i++)
+                        {
+                            if (DateTime.TryParse(pts.Rows[i]["data"].ToString(), out aux))
+                                data[i] = aux.ToString("dd/MM/yyyy");
+                        }
+                        evoDataCb.Items.Clear();
+                        evoDataCb.Items.AddRange(data);
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void evoNomeTb_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    string query = "SELECT * FROM paciente WHERE nome='"+evoNomeTb.Text+"'";
+                    DataTable pts = db.query(query);
+                    if (pts != null)
+                    {
+                        evoPacienteMtb.Text = pts.Rows[0]["id"].ToString();
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void evoPacienteMtb_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    string query = "SELECT * FROM paciente WHERE id='" + evoPacienteMtb.Text + "'";
+                    DataTable pts = db.query(query);
+                    if (pts != null)
+                    {
+                        evoNomeTb.Text = pts.Rows[0]["nome"].ToString();
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void limpaEvolucao()
+        {
+            try
+            {
+                evoPacienteMtb.Clear();
+                evoNomeTb.Clear();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void evoLpLb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                limpaEvolucao();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void evoInserirBt_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DataTable dt = db.query("select id from evolucao where data='"+evoInsDataDtp.Value.ToString("YYYY-MM-dd")+"'");
+                if (dt!=null)
+                {
+                    if (MessageBox.Show("Este valor já foi definido. Deseja atualizar os dados?","Atualizar",MessageBoxButtons.YesNo)== DialogResult.Yes)
+                    {
+                        //atualizar
+                    }
+                }
+                else
+                {
+                    string query = "INSERT INTO evolucao VALUES('"+db.proximo("evolucao","id")+"','"+
+                        evoPacienteMtb.Text + "','" + 
+                        evoInsTipo.Text+"')";
+                }
+                evoInsPn.Hide();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void evoInsDadoTb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!evoInsPn.Visible)
+                    evoInsPn.Show();
+                else
+                    evoInsPn.Hide();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
         /*
          * try
             {
