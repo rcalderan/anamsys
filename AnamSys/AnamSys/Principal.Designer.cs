@@ -28,6 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.cadastrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pacienteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -220,12 +224,26 @@
             this.label59 = new System.Windows.Forms.Label();
             this.avalNomeLb = new System.Windows.Forms.Label();
             this.EvoPn = new System.Windows.Forms.Panel();
-            this.evoInsDadoTb = new System.Windows.Forms.Label();
+            this.EvoNovoPn = new System.Windows.Forms.Panel();
+            this.evoInsTipo = new System.Windows.Forms.ComboBox();
+            this.label62 = new System.Windows.Forms.Label();
             this.evoInsPn = new System.Windows.Forms.Panel();
             this.evoInserirBt = new System.Windows.Forms.Button();
+            this.label68 = new System.Windows.Forms.Label();
+            this.evoInsUniLb = new System.Windows.Forms.Label();
             this.evoInsUnidadeUd = new System.Windows.Forms.NumericUpDown();
             this.evoInsDataDtp = new System.Windows.Forms.DateTimePicker();
-            this.evoInsTipo = new System.Windows.Forms.ComboBox();
+            this.evoChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.panel9 = new System.Windows.Forms.Panel();
+            this.evoAteDtp = new System.Windows.Forms.DateTimePicker();
+            this.evoDeDtp = new System.Windows.Forms.DateTimePicker();
+            this.evoTesteCb = new System.Windows.Forms.ComboBox();
+            this.label64 = new System.Windows.Forms.Label();
+            this.label63 = new System.Windows.Forms.Label();
+            this.label66 = new System.Windows.Forms.Label();
+            this.label65 = new System.Windows.Forms.Label();
+            this.label61 = new System.Windows.Forms.Label();
+            this.evoInsDadoTb = new System.Windows.Forms.Label();
             this.evoDataCb = new System.Windows.Forms.ComboBox();
             this.label60 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
@@ -233,8 +251,6 @@
             this.evoPacienteMtb = new System.Windows.Forms.MaskedTextBox();
             this.evoLpLb = new System.Windows.Forms.Label();
             this.evoXLb = new System.Windows.Forms.Label();
-            this.panel9 = new System.Windows.Forms.Panel();
-            this.label62 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.conDetailsPn.SuspendLayout();
             this.conDetParPn.SuspendLayout();
@@ -256,8 +272,10 @@
             this.planoPn.SuspendLayout();
             this.avalPn.SuspendLayout();
             this.EvoPn.SuspendLayout();
+            this.EvoNovoPn.SuspendLayout();
             this.evoInsPn.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.evoInsUnidadeUd)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.evoChart)).BeginInit();
             this.panel9.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -2356,8 +2374,10 @@
             // EvoPn
             // 
             this.EvoPn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.EvoPn.Controls.Add(this.panel9);
+            this.EvoPn.Controls.Add(this.EvoNovoPn);
             this.EvoPn.Controls.Add(this.evoInsPn);
+            this.EvoPn.Controls.Add(this.evoChart);
+            this.EvoPn.Controls.Add(this.panel9);
             this.EvoPn.Controls.Add(this.evoDataCb);
             this.EvoPn.Controls.Add(this.label60);
             this.EvoPn.Controls.Add(this.label15);
@@ -2372,60 +2392,16 @@
             this.EvoPn.Visible = false;
             this.EvoPn.VisibleChanged += new System.EventHandler(this.EvoPn_VisibleChanged);
             // 
-            // evoInsDadoTb
+            // EvoNovoPn
             // 
-            this.evoInsDadoTb.AutoSize = true;
-            this.evoInsDadoTb.BackColor = System.Drawing.Color.Silver;
-            this.evoInsDadoTb.Location = new System.Drawing.Point(116, 51);
-            this.evoInsDadoTb.Name = "evoInsDadoTb";
-            this.evoInsDadoTb.Size = new System.Drawing.Size(71, 13);
-            this.evoInsDadoTb.TabIndex = 3;
-            this.evoInsDadoTb.Text = "Inserir dado >";
-            this.evoInsDadoTb.Click += new System.EventHandler(this.evoInsDadoTb_Click);
-            // 
-            // evoInsPn
-            // 
-            this.evoInsPn.BackColor = System.Drawing.Color.Silver;
-            this.evoInsPn.Controls.Add(this.evoInserirBt);
-            this.evoInsPn.Controls.Add(this.evoInsUnidadeUd);
-            this.evoInsPn.Controls.Add(this.evoInsDataDtp);
-            this.evoInsPn.Location = new System.Drawing.Point(227, 133);
-            this.evoInsPn.Name = "evoInsPn";
-            this.evoInsPn.Size = new System.Drawing.Size(338, 53);
-            this.evoInsPn.TabIndex = 5;
-            this.evoInsPn.Visible = false;
-            // 
-            // evoInserirBt
-            // 
-            this.evoInserirBt.Location = new System.Drawing.Point(249, 16);
-            this.evoInserirBt.Name = "evoInserirBt";
-            this.evoInserirBt.Size = new System.Drawing.Size(75, 26);
-            this.evoInserirBt.TabIndex = 3;
-            this.evoInserirBt.Text = "Inserir";
-            this.evoInserirBt.UseVisualStyleBackColor = true;
-            this.evoInserirBt.Click += new System.EventHandler(this.evoInserirBt_Click);
-            // 
-            // evoInsUnidadeUd
-            // 
-            this.evoInsUnidadeUd.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.evoInsUnidadeUd.Location = new System.Drawing.Point(9, 14);
-            this.evoInsUnidadeUd.Maximum = new decimal(new int[] {
-            99999,
-            0,
-            0,
-            0});
-            this.evoInsUnidadeUd.Name = "evoInsUnidadeUd";
-            this.evoInsUnidadeUd.Size = new System.Drawing.Size(66, 27);
-            this.evoInsUnidadeUd.TabIndex = 2;
-            // 
-            // evoInsDataDtp
-            // 
-            this.evoInsDataDtp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.evoInsDataDtp.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.evoInsDataDtp.Location = new System.Drawing.Point(106, 14);
-            this.evoInsDataDtp.Name = "evoInsDataDtp";
-            this.evoInsDataDtp.Size = new System.Drawing.Size(112, 26);
-            this.evoInsDataDtp.TabIndex = 1;
+            this.EvoNovoPn.BackColor = System.Drawing.Color.Silver;
+            this.EvoNovoPn.Controls.Add(this.evoInsTipo);
+            this.EvoNovoPn.Controls.Add(this.label62);
+            this.EvoNovoPn.Location = new System.Drawing.Point(227, 105);
+            this.EvoNovoPn.Name = "EvoNovoPn";
+            this.EvoNovoPn.Size = new System.Drawing.Size(196, 45);
+            this.EvoNovoPn.TabIndex = 8;
+            this.EvoNovoPn.Visible = false;
             // 
             // evoInsTipo
             // 
@@ -2435,11 +2411,230 @@
             "Repetições",
             "Segundos",
             "Minutos"});
-            this.evoInsTipo.Location = new System.Drawing.Point(84, 4);
+            this.evoInsTipo.Location = new System.Drawing.Point(83, 8);
             this.evoInsTipo.Name = "evoInsTipo";
             this.evoInsTipo.Size = new System.Drawing.Size(103, 28);
             this.evoInsTipo.TabIndex = 0;
             this.evoInsTipo.Text = "Repetições";
+            this.evoInsTipo.SelectedIndexChanged += new System.EventHandler(this.evoInsTipo_SelectedIndexChanged);
+            // 
+            // label62
+            // 
+            this.label62.AutoSize = true;
+            this.label62.BackColor = System.Drawing.Color.Transparent;
+            this.label62.Location = new System.Drawing.Point(4, 16);
+            this.label62.Name = "label62";
+            this.label62.Size = new System.Drawing.Size(73, 13);
+            this.label62.TabIndex = 3;
+            this.label62.Text = "Tipo de Teste";
+            // 
+            // evoInsPn
+            // 
+            this.evoInsPn.BackColor = System.Drawing.Color.Silver;
+            this.evoInsPn.Controls.Add(this.evoInserirBt);
+            this.evoInsPn.Controls.Add(this.label68);
+            this.evoInsPn.Controls.Add(this.evoInsUniLb);
+            this.evoInsPn.Controls.Add(this.evoInsUnidadeUd);
+            this.evoInsPn.Controls.Add(this.evoInsDataDtp);
+            this.evoInsPn.Location = new System.Drawing.Point(227, 168);
+            this.evoInsPn.Name = "evoInsPn";
+            this.evoInsPn.Size = new System.Drawing.Size(170, 126);
+            this.evoInsPn.TabIndex = 5;
+            this.evoInsPn.Visible = false;
+            // 
+            // evoInserirBt
+            // 
+            this.evoInserirBt.Location = new System.Drawing.Point(59, 93);
+            this.evoInserirBt.Name = "evoInserirBt";
+            this.evoInserirBt.Size = new System.Drawing.Size(102, 26);
+            this.evoInserirBt.TabIndex = 3;
+            this.evoInserirBt.Text = "Inserir";
+            this.evoInserirBt.UseVisualStyleBackColor = true;
+            this.evoInserirBt.Click += new System.EventHandler(this.evoInserirBt_Click);
+            // 
+            // label68
+            // 
+            this.label68.AutoSize = true;
+            this.label68.BackColor = System.Drawing.Color.Transparent;
+            this.label68.Location = new System.Drawing.Point(23, 56);
+            this.label68.Name = "label68";
+            this.label68.Size = new System.Drawing.Size(30, 13);
+            this.label68.TabIndex = 3;
+            this.label68.Text = "Data";
+            // 
+            // evoInsUniLb
+            // 
+            this.evoInsUniLb.AutoSize = true;
+            this.evoInsUniLb.BackColor = System.Drawing.Color.Transparent;
+            this.evoInsUniLb.Location = new System.Drawing.Point(-1, 16);
+            this.evoInsUniLb.Name = "evoInsUniLb";
+            this.evoInsUniLb.Size = new System.Drawing.Size(47, 13);
+            this.evoInsUniLb.TabIndex = 3;
+            this.evoInsUniLb.Text = "Unidade";
+            // 
+            // evoInsUnidadeUd
+            // 
+            this.evoInsUnidadeUd.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.evoInsUnidadeUd.Location = new System.Drawing.Point(59, 10);
+            this.evoInsUnidadeUd.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.evoInsUnidadeUd.Name = "evoInsUnidadeUd";
+            this.evoInsUnidadeUd.Size = new System.Drawing.Size(102, 27);
+            this.evoInsUnidadeUd.TabIndex = 2;
+            this.evoInsUnidadeUd.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // evoInsDataDtp
+            // 
+            this.evoInsDataDtp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.evoInsDataDtp.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.evoInsDataDtp.Location = new System.Drawing.Point(59, 49);
+            this.evoInsDataDtp.Name = "evoInsDataDtp";
+            this.evoInsDataDtp.Size = new System.Drawing.Size(102, 26);
+            this.evoInsDataDtp.TabIndex = 1;
+            this.evoInsDataDtp.TabStop = false;
+            // 
+            // evoChart
+            // 
+            this.evoChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            chartArea2.AxisX.LabelStyle.Format = "dd/MMM";
+            chartArea2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            chartArea2.Name = "ChartArea1";
+            this.evoChart.ChartAreas.Add(chartArea2);
+            legend2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            legend2.Name = "Legend1";
+            this.evoChart.Legends.Add(legend2);
+            this.evoChart.Location = new System.Drawing.Point(274, 88);
+            this.evoChart.Name = "evoChart";
+            this.evoChart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright;
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Dados";
+            series3.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.String;
+            series4.BorderColor = System.Drawing.Color.Blue;
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series4.Legend = "Legend1";
+            series4.Name = "Desempenho";
+            series4.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.String;
+            this.evoChart.Series.Add(series3);
+            this.evoChart.Series.Add(series4);
+            this.evoChart.Size = new System.Drawing.Size(590, 245);
+            this.evoChart.TabIndex = 7;
+            this.evoChart.Text = "chart1";
+            this.evoChart.Visible = false;
+            // 
+            // panel9
+            // 
+            this.panel9.BackColor = System.Drawing.Color.Silver;
+            this.panel9.Controls.Add(this.evoAteDtp);
+            this.panel9.Controls.Add(this.evoDeDtp);
+            this.panel9.Controls.Add(this.evoTesteCb);
+            this.panel9.Controls.Add(this.label64);
+            this.panel9.Controls.Add(this.label63);
+            this.panel9.Controls.Add(this.label66);
+            this.panel9.Controls.Add(this.label65);
+            this.panel9.Controls.Add(this.label61);
+            this.panel9.Controls.Add(this.evoInsDadoTb);
+            this.panel9.Location = new System.Drawing.Point(25, 80);
+            this.panel9.Name = "panel9";
+            this.panel9.Size = new System.Drawing.Size(200, 215);
+            this.panel9.TabIndex = 6;
+            // 
+            // evoAteDtp
+            // 
+            this.evoAteDtp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.evoAteDtp.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.evoAteDtp.Location = new System.Drawing.Point(39, 150);
+            this.evoAteDtp.Name = "evoAteDtp";
+            this.evoAteDtp.Size = new System.Drawing.Size(102, 26);
+            this.evoAteDtp.TabIndex = 8;
+            this.evoAteDtp.ValueChanged += new System.EventHandler(this.evoDeDtp_ValueChanged);
+            // 
+            // evoDeDtp
+            // 
+            this.evoDeDtp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.evoDeDtp.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.evoDeDtp.Location = new System.Drawing.Point(39, 122);
+            this.evoDeDtp.Name = "evoDeDtp";
+            this.evoDeDtp.Size = new System.Drawing.Size(102, 26);
+            this.evoDeDtp.TabIndex = 8;
+            this.evoDeDtp.ValueChanged += new System.EventHandler(this.evoDeDtp_ValueChanged);
+            // 
+            // evoTesteCb
+            // 
+            this.evoTesteCb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.evoTesteCb.FormattingEnabled = true;
+            this.evoTesteCb.Location = new System.Drawing.Point(38, 33);
+            this.evoTesteCb.Name = "evoTesteCb";
+            this.evoTesteCb.Size = new System.Drawing.Size(103, 28);
+            this.evoTesteCb.TabIndex = 7;
+            this.evoTesteCb.SelectedValueChanged += new System.EventHandler(this.evoTesteCb_SelectedValueChanged);
+            // 
+            // label64
+            // 
+            this.label64.AutoSize = true;
+            this.label64.BackColor = System.Drawing.Color.Silver;
+            this.label64.Location = new System.Drawing.Point(7, 157);
+            this.label64.Name = "label64";
+            this.label64.Size = new System.Drawing.Size(23, 13);
+            this.label64.TabIndex = 3;
+            this.label64.Text = "Até";
+            // 
+            // label63
+            // 
+            this.label63.AutoSize = true;
+            this.label63.BackColor = System.Drawing.Color.Silver;
+            this.label63.Location = new System.Drawing.Point(7, 129);
+            this.label63.Name = "label63";
+            this.label63.Size = new System.Drawing.Size(21, 13);
+            this.label63.TabIndex = 3;
+            this.label63.Text = "De";
+            // 
+            // label66
+            // 
+            this.label66.AutoSize = true;
+            this.label66.BackColor = System.Drawing.Color.Silver;
+            this.label66.Location = new System.Drawing.Point(3, 199);
+            this.label66.Name = "label66";
+            this.label66.Size = new System.Drawing.Size(68, 13);
+            this.label66.TabIndex = 3;
+            this.label66.Text = "Excluir Teste";
+            this.label66.Click += new System.EventHandler(this.label66_Click);
+            // 
+            // label65
+            // 
+            this.label65.AutoSize = true;
+            this.label65.BackColor = System.Drawing.Color.Silver;
+            this.label65.Location = new System.Drawing.Point(147, 41);
+            this.label65.Name = "label65";
+            this.label65.Size = new System.Drawing.Size(42, 13);
+            this.label65.TabIndex = 3;
+            this.label65.Text = "Novo >";
+            this.label65.Click += new System.EventHandler(this.label65_Click);
+            // 
+            // label61
+            // 
+            this.label61.AutoSize = true;
+            this.label61.BackColor = System.Drawing.Color.Silver;
+            this.label61.Location = new System.Drawing.Point(10, 41);
+            this.label61.Name = "label61";
+            this.label61.Size = new System.Drawing.Size(18, 13);
+            this.label61.TabIndex = 3;
+            this.label61.Text = "ID";
+            // 
+            // evoInsDadoTb
+            // 
+            this.evoInsDadoTb.AutoSize = true;
+            this.evoInsDadoTb.BackColor = System.Drawing.Color.Silver;
+            this.evoInsDadoTb.Location = new System.Drawing.Point(128, 199);
+            this.evoInsDadoTb.Name = "evoInsDadoTb";
+            this.evoInsDadoTb.Size = new System.Drawing.Size(71, 13);
+            this.evoInsDadoTb.TabIndex = 3;
+            this.evoInsDadoTb.Text = "Inserir dado >";
+            this.evoInsDadoTb.Click += new System.EventHandler(this.evoInsDadoTb_Click);
             // 
             // evoDataCb
             // 
@@ -2513,27 +2708,6 @@
             this.evoXLb.Text = "X";
             this.evoXLb.Click += new System.EventHandler(this.evoXLb_Click);
             // 
-            // panel9
-            // 
-            this.panel9.BackColor = System.Drawing.Color.Silver;
-            this.panel9.Controls.Add(this.evoInsTipo);
-            this.panel9.Controls.Add(this.label62);
-            this.panel9.Controls.Add(this.evoInsDadoTb);
-            this.panel9.Location = new System.Drawing.Point(25, 104);
-            this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(200, 100);
-            this.panel9.TabIndex = 6;
-            // 
-            // label62
-            // 
-            this.label62.AutoSize = true;
-            this.label62.BackColor = System.Drawing.Color.Silver;
-            this.label62.Location = new System.Drawing.Point(5, 8);
-            this.label62.Name = "label62";
-            this.label62.Size = new System.Drawing.Size(73, 13);
-            this.label62.TabIndex = 3;
-            this.label62.Text = "Tipo de Teste";
-            // 
             // principalForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2590,8 +2764,12 @@
             this.avalPn.PerformLayout();
             this.EvoPn.ResumeLayout(false);
             this.EvoPn.PerformLayout();
+            this.EvoNovoPn.ResumeLayout(false);
+            this.EvoNovoPn.PerformLayout();
             this.evoInsPn.ResumeLayout(false);
+            this.evoInsPn.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.evoInsUnidadeUd)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.evoChart)).EndInit();
             this.panel9.ResumeLayout(false);
             this.panel9.PerformLayout();
             this.ResumeLayout(false);
@@ -2808,6 +2986,18 @@
         private System.Windows.Forms.ComboBox evoInsTipo;
         private System.Windows.Forms.Panel panel9;
         private System.Windows.Forms.Label label62;
+        private System.Windows.Forms.Label label61;
+        private System.Windows.Forms.DataVisualization.Charting.Chart evoChart;
+        private System.Windows.Forms.DateTimePicker evoAteDtp;
+        private System.Windows.Forms.DateTimePicker evoDeDtp;
+        private System.Windows.Forms.Label label64;
+        private System.Windows.Forms.Label label63;
+        private System.Windows.Forms.Panel EvoNovoPn;
+        private System.Windows.Forms.Label label68;
+        private System.Windows.Forms.Label evoInsUniLb;
+        private System.Windows.Forms.Label label66;
+        private System.Windows.Forms.ComboBox evoTesteCb;
+        private System.Windows.Forms.Label label65;
     }
 }
 

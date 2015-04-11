@@ -2088,12 +2088,13 @@ namespace AnamSys
             {
                 if (e.KeyCode == Keys.Enter)
                 {
-                    string query = "SELECT * FROM paciente WHERE nome='"+evoNomeTb.Text+"'";
-                    DataTable pts = db.query(query);
-                    if (pts != null)
+                    string erro = carregaEvolucao(evoNomeTb.Text);
+                    if (""!=erro)
                     {
-                        evoPacienteMtb.Text = pts.Rows[0]["id"].ToString();
+                        MessageBox.Show(erro);
                     }
+                    else
+                        loadChart();
                 }
             }
             catch (Exception err)
@@ -2103,17 +2104,108 @@ namespace AnamSys
             }
         }
 
+        private string carregaEvolucao(int idPaciente)
+        {
+            try
+            {
+                string query = "SELECT * FROM paciente WHERE id='" + idPaciente + "'";
+                DataTable pts = db.query(query);
+                if (pts != null)
+                {
+                    evoPacienteMtb.Text = idPaciente.ToString();
+                    evoNomeTb.Text = pts.Rows[0]["nome"].ToString();
+                    pts = db.query("select id from teste where paciente='" + evoPacienteMtb.Text + "' order by id");
+                    if (pts != null)
+                    {
+                        evoTesteCb.Items.Clear();
+                        foreach (DataRow r in pts.Rows)
+                        {
+                            evoTesteCb.Items.Add(r["id"].ToString());
+                        }
+                        evoTesteCb.SelectedIndex = 0;
+                    }
+                    return "";
+                }
+                else
+                    return "Paciente não encontrado!";
+
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    return err.Message;
+                else
+                    return "";
+            }
+
+        }
+        private string carregaEvolucao(string nomePacinete)
+        {
+            try
+            {
+                string query = "SELECT * FROM paciente WHERE nome='" + nomePacinete + "'";
+                DataTable pts = db.query(query);
+                if (pts != null)
+                {
+                    evoPacienteMtb.Text = pts.Rows[0]["id"].ToString();
+                    pts = db.query("select id from teste where paciente='" + evoPacienteMtb.Text+"' order by id");
+                    if (pts != null)
+                    {
+                        evoTesteCb.Items.Clear();
+                        foreach(DataRow r in pts.Rows)
+                        {
+                            evoTesteCb.Items.Add(r["id"].ToString());
+                        }
+                        evoTesteCb.SelectedIndex = 0;
+                    }
+                    /*
+                    pts = db.query("select id from teste where paciente='" + evoPacienteMtb.Text + "' order by id");
+                    if (pts!=null)
+                    {
+
+                        string[] data = new string[pts.Rows.Count];
+                        DateTime aux;
+                        for (int i = 0; i < pts.Rows.Count; i++)
+                        {
+                            if (DateTime.TryParse(pts.Rows[i]["data"].ToString(), out aux))
+                                data[i] = aux.ToString("dd/MM/yyyy");
+                        }
+                        evoDataCb.Items.Clear();
+                        evoDataCb.Items.AddRange(data);
+                    }*/
+
+                    return "";
+                }
+                else
+                    return "Paciente não encontrado!";
+
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    return err.Message;
+                else
+                    return "";
+            }
+
+        }
+
         private void evoPacienteMtb_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
                 if (e.KeyCode == Keys.Enter)
                 {
-                    string query = "SELECT * FROM paciente WHERE id='" + evoPacienteMtb.Text + "'";
-                    DataTable pts = db.query(query);
-                    if (pts != null)
+                    int p;
+                    if (int.TryParse(evoPacienteMtb.Text, out p))
                     {
-                        evoNomeTb.Text = pts.Rows[0]["nome"].ToString();
+                        string erro = carregaEvolucao(p);
+                        if (erro != "")
+                        {
+                            MessageBox.Show("Paciente não encontrado...");
+                        }
+                        else
+                            loadChart();
                     }
                 }
             }
@@ -2130,6 +2222,8 @@ namespace AnamSys
             {
                 evoPacienteMtb.Clear();
                 evoNomeTb.Clear();
+                evoInsUnidadeUd.Value = 0;
+                evoInsDataDtp.Value = DateTime.Today;
             }
             catch (Exception err)
             {
@@ -2155,19 +2249,61 @@ namespace AnamSys
         {
             try
             {
-                DataTable dt = db.query("select id from evolucao where data='"+evoInsDataDtp.Value.ToString("YYYY-MM-dd")+"'");
+                if (db.query("select id from paciente where id='"+evoPacienteMtb.Text+"'")==null)
+                {
+                    MessageBox.Show("Antes disto, adicione um paciente...");
+                    return;
+                }
+                DataTable dt = db.query("select id from teste where paciente='"+evoPacienteMtb.Text+"' and tipo='"+evoInsTipo.SelectedIndex.ToString()+"'");
+                string prox = db.proximo("teste", "id");
+                if (dt==null)
+                {
+                    string erro = db.comando("insert into teste values("+prox+",'" + evoPacienteMtb.Text + "','" + evoInsTipo.SelectedIndex.ToString() + "')");
+                    if ("" == erro)
+                    {
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Erro ao registrar novo teste: " + erro);
+                        return;
+                    }
+                }
+                else
+                {
+                    prox = dt.Rows[0]["id"].ToString();
+                }
+                dt = db.query("select id from evolucao where data='" + evoInsDataDtp.Value.ToString("yyyy-MM-dd") + "' and teste='"+ prox+"'");
                 if (dt!=null)
                 {
                     if (MessageBox.Show("Este valor já foi definido. Deseja atualizar os dados?","Atualizar",MessageBoxButtons.YesNo)== DialogResult.Yes)
                     {
-                        //atualizar
+                        string query = "update evolucao set data='" + evoInsDataDtp.Value.ToString("yyyy-MM-dd") + "', unidade='" + evoInsUnidadeUd.Value.ToString() + 
+                            "' where id='"+dt.Rows[0]["id"].ToString()+"'",
+                           erro = db.comando(query);
+                        if (erro != "")
+                            MessageBox.Show("Erro ao atualizar teste: " + erro);
+                        else
+                        {
+                            MessageBox.Show("Dado inserido no teste com sucesso!");
+                            carregaEvolucao(evoPacienteMtb.Text);
+                        }
                     }
                 }
                 else
                 {
                     string query = "INSERT INTO evolucao VALUES('"+db.proximo("evolucao","id")+"','"+
                         evoPacienteMtb.Text + "','" + 
-                        evoInsTipo.Text+"')";
+                        prox+"','"+evoInsDataDtp.Value.ToString("yyyy-MM-dd")+"','"+evoInsUnidadeUd.Value.ToString()+"')",
+                        erro=db.comando(query);
+                    if (erro != "")
+                        MessageBox.Show(erro);
+                    else
+                    {
+                        MessageBox.Show("Dado inserido no teste com sucesso!");
+                        carregaEvolucao(evoPacienteMtb.Text);
+                    }
+                    
                 }
                 evoInsPn.Hide();
             }
@@ -2182,10 +2318,162 @@ namespace AnamSys
         {
             try
             {
+                evoInsPn.BringToFront();
                 if (!evoInsPn.Visible)
                     evoInsPn.Show();
                 else
                     evoInsPn.Hide();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void evoTesteCb_SelectedValueChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                loadChart();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void loadChart()
+        {
+            try
+            {
+                string query = "select e.data,e.unidade, t.tipo from evolucao as e inner join teste as t where e.teste=t.id and and t.tipo= e.paciente='" + evoPacienteMtb.Text + "' and e.data>='" + evoDeDtp.Value.ToString("yyyy-MM-dd") + "' and e.data<='" + evoAteDtp.Value.ToString("yyyy-MM-dd") + "' order by e.data asc";
+                DataTable dt = db.query(query);
+                if (dt != null)
+                {
+                    evoChart.Show();
+                    evoInsTipo.SelectedIndex = Convert.ToInt32(dt.Rows[0]["tipo"]);
+                    DateTime auxDt;
+                    evoChart.ChartAreas[0].AxisX.LabelStyle.Format = "dd/MM\nyyyy";
+                    evoChart.Series["Dados"].Points.Clear();
+                    evoChart.Series["Dados"].XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
+                    evoChart.Series["Desempenho"].Points.Clear();
+                    evoChart.Series["Desempenho"].XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
+                    
+                    if (DateTime.TryParse(dt.Rows[0]["data"].ToString(), out auxDt))
+                        evoDeDtp.Value = auxDt;
+                    if (DateTime.TryParse(dt.Rows[dt.Rows.Count-1]["data"].ToString(), out auxDt))
+                        evoAteDtp.Value = auxDt;
+
+                    System.Windows.Forms.DataVisualization.Charting.DataPoint pt = new System.Windows.Forms.DataVisualization.Charting.DataPoint();
+                    pt.SetValueXY(dt.Rows[0]["data"], dt.Rows[0]["unidade"]);
+                    evoChart.Series["Desempenho"].Points.Add(pt);
+                    pt = new System.Windows.Forms.DataVisualization.Charting.DataPoint();
+                    pt.SetValueXY(dt.Rows[dt.Rows.Count-1]["data"], dt.Rows[dt.Rows.Count-1]["unidade"]);
+                    evoChart.Series["Desempenho"].Points.Add(pt);
+                    //System.Windows.Forms.DataVisualization.Charting.DataPoint pt = new System.Windows.Forms.DataVisualization.Charting.DataPoint(evoChart.Series["Dados"]);
+                  
+                    //IEnumerable<DateTime> dtm = from value in Enumerable.Range(evoDeDtp.Value,evoDeDtp.Value) select value;
+                    //IEnumerable<DateTime> dtm = from val in dt.Rows
+                    
+                    foreach(DataRow r in dt.Rows)
+                    {
+                        pt = new System.Windows.Forms.DataVisualization.Charting.DataPoint();
+                        pt.SetValueXY(r["data"], r["unidade"]);
+                        evoChart.Series["Dados"].Points.Add(pt);
+                        //evoChart.Series["Desempenho"].Points.Add(pt);
+                        //DateTime.TryParse(dt.Rows[i]["data"].ToString(), out auxDt);
+                        //evoChart.Series["Dados"].Points.AddY(Convert.ToDouble(dt.Rows[i]["unidade"]));
+                        //evoChart.Series["Dados"].Points.DataBindXY(r["data"],"data", r["unidade"], "unidade");
+                        //evoChart.Series["Desempenho"].Points.AddY(Convert.ToDouble(dt.Rows[i]["unidade"]));
+                    }
+
+                }
+                else
+                    evoChart.Hide();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void evoDeDtp_ValueChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                loadChart();
+
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void evoInsTipo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                DataTable dt = db.query("select id from teste where paciente='"+evoPacienteMtb.Text+"' and tipo='"+evoInsTipo.SelectedIndex.ToString()+"'");
+                if (dt!=null)
+                {
+
+                }
+                else
+                {
+                    if (DialogResult.Yes==MessageBox.Show("Inserir novo tipo de teste com unidade \""+evoInsTipo.Text+"\"? Lembrando que não é permitido criar mais de um teste com a mesma unidade para o mesmo paciente.","Novo",MessageBoxButtons.YesNo))
+                    {
+                        string prox = db.proximo("teste", "id"),
+                            erro = db.comando("insert into teste values(" + prox + "," + evoPacienteMtb.Text + "," + evoInsTipo.SelectedIndex.ToString() + ")");
+                        if (erro == "")
+                        {
+                            loadChart();
+                            MessageBox.Show("Novo teste criado com sucesso! Você já pode inserir os novos dados!");
+                            evoInsPn.Show();
+
+                            evoInsPn.BringToFront();
+                        }
+                        else
+                            MessageBox.Show("Erro ao criar teste: " + erro);                        
+                    }
+                }
+                evoInsUniLb.Text = evoInsTipo.Text;
+                EvoNovoPn.Hide();
+                loadChart();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void label65_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                EvoNovoPn.BringToFront();
+                if (EvoNovoPn.Visible)
+                    EvoNovoPn.Hide();
+                else
+                    EvoNovoPn.Show();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void label66_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MessageBox.Show("Recurso não implementado.");
             }
             catch (Exception err)
             {
