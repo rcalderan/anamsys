@@ -262,6 +262,8 @@ namespace AnamSys
                 Int32 mesAtual, anoAtual;
                 anoAtual = Convert.ToInt32(txtAno.Text);
                 mesAtual = Convert.ToInt32(cboMes.Text);
+                cboMes.Text = mesAtual.ToString();
+                txtAno.Text = anoAtual.ToString();
                 if (av * (-1) > 0)
                 {
                     if (mesAtual == 1)
@@ -278,20 +280,25 @@ namespace AnamSys
                     }
                 }
                 else
-                {
-                    if (mesAtual == 12)
+                    if (av * (-1) < 0)
                     {
-                        anoAtual += 1;
-                        mesAtual = 1;
-                        txtAno.Text = anoAtual.ToString();
-                        cboMes.Text = mesAtual.ToString();
+                        if (mesAtual == 12)
+                        {
+                            anoAtual += 1;
+                            mesAtual = 1;
+                            txtAno.Text = anoAtual.ToString();
+                            cboMes.Text = mesAtual.ToString();
+                        }
+                        else
+                        {
+                            mesAtual += 1;
+                            cboMes.Text = mesAtual.ToString();
+                        }
                     }
                     else
                     {
-                        mesAtual += 1;
-                        cboMes.Text = mesAtual.ToString();
+                        //
                     }
-                }
 
                 //remove all the controls in the panel
                 panel1.Controls.Clear();
@@ -412,13 +419,14 @@ namespace AnamSys
         {
             try
             {
-                DataTable dt = db.query("Select c.id, c.ativa,c.data, p.nome from consulta as c inner join paciente as p where c.paciente=p.id");
+                DataTable dt = db.query("Select c.id, c.ativa,c.data, p.nome from consulta as c inner join paciente as p where c.paciente=p.id and c.ativa=1 and data>='" + DateTime.Today.ToString("yyyy-MM-dd") + "'");
                 if (dt != null)
                 {
                     conLv.Items.Clear();
                     ListViewItem aux;
-                    string[] str = new string[3];
+                    string[] str = new string[5];
                     DateTime dtAux = new DateTime();
+                    int compare;
                     foreach (DataRow r in dt.Rows)
                     {
 
@@ -430,11 +438,38 @@ namespace AnamSys
                             str[2] = dtAux.ToString("dd/MM/yyyy HH:mm");
                         aux = new ListViewItem(str);
                         if (r["ativa"].ToString() == "1")
+                        {
                             aux.Checked = true;
+                            str[4] = "OK";
+                        }
                         else
+                        {
                             aux.Checked = false;
+                            str[4] = "PEND";
+                        }
 
                         conLv.Items.Add(aux);
+                    }
+                    //dt = db.query("select * from fatura");
+                    foreach (ListViewItem i in conLv.Items)
+                    {
+                        if (DateTime.TryParse(i.SubItems[2].Text, out dtAux))
+                        {
+                            compare = dtAux.CompareTo(DateTime.Today);
+                            if (compare < 0)
+                            {
+                                if (i.SubItems[4].Text == "OK")
+                                    i.BackColor = Color.PaleGoldenrod;
+                                else
+                                    if (i.SubItems[4].Text == "PEND")
+                                        i.BackColor = Color.Red;
+                            }
+                            else
+                                if (compare >= 0)
+                                    i.BackColor = Color.LightSeaGreen;
+                        }
+                        else
+                            i.BackColor = Color.White;
                     }
                 }
             }
@@ -445,30 +480,68 @@ namespace AnamSys
             }
         }
 
-        private void listaConsultas(string paciente)
+        private void listaConsultas(string IDs)
         {
             try
             {
-                DataTable dt = db.query("Select c.id, c.ativa,c.data, p.nome from consulta as c inner join paciente as p where c.paciente=p.id and c.paciente="+paciente);
+                string query = "Select c.id, c.ativa,c.data, p.nome from consulta as c inner join paciente as p where c.paciente=p.id and c.ativa=1 and data>='" + DateTime.Today.ToString("yyyy-MM-dd") + "' and (";
+                string[] cods = IDs.Split(' ');
+                foreach (string s in cods)
+                {
+                    query += "c.id="+s+" or ";
+                }
+                query = query.Substring(0,query.Length - 4)+")";
+                DataTable dt = db.query(query);
                 if (dt != null)
                 {
                     conLv.Items.Clear();
                     ListViewItem aux;
-                    string[] str = new string[3];
+                    string[] str = new string[5];
                     DateTime dtAux = new DateTime();
+                    int compare;
                     foreach (DataRow r in dt.Rows)
                     {
+
+                        str[0] = r["id"].ToString();
+                        str[1] = r["nome"].ToString();
+                        if (!DateTime.TryParse(r["data"].ToString(), out dtAux))
+                            str[2] = "Data Não Definida";
+                        else
+                            str[2] = dtAux.ToString("dd/MM/yyyy HH:mm");
+                        aux = new ListViewItem(str);
                         if (r["ativa"].ToString() == "1")
                         {
-                            str[0] = r["id"].ToString();
-                            str[1] = r["nome"].ToString();
-                            if (!DateTime.TryParse(r["data"].ToString(), out dtAux))
-                                str[2] = "Data Não Definida";
-                            else
-                                str[2] = dtAux.ToString("dd/MM/yyyy HH:mm:ss");
-                            aux = new ListViewItem(str);
-                            conLv.Items.Add(aux);
+                            aux.Checked = true;
+                            str[4] = "OK";
                         }
+                        else
+                        {
+                            aux.Checked = false;
+                            str[4] = "PEND";
+                        }
+
+                        conLv.Items.Add(aux);
+                    }
+                    //dt = db.query("select * from fatura");
+                    foreach (ListViewItem i in conLv.Items)
+                    {
+                        if (DateTime.TryParse(i.SubItems[2].Text, out dtAux))
+                        {
+                            compare = dtAux.CompareTo(DateTime.Today);
+                            if (compare < 0)
+                            {
+                                if (i.SubItems[4].Text == "OK")
+                                    i.BackColor = Color.PaleGoldenrod;
+                                else
+                                    if (i.SubItems[4].Text == "PEND")
+                                        i.BackColor = Color.Red;
+                            }
+                            else
+                                if (compare >= 0)
+                                    i.BackColor = Color.LightSeaGreen;
+                        }
+                        else
+                            i.BackColor = Color.White;
                     }
                 }
             }
@@ -520,6 +593,8 @@ namespace AnamSys
                     lblDayz.Name = "conDia" + i.ToString() + "Lb";
                     lblDayz.Text = i.ToString();
                     lblDayz.BorderStyle = BorderStyle.Fixed3D;
+
+                    auxDt = new DateTime(DateTime.Today.Year, DateTime.Today.Month, i);
                     if (i == DateTime.Now.Day)
                     {
                         lblDayz.BackColor = Color.Green;
@@ -531,6 +606,10 @@ namespace AnamSys
                     else
                     {
                         lblDayz.BackColor = Color.Aquamarine;
+                    }
+                    if (cList.Exists(element => element == auxDt))
+                    {
+                        lblDayz.BackColor = Color.LightSeaGreen;
                     }
                     lblDayz.Font = label31.Font;
                     lblDayz.SetBounds(x, y, 37, 27);
@@ -547,6 +626,55 @@ namespace AnamSys
                 x = 0;
                 ndayz = 0;
                 y = 0;
+
+                /*
+                for (Int32 i = 1; i < Dayz + 1; i++)
+                {
+                    ndayz += 1;
+                    auxDt = new DateTime(anoAtual, mesAtual, i);
+                    lblDayz = new Label();
+                    lblDayz.Click += calDiaClick;
+                    lblDayz.Text = i.ToString();
+                    lblDayz.Name = "conDia" + i.ToString() + "Lb";
+                    lblDayz.BorderStyle = BorderStyle.Fixed3D;
+
+                    Int32 mon = Convert.ToInt32(cboMes.Text);
+                    Int32 year = Convert.ToInt32(txtAno.Text);
+                    if ((i == DateTime.Now.Day) && (mon == DateTime.Now.Month) && (year == DateTime.Now.Year))
+                    {
+                        //the current day must be highlighted differently
+                        lblDayz.BackColor = Color.Green;
+                    }
+                    else if (ndayz == 01)
+                    {
+                        lblDayz.BackColor = Color.LightSalmon;
+                    }
+                    else
+                    {
+                        //set this color for other days in the selected month
+                        lblDayz.BackColor = Color.Aquamarine;
+                    }
+
+                    if (cList.Exists(element => element == auxDt))
+                    {
+                        lblDayz.BackColor = Color.LightSeaGreen;
+                    }
+                    lblDayz.Font = label31.Font;
+                    lblDayz.SetBounds(x, y, 37, 27);
+
+                    x += 42;
+                    if (ndayz == 7)
+                    {
+                        x = 0;
+                        ndayz = 0;
+                        y += 29;
+                    }
+                    panel1.Controls.Add(lblDayz);
+                }
+                x = 0;
+                ndayz = 0;
+                y = 0;
+                 */
             }
             catch (Exception erro)
             {
@@ -657,6 +785,8 @@ namespace AnamSys
                     string prox = db.proximo("paciente", "id");
                     if (prox == cad1IdMtb.Text)
                     {
+                        if (pictureBox1.ImageLocation == "")
+                            pictureBox1.ImageLocation = "0.png";
                         string query = "INSERT INTO paciente values(" + cad1IdMtb.Text + ",'" +
                             cad1NomeTb.Text + "','" +
                             cad1RgMtb.Text + "','" +
@@ -667,7 +797,8 @@ namespace AnamSys
                             cad1UfTb.Text + "','" +
                             cadNascDtp.Value.ToString("yyyy-MM-dd") + "','" +
                             cad1ObsTb.Text + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "','" +
-                            conPlanoTb.Text + "')",
+                            conPlanoTb.Text + "','"+
+                            pictureBox1.ImageLocation+"')",
                             erro = db.comando(query);
                         if (erro != "")
                             MessageBox.Show(erro);
@@ -733,10 +864,10 @@ namespace AnamSys
                     conPlanoTb.Text = dr["plano"].ToString();
                     conPacienteLb.Text = cad1IdMtb.Text + " - " + cad1NomeTb.Text;
                     conDetNomeLb.Text = cad1IdMtb.Text + " - "+ cad1NomeTb.Text;
-                    dt = db.query("Select * from consulta where id=" + cad1IdMtb.Text);
+                    /*dt = db.query("Select * from consulta where id=" + cad1IdMtb.Text);
                     conLv.Items.Clear();
                     conFinPacienteLb.Text = conPacienteLb.Text;
-                    listaConsultas(codigo);
+                    listaConsultas(codigo);*/
                     return "";
                 }
                 else
@@ -857,13 +988,18 @@ namespace AnamSys
                             double val;
                             if (!double.TryParse(conDetValorTb.Text, out val))
                                 val = 0;
-                            Fatura fat = new Fatura(novaConsulta.get_Id(), 0, novaConsulta.get_Data(), val, Financeiro.FormaDePagamento.GetFromId(conDetFormaCb.SelectedIndex), conDetParCh.Checked);
+                            Fatura fat;
+                            if (conDetPgCh.Checked)
+                                fat = new Fatura(novaConsulta.get_Id(), 0, DateTime.Now, val, Financeiro.FormaDePagamento.GetFromId(conDetFormaCb.SelectedIndex), conDetPgCh.Checked);
+                            else
+                                fat = new Fatura(novaConsulta.get_Id(), 0, novaConsulta.get_Data(), val, Financeiro.FormaDePagamento.GetFromId(conDetFormaCb.SelectedIndex), conDetPgCh.Checked);
 
                             if ((debug_mode) && (fat.get_Id() == -1))
                                 MessageBox.Show("Erro ao criar nova Fatura: id= -1");
                             else
                             {
                                 MessageBox.Show("A consulta de " + cad1NomeTb.Text + " foi marcada para " + data.ToShortDateString() + " às " + conHoraCb.Text + ":" + conMinCb.Text);
+                                conDetailsPn.Hide();
                             }
                         }
                         listaConsultas();
@@ -878,11 +1014,11 @@ namespace AnamSys
                         string erro=novaConsulta.save();
                         if (erro != "")
                         {
-                            MessageBox.Show("erro ao atualizar dados da consulta");
+                            MessageBox.Show("erro ao atualizar dados da consulta: \""+erro+"\"");
                         }
                         else
                         {
-                            Fatura fatura = new Fatura(novaConsulta.get_Id(), 0, data, Double.Parse(conDetValorTb.Text), Financeiro.FormaDePagamento.GetFromId(conDetFormaCb.SelectedIndex), conDetParCh.Checked);
+                            Fatura fatura = new Fatura(novaConsulta.get_Id(), 0, data, Double.Parse(conDetValorTb.Text), Financeiro.FormaDePagamento.GetFromId(conDetFormaCb.SelectedIndex), conDetPgCh.Checked);
                             if (fatura.get_Id() != -1)
                             {
                                 erro = fatura.save();
@@ -897,6 +1033,7 @@ namespace AnamSys
                             }
                         }
                     }
+                    avancaMes(0);
                 }
                 else
                 {
@@ -914,6 +1051,7 @@ namespace AnamSys
         private void faturarToolStripMenuItem_Click(object sender, EventArgs e)
         {
             limpaPaciente();
+            finPn.Show();
         }
 
         private void fichaEvolutivaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -931,6 +1069,9 @@ namespace AnamSys
 
         private void agendaToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            mostraGb(consultasPn);
+            limpaConsulta();
+            listaConsultas();
         }
 
         private void conConXLb_Click(object sender, EventArgs e)
@@ -1002,12 +1143,62 @@ namespace AnamSys
                 if (e.KeyCode==Keys.Enter)
                 {
                     TextBox snd = (TextBox)sender;
-                    snd.Text = snd.Text.Trim().Remove(' ');
+                    if (snd.Text.IndexOf(' ')!=-1)
+                        snd.Text = snd.Text.Trim().Remove(' ');
                     double val =0;
                     if (!double.TryParse(snd.Text, out val))
+                    {
                         MessageBox.Show("Formato errado. Selecione o valor da taxa corretamente.");
-                    snd.Text = val.ToString("F2");
+                    }
+                    else
+                    {
+                        snd.Text = val.ToString("F2");
+                        salvaOperadora();
+                    }
                 }
+            }
+            catch (Exception erro)
+            {
+                if (debug_mode)
+                    MessageBox.Show("Caugth: " + erro.Message);
+            }
+        }
+
+        private void salvaOperadora()
+        {
+            try
+            {
+                Financeiro a = new Financeiro();
+                Operadora newOp = new Operadora(), oldOp = new Operadora();
+                newOp = Operadora.Find(conTaxName2Lb.Text);
+                if (newOp != null)
+                {
+                    oldOp = Operadora.Find(conTaxName2Lb.Text);
+                    Control[] c;
+                    string auxTax = "";
+
+                    newOp.set_Id(oldOp.get_Id());
+                    newOp.set_Nome(conTaxName2Lb.Text);
+                    newOp.set_Padrao(conTaxEsteCh.Checked);
+                    for (int i = 0; i < 13; i++)
+                    {
+                        c = conTaxPn.Controls.Find("conTx" + i.ToString() + "Tb", false);
+                        if (c.Length != 0)
+                        {
+                            auxTax += c[0].Text + " ";
+                        }
+                        newOp.set_Taxas(auxTax);
+                    }
+                    string erro = oldOp.Update(newOp);
+                    if (erro != "")
+                        MessageBox.Show(erro);
+                    else
+                        MessageBox.Show("Alteração salva!");
+                }
+                else
+                    MessageBox.Show("Selecione uma operadora...");
+                carregaConfig();
+
             }
             catch (Exception erro)
             {
@@ -1059,6 +1250,8 @@ namespace AnamSys
                         for (int i = 0; i < 13; i++)
                         {
                             taxesTb = conTaxPn.Controls.Find("conTx" + i.ToString() + "Tb", false);
+                            if (taxesTb.Length == 0)
+                                MessageBox.Show("index nao encontrado "+i.ToString());
                             aux = (TextBox)taxesTb[0];
                             aux.Text = aux.Text.Replace(',', '.');
                             taxes[i] = aux.Text;
@@ -1080,32 +1273,7 @@ namespace AnamSys
                         carregaConfig();
                 }
                 else
-                {//atualiza
-                    if (DialogResult.Yes == MessageBox.Show("Deseja atualizar os dados desta operadora de cartões?", "Atualizar",MessageBoxButtons.YesNo))
-                    {
-                        string padrao,query = "UPDATE operadora set taxas='", taxas = "", erro;
-                        string[] taxes = new string[13];
-                        Control[] taxesTb = conTaxPn.Controls.Find("conTx0Tb", false);
-                        TextBox aux;
-                        if (conTaxEsteCh.Checked)
-                            padrao = "1";
-                        else
-                            padrao = "0";
-                        for (int i = 0; i < 13; i++)
-                        {
-                            taxesTb = conTaxPn.Controls.Find("conTx" + i.ToString() + "Tb", false);
-                            aux = (TextBox)taxesTb[0];
-                            aux.Text = aux.Text.Replace(',', '.');
-                            taxes[i] = aux.Text;
-                            taxas += aux.Text + " ";
-                        }
-                        query += taxas + "',ativo=" + padrao + " where nome='" + conTaxNameCb.Text + "'";
-                        erro = db.comando(query);
-                        if (erro != "")
-                            MessageBox.Show("Falha ao atualizar: " + erro);
-                    }
-                    else
-                        carregaConfig();
+                {
                 }
             }
             catch (Exception erro)
@@ -1120,8 +1288,51 @@ namespace AnamSys
         {
             try
             {
-                DataTable dt = db.query("Select * from operadora");
-                if (dt == null)
+                Operadora[] ops = Operadora.findAll();
+                if (ops!=null)
+                {
+                    conFinCartRb.Enabled = true;
+                    conFinDebRb.Enabled = true;
+                    conFinCredVistaRb.Enabled = true;
+                    conFinParRb.Enabled = true;
+                    conFinVezesNup.Enabled = true;
+
+                    double[] taxasVal;
+                    Control[] taxesTb;
+                    TextBox aux;
+                    conTaxNameCb.Items.Clear();
+                    foreach (Operadora op in ops)
+                    {
+                        conTaxNameLb.Text = op.get_Nome();
+                        conTaxNameCb.Items.Add(conTaxNameLb.Text);
+                        if (op.get_Padrao())
+                        {
+                            conTaxName2Lb.Text = op.get_Nome();
+                            taxasVal = Operadora.TaxesToArray(op.get_Taxas());
+                            if (taxasVal!=null)
+                                for (int i = 0; i < 13; i++)
+                                {
+                                    taxesTb = conTaxPn.Controls.Find("conTx" + i.ToString() + "Tb", false);
+                                    aux = (TextBox)taxesTb[0];
+                                    if (i < taxasVal.Length)
+                                        aux.Text = taxasVal[i].ToString("F2");
+                                    else
+                                        aux.Text = "0";
+                                }
+                            else
+                                for (int i = 0; i < 13; i++)
+                                {
+                                    taxesTb = conTaxPn.Controls.Find("conTx" + i.ToString() + "Tb", false);
+                                    aux = (TextBox)taxesTb[0];
+                                    aux.Text = "0";
+                                }
+
+                        }
+                        
+                    }
+                    //conTaxNameCb.Text = conTaxNameLb.Text;
+                }
+                else
                 {
                     conTaxNameLb.Text = "Operadora <- insira uma";
                     conTaxNameCb.Text = "";
@@ -1134,38 +1345,6 @@ namespace AnamSys
                     conFinParRb.Enabled = false;
                     conFinVezesNup.Enabled = false;
                 }
-                else
-                {
-                    double[] taxasVal;
-                    Control[] taxesTb;
-                    string[] itens = new string[dt.Rows.Count];
-                    TextBox aux;
-                    conTaxNameCb.Items.Clear();
-                    int j = 0;
-                    foreach(DataRow dr in dt.Rows)
-                    {
-                        itens[j] = dr["Nome"].ToString();
-                        j++;
-                        if (bool.Parse(dr["ativo"].ToString()))
-                        {
-                            conTaxEsteCh.Checked = true;
-                            conTaxEsteCh.Enabled = false;
-                            conTaxNameLb.Text = dr["nome"].ToString();
-                            conTaxName2Tb.Text = dr["Nome"].ToString();
-                            taxasVal = Fatura.stringStringToDoubleArray(dr["taxas"].ToString());
-                            for (int i = 0; i < 13; i++)
-                            {
-                                taxesTb = conTaxPn.Controls.Find("conTx" + i.ToString() + "Tb", false);
-                                aux = (TextBox)taxesTb[0];
-                                if (i < taxasVal.Length)
-                                    aux.Text = taxasVal[i].ToString("F2");
-                                else
-                                    aux.Text = "0";
-                            }
-                        }
-                    }
-                    conTaxNameCb.Items.AddRange(itens);
-                }
             }
             catch (Exception erro)
             {
@@ -1177,47 +1356,43 @@ namespace AnamSys
         {
             try
             {
-                DataTable dt = db.query("Select * from operadora where nome='" + operadora + "'");
-                if (dt == null)
+                Operadora op = Operadora.Find(operadora);
+                if (op != null)
                 {
-                    conTaxEsteCh.Checked = false;
-                    conTaxEsteCh.Enabled = true;
-                    conTaxName2Tb.Text = "Operadora";
-                    foreach (Control tb in conTaxPn.Controls)
-                        if (tb is TextBox)
-                            tb.Text = "0";
-                }
-                else
-                {
+                    conFinCartRb.Enabled = true;
+                    conFinDebRb.Enabled = true;
+                    conFinCredVistaRb.Enabled = true;
+                    conFinParRb.Enabled = true;
+                    conFinVezesNup.Enabled = true;
+
                     double[] taxasVal;
                     Control[] taxesTb;
                     TextBox aux;
-                    conTaxNameCb.Items.Clear();
-                    DataRow dr = dt.Rows[0];
-                    conTaxNameCb.Items.Add(dr["Nome"]);
-                    if (bool.Parse(dr["ativo"].ToString()))
-                    {
-                        conTaxEsteCh.Enabled = false;
-                        conTaxEsteCh.Checked = true;
-                        conTaxName2Tb.Text = dr["Nome"].ToString();
-                    }
+                    //conTaxNameCb.Items.Clear();
+                    conTaxName2Lb.Text = operadora;
+                    taxasVal = Operadora.TaxesToArray(op.get_Taxas());
+                    if (taxasVal != null)
+                        for (int i = 0; i < 13; i++)
+                        {
+                            taxesTb = conTaxPn.Controls.Find("conTx" + i.ToString() + "Tb", false);
+                            aux = (TextBox)taxesTb[0];
+                            if (i < taxasVal.Length)
+                                aux.Text = taxasVal[i].ToString("F2");
+                            else
+                                aux.Text = "0";
+                        }
                     else
-                    {
-                        conTaxEsteCh.Checked = false;
-                        conTaxEsteCh.Enabled = true;
-                    }
-                    conTaxName2Tb.Text = dr["Nome"].ToString();
-                    conTaxNameLb.Text = dr["nome"].ToString();
-                    taxasVal = Fatura.stringStringToDoubleArray(dr["taxas"].ToString());
-                    for (int i = 0; i < 13; i++)
-                    {
-                        taxesTb = conTaxPn.Controls.Find("conTx" + i.ToString() + "Tb", false);
-                        aux = (TextBox)taxesTb[0];
-                        if (i < taxasVal.Length)
-                            aux.Text = taxasVal[i].ToString("F2");
-                        else
+                        for (int i = 0; i < 13; i++)
+                        {
+                            taxesTb = conTaxPn.Controls.Find("conTx" + i.ToString() + "Tb", false);
+                            aux = (TextBox)taxesTb[0];
                             aux.Text = "0";
-                    }
+                        }
+                }
+                else
+                {
+                    MessageBox.Show("Operadora não encontrada!");
+                    carregaConfig();
                 }
             }
             catch (Exception erro)
@@ -1400,7 +1575,7 @@ namespace AnamSys
                 conDetParCh.Checked = false;
                 conDetValorTb.Text = "0";
                 conDetFormaCb.Text = "";
-                ConDetPgCh.Checked = false;
+                conDetPgCh.Checked = false;
                 conDetIdLb.Text = db.proximo("consulta", "id");
             }
             catch (Exception err)
@@ -1421,6 +1596,7 @@ namespace AnamSys
                 conDetFormaCb.Text = "Dinheiro";
                 conDetValorTb.Text = "0";
                 conDetParCh.Checked = false;
+                conDetailsPn.Hide();
 
             }
             catch (Exception err)
@@ -1464,7 +1640,7 @@ namespace AnamSys
                     DataTable dt = db.query("select * from consulta where id=" + i.SubItems[0].Text);
                     if (dt != null)
                     {
-                        limpaConsulta();
+                        //limpaConsulta();
                         if (carregaPaciente(dt.Rows[0]["paciente"].ToString()) != "")
                         {
                             MessageBox.Show("Erro. Paciente (" + i.SubItems[1].Text + ") " + i.SubItems[1].Text + " NÃO não encontrado, favor cadastre novamente!");
@@ -1486,20 +1662,6 @@ namespace AnamSys
                             Double aux_Valor;
                             int index;
                             bool pg;
-                            /*if (dt.Rows.Count < 12)
-                            {
-                                conDetParNup.Value = dt.Rows.Count + 1;
-                            }
-                            else
-                            {
-                                conDetParNup.Value = 12;
-                            }
-                            foreach (DataRow dr in dt.Rows)
-                            {
-                                if (!double.TryParse(dr["valor"].ToString(), out aux_Valor))
-                                    aux_Valor = 0;
-                                conDetParLbox.Items.Add(aux_Valor.ToString("F2"));
-                            } */
                             string test = dt.Rows[0]["valor"].ToString();
                             if (!double.TryParse(dt.Rows[0]["valor"].ToString(), out aux_Valor))
                                 aux_Valor = 0;
@@ -1509,14 +1671,14 @@ namespace AnamSys
                                 pg = false;
                             conDetValorTb.Text = aux_Valor.ToString("F2");
                             conDetFormaCb.SelectedIndex = index;
-                            ConDetPgCh.Checked = pg;
+                            conDetPgCh.Checked = pg;
                         }
                         else
                         {
                             conDetParNup.Value = 1;
                             conDetValorTb.Text = "0.0";
                             conDetFormaCb.SelectedIndex = 0;
-                            ConDetPgCh.Checked = false;
+                            conDetPgCh.Checked = false;
                         }
                         conDetailsPn.Show();
                     }
@@ -1711,6 +1873,25 @@ namespace AnamSys
                 {
                     Point loc = new Point(principalForm.ActiveForm.Width / 2 - cad1Pn.Width / 2, principalForm.ActiveForm.Height / 2 - cad1Pn.Height / 2);
                     cad1Pn.Location = loc;
+                    DataTable dt = db.query("Select nome from paciente");
+                    List<string> sourse = new List<string>();
+                    string auxName;
+                    int n;
+                    if (dt != null)
+                    {                        
+                        foreach(DataRow r in dt.Rows)
+                        {
+                            auxName = r["nome"].ToString();
+                            n = 1; 
+                            while (sourse.Contains(auxName))
+                            {
+                                n++;
+                                auxName = r["nome"].ToString() + " (" + n.ToString() + ")";
+                            }
+                            sourse.Add(auxName);
+                        }
+                        cad1NomeTb.AutoCompleteCustomSource.AddRange(sourse.ToArray());
+                    }
                 }
 
             }
@@ -1812,7 +1993,8 @@ namespace AnamSys
             {
                 if (isMoving)
                 {
-                    Control parent = c.Parent;
+                    Control parent = c.Parent, lastParent = c.Parent;
+                    Point lastLocation = c.Location, targetLocation;
                     int x=y=0;
                     //bool root = boxes.Contains<Control>(parent);
                     while(parent!=null)//&&(!root))
@@ -1820,9 +2002,16 @@ namespace AnamSys
                         x += c.Parent.Location.X;
                         y += c.Parent.Location.Y;
                         parent = parent.Parent;
+                        if (parent != null)
+                            lastParent = parent;
                     }
-                    c.Location = new Point(MousePosition.X - x - hoverCursorLocation.X-8, MousePosition.Y - y - hoverCursorLocation.Y-30);
-                    
+                    targetLocation = new Point(MousePosition.X - x - hoverCursorLocation.X-8, MousePosition.Y - y - hoverCursorLocation.Y-30);
+
+                    if ((targetLocation.Y < 0)||(targetLocation.Y+c.Height>lastParent.Height))
+                        targetLocation.Y = lastLocation.Y;
+                    if ((targetLocation.X < 0) || (targetLocation.X + c.Width > lastParent.Width))
+                        targetLocation.X = lastLocation.X;
+                    c.Location = targetLocation;
                 }
 
             }
@@ -2474,6 +2663,311 @@ namespace AnamSys
             try
             {
                 MessageBox.Show("Recurso não implementado.");
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void conPesqTb_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    string query = "Select * from consulta as c inner join paciente as p where c.paciente = p.id and p.nome like '%" + conPesqTb.Text + "%'";
+                    DataTable dt = db.query(query);
+                    conLv.Items.Clear();
+                    conFinPacienteLb.Text = conPacienteLb.Text;
+                    if (dt != null)
+                    {
+                        string codigos="";
+                        foreach (DataRow r in dt.Rows)
+                            codigos += r["id"].ToString() + " ";
+                        if (codigos != "")
+                            codigos = codigos.Substring(0, codigos.Length - 1);
+                        listaConsultas(codigos);
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void cad1NomeTb_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    DataTable dt = db.query("select id from paciente where nome='"+cad1NomeTb.Text+"'");
+                    if (dt != null)
+                    {
+                        carregaPaciente(dt.Rows[0]["id"].ToString());
+                    }
+                    else
+                        limpaPaciente();
+                }
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                /*
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.Multiselect = false;
+                dialog.Filter = "Image Files (JPG,PNG,GIF)|*.JPG;*.PNG;*.GIF";
+                dialog.InitialDirectory = Application.StartupPath + "\\images";
+                if (!System.IO.Directory.Exists(dialog.InitialDirectory))
+                    System.IO.Directory.CreateDirectory(dialog.InitialDirectory);
+                if (DialogResult.Cancel != dialog.ShowDialog())
+                {
+                    if (System.IO.File.Exists(dialog.FileName))
+                    {
+                        //string file = dialog.FileName.Substring(dialog.FileName.LastIndexOf('\\') + 1, dialog.FileName.Length-1 - dialog.FileName.LastIndexOf('\\'));
+                        //System.IO.File.Copy(dialog.FileName,dialog.InitialDirectory+"\\"+file,true);
+                        pictureBox1.Load(dialog.FileName);
+                        pictureBox1.Refresh();
+                        //pictureBox1.ImageLocation = dialog.InitialDirectory + "\\avatar.png";
+                        //MessageBox.Show(pictureBox1.ImageLocation);
+                    }
+                }*/
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void finPn_VisibleChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (finPn.Visible)
+                {
+                    mostraFatura();
+                }
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        
+        private void mostraFatura()
+        {
+            try
+            {
+                string query = "select * from fatura";
+                DataTable dt = db.query(query);
+                if (dt!=null)
+                {
+                    List<ListViewItem> itens = new List<ListViewItem>();
+                    ListViewItem itemAux;
+                    string[] subitens;
+                    object[] ar;
+                    DateTime auxDt;
+                    foreach (DataRow i in dt.Rows)
+                    {
+                        ar = i.ItemArray;
+                        subitens = new string[ar.Length];
+                        for (int x = 0; x < subitens.Length; x++)
+                        {
+                            if (x==2 || x==7)
+                            {
+                                if (!DateTime.TryParse(ar[x].ToString(), out auxDt))
+                                    auxDt = new DateTime(1111, 11, 11);
+                                subitens[x] = auxDt.ToString("yyyy/MM/dd") +" às " +auxDt.ToString("t");
+                            }
+                            else
+                                subitens[x] = ar[x].ToString();
+                        }
+                        itemAux = new ListViewItem(subitens);
+                        itens.Add(itemAux);
+                    }
+                    conFinLv.Items.Clear();
+                    conFinLv.Items.AddRange(itens.ToArray());
+                }
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void label20_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                mostraFatura();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void conOperNovoLb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (conTaxNameCb.Text != "")
+                {
+
+                    if (DialogResult.Yes == MessageBox.Show("Deseja mesmo Adicionar uma operadora de cartões chamada \"" + conTaxNameCb.Text + "\"??", "Salvando...", MessageBoxButtons.YesNo))
+                    {
+                        DataTable dt = db.query("Select * from operadora where nome='" + conTaxNameCb.Text + "'");
+                        if (dt == null)
+                        {//salvar
+                            string id, query, padrao, taxas = "", erro;
+                            string[] taxes = new string[13];
+                            Control[] taxesTb = conTaxPn.Controls.Find("conTx0Tb", false);
+                            TextBox aux;
+                            if (conTaxEsteCh.Checked)
+                            {
+                                if (db.comando("update operadora set padrao=0") == "")
+                                    padrao = "1";
+                                else
+                                {
+                                    conTaxEsteCh.Checked = false;
+                                    padrao = "0";
+                                }
+                            }
+                            else
+                                padrao = "0";
+                            id = db.proximo("operadora", "id");
+                            query = "INSERT INTO operadora VALUES(" + id + ",'" +
+                                   conTaxNameCb.Text + "',1,'";
+                            for (int i = 0; i < 13; i++)
+                            {
+                                taxesTb = conTaxPn.Controls.Find("conTx" + i.ToString() + "Tb", false);
+                                if (taxesTb.Length == 0)
+                                    MessageBox.Show("index nao encontrado " + i.ToString());
+                                aux = (TextBox)taxesTb[0];
+                                aux.Text = aux.Text.Replace(',', '.');
+                                taxes[i] = aux.Text;
+                                if (i < 12)
+                                    taxas += aux.Text + " ";
+                                else
+                                    taxas += aux.Text;
+
+                            }
+                            query += taxas + "',"+padrao+")";
+                            erro = db.comando(query);
+                            if (erro != "")
+                                MessageBox.Show("Falha ao salvar: " + erro);
+                            else
+                                MessageBox.Show("Operadora ADICIONADA com sucesso!");
+                        }
+                        else
+                            MessageBox.Show("Esta operadora já está registrada!");
+                    }
+                }
+                else
+                    MessageBox.Show("Digite o nome da operadora de cartões!");
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void conOperDesativarLb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DataTable dt = db.query("Select * from operadora where nome='" + conTaxNameCb.Text + "'");
+                if ((conTaxNameCb.Text == "") || (dt == null))
+                    MessageBox.Show("Nada a ser excluido!");
+                else
+                {
+                    if (DialogResult.Yes == MessageBox.Show("Deseja mesmo DESATIVAR a operadora \"" + conTaxNameCb.Text + "\" do banco de dados??", "Excluir", MessageBoxButtons.YesNo))
+                    {
+                        string erro = db.comando("upadte operadora set ativo=0 where nome='" + conTaxNameCb.Text + "'");
+                        if (erro != "")
+                            MessageBox.Show("Não foi possível desativar operadora: erro\"" + erro + "\"");
+                        else
+                        {
+                            MessageBox.Show("Operadora foi DESATIVADA com sucesso!");
+                            carregaConfig();
+                        }
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void conTaxEsteCh_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                salvaOperadora();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void conFinLv_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                double sum = 0,aux;
+                foreach(ListViewItem i in conFinLv.SelectedItems)
+                {
+                    if (!double.TryParse(i.SubItems[3].Text, out aux))
+                        aux = 0;
+                    sum += aux;
+                }
+                FinTotLb.Text = "R$ " + sum.ToString("F2");
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void backupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.DirectoryServices.DirectoryEntry entry = new System.DirectoryServices.DirectoryEntry(Application.StartupPath);
+                entry.AuthenticationType = System.DirectoryServices.AuthenticationTypes.None;
+                FolderBrowserDialog folder = new FolderBrowserDialog();
+                folder.SelectedPath = Application.StartupPath + @"\Backup";
+                if (folder.ShowDialog()== DialogResult.OK)
+                {
+                    if (!System.IO.Directory.Exists(folder.SelectedPath))
+                        System.IO.Directory.CreateDirectory(folder.SelectedPath);
+                    System.IO.File.Copy(Application.StartupPath+@"\"+"anamsys",folder.SelectedPath+@"\anamsys",true);
+                    MessageBox.Show("Backup realizado com sucesso.");
+                }
+
             }
             catch (Exception err)
             {

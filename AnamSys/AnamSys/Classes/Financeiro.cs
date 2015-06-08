@@ -114,7 +114,205 @@ namespace AnamSys
             }
         }
     }
-    
+
+    class Operadora : Financeiro
+    {
+        private int Id;
+        private string Nome;
+        private bool Ativo;
+        private bool Padrao;
+        private string Taxas;
+
+        public int get_Id() { return this.Id; }
+        public string get_Nome() { return this.Nome; }
+        public bool get_Ativo() { return this.Ativo; }
+        public bool get_Padrao() { return this.Padrao; }
+        public string get_Taxas() { return this.Taxas; }
+
+        public void set_Id(int id) { this.Id=id; }
+        public void set_Nome(string nome) { this.Nome = nome; }
+        public void set_Ativo(bool ativo) { this.Ativo = ativo; }
+        public void set_Padrao(bool padrao) { this.Padrao = padrao; }
+        public void set_Taxas(string taxas) { this.Taxas=taxas; }
+        
+        public Operadora()
+        {
+
+        }
+
+        public static double[] TaxesToArray(string taxas)
+        {
+            if (taxas[taxas.Length-1] == ' ')
+                taxas = taxas.Substring(0, taxas.Length - 1);
+            string[] l = taxas.Split(' ');
+            double[] taxes = new double[l.Length];
+
+            double aux = 0;
+            for (int i = 0; i < l.Length; i++)
+            {
+                if (double.TryParse(l[i], out aux))
+                    taxes[i] = aux;
+                else
+                    taxes[i] = 0;
+            }
+            return taxes;
+        }
+
+        public Operadora Load(int id)
+        {
+            try
+            {
+                Database conexao = new Database();
+                System.Data.DataTable dt = conexao.query("select * from operadora where id=" + id.ToString());
+                if (dt != null)
+                {
+                    this.set_Id(int.Parse(dt.Rows[0]["id"].ToString()));
+                    this.set_Nome(dt.Rows[0]["nome"].ToString());
+                    this.set_Ativo(bool.Parse(dt.Rows[0]["ativo"].ToString()));
+                    this.set_Padrao(bool.Parse(dt.Rows[0]["padrao"].ToString()));
+                    this.set_Taxas(dt.Rows[0]["taxas"].ToString());
+
+                    return this;
+                }
+                else
+                    return null;
+            }
+            catch { return null;}
+        }
+
+        public static Operadora Find(string nome)
+        {
+            try
+            {
+                Database db = new Database();
+                System.Data.DataTable dt = db.query("select * from operadora where nome='"+nome+"'");
+                if (dt != null)
+                {
+                    Operadora result = new Operadora();
+
+                    result = new Operadora();
+                    result.set_Id(int.Parse(dt.Rows[0]["id"].ToString()));
+                    result.set_Nome(dt.Rows[0]["nome"].ToString());
+                    result.set_Ativo(bool.Parse(dt.Rows[0]["ativo"].ToString()));
+                    result.set_Padrao(bool.Parse(dt.Rows[0]["padrao"].ToString()));
+                    result.set_Taxas(dt.Rows[0]["taxas"].ToString());
+                    return result;
+                }
+                else
+                    return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public static Operadora[] findAll()
+        {
+            try
+            {
+                Operadora[] result;
+                Database db = new Database();
+                System.Data.DataTable dt = db.query("select * from operadora");
+                if (dt != null)
+                {
+                    result = new Operadora[dt.Rows.Count];
+
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        result[i] = new Operadora();
+                        result[i].set_Id(int.Parse(dt.Rows[i]["id"].ToString()));
+                        result[i].set_Nome(dt.Rows[i]["nome"].ToString());
+                        result[i].set_Ativo(bool.Parse(dt.Rows[i]["ativo"].ToString()));
+                        result[i].set_Padrao(bool.Parse(dt.Rows[i]["padrao"].ToString()));
+                        result[i].set_Taxas(dt.Rows[i]["taxas"].ToString());
+                    }
+                    return result;
+                }
+                else
+                    return null;
+
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        
+        public Operadora[] findAll(string nome)
+        {
+            try
+            {
+                Operadora[] result;
+                Database db = new Database();
+                System.Data.DataTable dt = db.query("select * from operadora where nome like '%" + nome + "%'");
+                if (dt != null)
+                {
+                    result = new Operadora[dt.Rows.Count];
+
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        result[i] = new Operadora();
+                        result[i].set_Id(int.Parse(dt.Rows[i]["id"].ToString()));
+                        result[i].set_Nome(dt.Rows[i]["nome"].ToString());
+                        result[i].set_Ativo(bool.Parse(dt.Rows[i]["ativo"].ToString()));
+                        result[i].set_Padrao(bool.Parse(dt.Rows[i]["padrao"].ToString()));
+                        result[i].set_Taxas(dt.Rows[i]["taxas"].ToString());
+                    }
+                    return result;
+                }
+                else 
+                    return null;
+
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public string Update(Operadora nova)
+        {
+            try
+            {
+                if (this.get_Id() != nova.get_Id())
+                    return "Os objetos devem ser iguais!";
+                string updateQuery = "UPDATE operadora set ";
+                string aux;
+                if (this.get_Nome() != nova.get_Nome())
+                    updateQuery += "nome='" + nova.get_Nome() + "', ";
+                if (this.get_Ativo() != nova.get_Ativo())
+                {
+                    if (nova.get_Ativo())
+                        aux = "1";
+                    else
+                        aux = "0";
+                    updateQuery += "ativo=" + aux + ", ";
+                }
+                if (this.get_Padrao() != nova.get_Padrao())
+                {
+                    if (nova.get_Padrao())
+                        aux = "1";
+                    else
+                        aux = "0";
+                    updateQuery += "padrao=" + aux + ", ";
+                }
+                string tx = this.get_Taxas(), tx2 = nova.get_Taxas();
+                if (this.get_Taxas() != nova.get_Taxas())
+                    updateQuery += "taxas='" + nova.get_Taxas() + "', ";
+                if (updateQuery.LastIndexOf(", ")!=-1)
+                {
+                    updateQuery = updateQuery.Substring(0, updateQuery.Length - 2)+ " where id="+nova.get_Id().ToString();
+                    Database db = new Database();
+                    return db.comando(updateQuery);
+                }
+                return "";
+            }
+            catch { return "Erro ao tentar atualizar... Contacte o programador."; }
+        }
+
+    }
+
     class Fatura: Financeiro
     {
         private int id;
@@ -259,21 +457,6 @@ namespace AnamSys
 
             }
             catch { return false; }
-        }
-        public static double[] stringStringToDoubleArray(string taxas)
-        {
-            string[] l = taxas.Split(' ');
-            double[] taxes = new double[l.Length];
-
-            double aux = 0;
-            for (int i = 0; i < l.Length;i++ )
-            {
-                if (double.TryParse(l[i], out aux))
-                    taxes[i] = aux;
-                else
-                    taxes[i] = 0;
-            }
-            return taxes;
         }
         /*
         public bool update(Fatura newF)
