@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.cadastrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pacienteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,6 +44,7 @@
             this.faturarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fichaEvolutivaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.agendaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.backupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cad1DeletaBt = new System.Windows.Forms.Button();
             this.cad1NovoBt = new System.Windows.Forms.Button();
             this.cad1AtualizaBt = new System.Windows.Forms.Button();
@@ -61,7 +62,6 @@
             this.cad1RgMtb = new System.Windows.Forms.MaskedTextBox();
             this.cad1CpfMtb = new System.Windows.Forms.MaskedTextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.cad1IdMtb = new System.Windows.Forms.MaskedTextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -196,7 +196,6 @@
             this.label30 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.cad1Pn = new System.Windows.Forms.Panel();
-            this.cad1PicBox = new System.Windows.Forms.PictureBox();
             this.cad1ConsultasBt = new System.Windows.Forms.Button();
             this.cad1AntLb = new System.Windows.Forms.Label();
             this.cad1LimpaLb = new System.Windows.Forms.Label();
@@ -212,6 +211,8 @@
             this.finPn = new System.Windows.Forms.Panel();
             this.finLpLb = new System.Windows.Forms.Label();
             this.finXLb = new System.Windows.Forms.Label();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.FinTotLb = new System.Windows.Forms.Label();
             this.conFinLv = new System.Windows.Forms.ListView();
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -260,11 +261,10 @@
             this.evoPacienteMtb = new System.Windows.Forms.MaskedTextBox();
             this.evoLpLb = new System.Windows.Forms.Label();
             this.evoXLb = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.FinTotLb = new System.Windows.Forms.Label();
-            this.backupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.directoryEntry1 = new System.DirectoryServices.DirectoryEntry();
+            this.cad1IdLb = new System.Windows.Forms.Label();
+            this.cad1PicBox = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             this.conDetailsPn.SuspendLayout();
             this.conDetParPn.SuspendLayout();
@@ -281,9 +281,9 @@
             this.conOperPn.SuspendLayout();
             this.conTaxPn.SuspendLayout();
             this.cad1Pn.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cad1PicBox)).BeginInit();
             this.consultasPn.SuspendLayout();
             this.finPn.SuspendLayout();
+            this.panel6.SuspendLayout();
             this.planoPn.SuspendLayout();
             this.avalPn.SuspendLayout();
             this.EvoPn.SuspendLayout();
@@ -292,8 +292,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.evoInsUnidadeUd)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.evoChart)).BeginInit();
             this.panel9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cad1PicBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.panel6.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -305,7 +305,7 @@
             this.agendaToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(234, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(217, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -317,34 +317,34 @@
             this.avaliaçãoToolStripMenuItem,
             this.fichaEvolutivaToolStripMenuItem1});
             this.cadastrosToolStripMenuItem.Name = "cadastrosToolStripMenuItem";
-            this.cadastrosToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
+            this.cadastrosToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
             this.cadastrosToolStripMenuItem.Text = "Paciente";
             // 
             // pacienteToolStripMenuItem
             // 
             this.pacienteToolStripMenuItem.Name = "pacienteToolStripMenuItem";
-            this.pacienteToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.pacienteToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.pacienteToolStripMenuItem.Text = "Cadastro";
             this.pacienteToolStripMenuItem.Click += new System.EventHandler(this.pacienteToolStripMenuItem_Click);
             // 
             // planoDeAtendimentoToolStripMenuItem
             // 
             this.planoDeAtendimentoToolStripMenuItem.Name = "planoDeAtendimentoToolStripMenuItem";
-            this.planoDeAtendimentoToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.planoDeAtendimentoToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.planoDeAtendimentoToolStripMenuItem.Text = "Plano de Atendimento";
             this.planoDeAtendimentoToolStripMenuItem.Click += new System.EventHandler(this.planoDeAtendimentoToolStripMenuItem_Click);
             // 
             // avaliaçãoToolStripMenuItem
             // 
             this.avaliaçãoToolStripMenuItem.Name = "avaliaçãoToolStripMenuItem";
-            this.avaliaçãoToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.avaliaçãoToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.avaliaçãoToolStripMenuItem.Text = "Avaliação";
             this.avaliaçãoToolStripMenuItem.Click += new System.EventHandler(this.avaliaçãoToolStripMenuItem_Click);
             // 
             // fichaEvolutivaToolStripMenuItem1
             // 
             this.fichaEvolutivaToolStripMenuItem1.Name = "fichaEvolutivaToolStripMenuItem1";
-            this.fichaEvolutivaToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
+            this.fichaEvolutivaToolStripMenuItem1.Size = new System.Drawing.Size(179, 22);
             this.fichaEvolutivaToolStripMenuItem1.Text = "Ficha Evolutiva";
             // 
             // anamneseToolStripMenuItem
@@ -355,35 +355,35 @@
             this.faturarToolStripMenuItem,
             this.fichaEvolutivaToolStripMenuItem});
             this.anamneseToolStripMenuItem.Name = "anamneseToolStripMenuItem";
-            this.anamneseToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
+            this.anamneseToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.anamneseToolStripMenuItem.Text = "Consulta";
             this.anamneseToolStripMenuItem.Click += new System.EventHandler(this.anamneseToolStripMenuItem_Click);
             // 
             // consultarToolStripMenuItem
             // 
             this.consultarToolStripMenuItem.Name = "consultarToolStripMenuItem";
-            this.consultarToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.consultarToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.consultarToolStripMenuItem.Text = "Consultas";
             this.consultarToolStripMenuItem.Click += new System.EventHandler(this.consultarToolStripMenuItem_Click);
             // 
             // anamneseToolStripMenuItem1
             // 
             this.anamneseToolStripMenuItem1.Name = "anamneseToolStripMenuItem1";
-            this.anamneseToolStripMenuItem1.Size = new System.Drawing.Size(187, 22);
+            this.anamneseToolStripMenuItem1.Size = new System.Drawing.Size(176, 22);
             this.anamneseToolStripMenuItem1.Text = "Anamnese";
             this.anamneseToolStripMenuItem1.Click += new System.EventHandler(this.anamneseToolStripMenuItem1_Click);
             // 
             // faturarToolStripMenuItem
             // 
             this.faturarToolStripMenuItem.Name = "faturarToolStripMenuItem";
-            this.faturarToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.faturarToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.faturarToolStripMenuItem.Text = "Faturar";
             this.faturarToolStripMenuItem.Click += new System.EventHandler(this.faturarToolStripMenuItem_Click);
             // 
             // fichaEvolutivaToolStripMenuItem
             // 
             this.fichaEvolutivaToolStripMenuItem.Name = "fichaEvolutivaToolStripMenuItem";
-            this.fichaEvolutivaToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.fichaEvolutivaToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.fichaEvolutivaToolStripMenuItem.Text = "Evolução do Paciente";
             this.fichaEvolutivaToolStripMenuItem.Click += new System.EventHandler(this.fichaEvolutivaToolStripMenuItem_Click);
             // 
@@ -392,9 +392,16 @@
             this.agendaToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.backupToolStripMenuItem});
             this.agendaToolStripMenuItem.Name = "agendaToolStripMenuItem";
-            this.agendaToolStripMenuItem.Size = new System.Drawing.Size(96, 20);
+            this.agendaToolStripMenuItem.Size = new System.Drawing.Size(88, 20);
             this.agendaToolStripMenuItem.Text = "Configurações";
             this.agendaToolStripMenuItem.Click += new System.EventHandler(this.agendaToolStripMenuItem_Click);
+            // 
+            // backupToolStripMenuItem
+            // 
+            this.backupToolStripMenuItem.Name = "backupToolStripMenuItem";
+            this.backupToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.backupToolStripMenuItem.Text = "Backup";
+            this.backupToolStripMenuItem.Click += new System.EventHandler(this.backupToolStripMenuItem_Click);
             // 
             // cad1DeletaBt
             // 
@@ -546,10 +553,11 @@
             // 
             this.cad1CpfMtb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cad1CpfMtb.Location = new System.Drawing.Point(106, 34);
-            this.cad1CpfMtb.Mask = "00000000000";
+            this.cad1CpfMtb.Mask = "000,000,000-00";
             this.cad1CpfMtb.Name = "cad1CpfMtb";
-            this.cad1CpfMtb.Size = new System.Drawing.Size(107, 26);
+            this.cad1CpfMtb.Size = new System.Drawing.Size(119, 26);
             this.cad1CpfMtb.TabIndex = 2;
+            this.cad1CpfMtb.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cad1CpfMtb_KeyDown);
             // 
             // label8
             // 
@@ -560,17 +568,6 @@
             this.label8.Size = new System.Drawing.Size(23, 13);
             this.label8.TabIndex = 0;
             this.label8.Text = "RG";
-            // 
-            // cad1IdMtb
-            // 
-            this.cad1IdMtb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cad1IdMtb.Location = new System.Drawing.Point(21, 34);
-            this.cad1IdMtb.Mask = "00000";
-            this.cad1IdMtb.Name = "cad1IdMtb";
-            this.cad1IdMtb.Size = new System.Drawing.Size(35, 26);
-            this.cad1IdMtb.TabIndex = 1;
-            this.cad1IdMtb.ValidatingType = typeof(int);
-            this.cad1IdMtb.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cad1IdMtb_KeyDown);
             // 
             // label7
             // 
@@ -596,7 +593,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(18, 21);
+            this.label1.Location = new System.Drawing.Point(21, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(18, 13);
             this.label1.TabIndex = 0;
@@ -2090,9 +2087,9 @@
             this.cad1Pn.Controls.Add(this.cad1NovoBt);
             this.cad1Pn.Controls.Add(this.cadNascDtp);
             this.cad1Pn.Controls.Add(this.cad1AtualizaBt);
-            this.cad1Pn.Controls.Add(this.cad1IdMtb);
             this.cad1Pn.Controls.Add(this.label3);
             this.cad1Pn.Controls.Add(this.cad1NomeTb);
+            this.cad1Pn.Controls.Add(this.cad1IdLb);
             this.cad1Pn.Controls.Add(this.label1);
             this.cad1Pn.Controls.Add(this.cad1UfTb);
             this.cad1Pn.Controls.Add(this.cad1RgMtb);
@@ -2119,17 +2116,6 @@
             this.cad1Pn.MouseMove += new System.Windows.Forms.MouseEventHandler(this.control_MouseMove);
             this.cad1Pn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.control_MouseUp);
             // 
-            // cad1PicBox
-            // 
-            this.cad1PicBox.Image = global::AnamSys.Properties.Resources._0;
-            this.cad1PicBox.InitialImage = null;
-            this.cad1PicBox.Location = new System.Drawing.Point(506, 33);
-            this.cad1PicBox.Name = "cad1PicBox";
-            this.cad1PicBox.Size = new System.Drawing.Size(122, 122);
-            this.cad1PicBox.TabIndex = 15;
-            this.cad1PicBox.TabStop = false;
-            this.cad1PicBox.Click += new System.EventHandler(this.pictureBox1_Click);
-            // 
             // cad1ConsultasBt
             // 
             this.cad1ConsultasBt.Location = new System.Drawing.Point(22, 354);
@@ -2144,7 +2130,7 @@
             // 
             this.cad1AntLb.AutoSize = true;
             this.cad1AntLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cad1AntLb.Location = new System.Drawing.Point(1, 37);
+            this.cad1AntLb.Location = new System.Drawing.Point(1, 36);
             this.cad1AntLb.Name = "cad1AntLb";
             this.cad1AntLb.Size = new System.Drawing.Size(19, 20);
             this.cad1AntLb.TabIndex = 4;
@@ -2177,7 +2163,7 @@
             // 
             this.cad1ProxLv.AutoSize = true;
             this.cad1ProxLv.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cad1ProxLv.Location = new System.Drawing.Point(55, 37);
+            this.cad1ProxLv.Location = new System.Drawing.Point(55, 36);
             this.cad1ProxLv.Name = "cad1ProxLv";
             this.cad1ProxLv.Size = new System.Drawing.Size(19, 20);
             this.cad1ProxLv.TabIndex = 4;
@@ -2314,6 +2300,26 @@
             this.finXLb.TabIndex = 17;
             this.finXLb.Text = "X";
             this.finXLb.Click += new System.EventHandler(this.finXLb_Click);
+            // 
+            // panel6
+            // 
+            this.panel6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.panel6.Controls.Add(this.FinTotLb);
+            this.panel6.Location = new System.Drawing.Point(8, 222);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(137, 29);
+            this.panel6.TabIndex = 15;
+            // 
+            // FinTotLb
+            // 
+            this.FinTotLb.AutoSize = true;
+            this.FinTotLb.BackColor = System.Drawing.Color.Transparent;
+            this.FinTotLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FinTotLb.Location = new System.Drawing.Point(2, 6);
+            this.FinTotLb.Name = "FinTotLb";
+            this.FinTotLb.Size = new System.Drawing.Size(65, 20);
+            this.FinTotLb.TabIndex = 11;
+            this.FinTotLb.Text = "R$ 0,00";
             // 
             // conFinLv
             // 
@@ -2633,28 +2639,28 @@
             // evoChart
             // 
             this.evoChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            chartArea5.AxisX.LabelStyle.Format = "dd/MMM";
-            chartArea5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            chartArea5.Name = "ChartArea1";
-            this.evoChart.ChartAreas.Add(chartArea5);
-            legend5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            legend5.Name = "Legend1";
-            this.evoChart.Legends.Add(legend5);
+            chartArea2.AxisX.LabelStyle.Format = "dd/MMM";
+            chartArea2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            chartArea2.Name = "ChartArea1";
+            this.evoChart.ChartAreas.Add(chartArea2);
+            legend2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            legend2.Name = "Legend1";
+            this.evoChart.Legends.Add(legend2);
             this.evoChart.Location = new System.Drawing.Point(274, 88);
             this.evoChart.Name = "evoChart";
             this.evoChart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright;
-            series9.ChartArea = "ChartArea1";
-            series9.Legend = "Legend1";
-            series9.Name = "Dados";
-            series9.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.String;
-            series10.BorderColor = System.Drawing.Color.Blue;
-            series10.ChartArea = "ChartArea1";
-            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series10.Legend = "Legend1";
-            series10.Name = "Desempenho";
-            series10.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.String;
-            this.evoChart.Series.Add(series9);
-            this.evoChart.Series.Add(series10);
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Dados";
+            series3.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.String;
+            series4.BorderColor = System.Drawing.Color.Blue;
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series4.Legend = "Legend1";
+            series4.Name = "Desempenho";
+            series4.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.String;
+            this.evoChart.Series.Add(series3);
+            this.evoChart.Series.Add(series4);
             this.evoChart.Size = new System.Drawing.Size(590, 245);
             this.evoChart.TabIndex = 7;
             this.evoChart.Text = "chart1";
@@ -2842,6 +2848,27 @@
             this.evoXLb.Text = "X";
             this.evoXLb.Click += new System.EventHandler(this.evoXLb_Click);
             // 
+            // cad1IdLb
+            // 
+            this.cad1IdLb.AutoSize = true;
+            this.cad1IdLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cad1IdLb.Location = new System.Drawing.Point(21, 40);
+            this.cad1IdLb.Name = "cad1IdLb";
+            this.cad1IdLb.Size = new System.Drawing.Size(18, 13);
+            this.cad1IdLb.TabIndex = 0;
+            this.cad1IdLb.Text = "ID";
+            // 
+            // cad1PicBox
+            // 
+            this.cad1PicBox.Image = global::AnamSys.Properties.Resources._0;
+            this.cad1PicBox.InitialImage = null;
+            this.cad1PicBox.Location = new System.Drawing.Point(506, 33);
+            this.cad1PicBox.Name = "cad1PicBox";
+            this.cad1PicBox.Size = new System.Drawing.Size(122, 122);
+            this.cad1PicBox.TabIndex = 15;
+            this.cad1PicBox.TabStop = false;
+            this.cad1PicBox.Click += new System.EventHandler(this.pictureBox1_Click);
+            // 
             // pictureBox1
             // 
             this.pictureBox1.Location = new System.Drawing.Point(506, 33);
@@ -2850,33 +2877,6 @@
             this.pictureBox1.TabIndex = 15;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
-            // 
-            // panel6
-            // 
-            this.panel6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.panel6.Controls.Add(this.FinTotLb);
-            this.panel6.Location = new System.Drawing.Point(8, 222);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(137, 29);
-            this.panel6.TabIndex = 15;
-            // 
-            // FinTotLb
-            // 
-            this.FinTotLb.AutoSize = true;
-            this.FinTotLb.BackColor = System.Drawing.Color.Transparent;
-            this.FinTotLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FinTotLb.Location = new System.Drawing.Point(2, 6);
-            this.FinTotLb.Name = "FinTotLb";
-            this.FinTotLb.Size = new System.Drawing.Size(65, 20);
-            this.FinTotLb.TabIndex = 11;
-            this.FinTotLb.Text = "R$ 0,00";
-            // 
-            // backupToolStripMenuItem
-            // 
-            this.backupToolStripMenuItem.Name = "backupToolStripMenuItem";
-            this.backupToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.backupToolStripMenuItem.Text = "Backup";
-            this.backupToolStripMenuItem.Click += new System.EventHandler(this.backupToolStripMenuItem_Click);
             // 
             // principalForm
             // 
@@ -2924,11 +2924,12 @@
             this.conTaxPn.PerformLayout();
             this.cad1Pn.ResumeLayout(false);
             this.cad1Pn.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cad1PicBox)).EndInit();
             this.consultasPn.ResumeLayout(false);
             this.consultasPn.PerformLayout();
             this.finPn.ResumeLayout(false);
             this.finPn.PerformLayout();
+            this.panel6.ResumeLayout(false);
+            this.panel6.PerformLayout();
             this.planoPn.ResumeLayout(false);
             this.planoPn.PerformLayout();
             this.avalPn.ResumeLayout(false);
@@ -2943,9 +2944,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.evoChart)).EndInit();
             this.panel9.ResumeLayout(false);
             this.panel9.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cad1PicBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.panel6.ResumeLayout(false);
-            this.panel6.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2966,7 +2966,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox cad1NomeTb;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.MaskedTextBox cad1IdMtb;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.MaskedTextBox cad1RgMtb;
@@ -3186,6 +3185,7 @@
         private System.Windows.Forms.Label FinTotLb;
         private System.Windows.Forms.ToolStripMenuItem backupToolStripMenuItem;
         private System.DirectoryServices.DirectoryEntry directoryEntry1;
+        private System.Windows.Forms.Label cad1IdLb;
     }
 }
 

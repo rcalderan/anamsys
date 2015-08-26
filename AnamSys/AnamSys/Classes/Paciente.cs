@@ -16,7 +16,7 @@ namespace AnamSys
         private string bairro;
         private string cidade;
         private string uf;
-        private string obs;
+        private string[] obs;
         private string plano;
         private DateTime hoje, nascimento;
 
@@ -37,8 +37,8 @@ namespace AnamSys
         public void set_uf(string uf) { this.uf = uf; }
         public DateTime get_nascimento() { return this.nascimento; }
         public void set_nascimento(DateTime nascimento) { this.nascimento = nascimento; }
-        public string get_obs() { return this.obs; }
-        public void set_obs(string obs) { this.obs = obs; }
+        public string[] get_obs() { return this.obs; }
+        public void set_obs(string[] obs) { this.obs = obs; }
         public DateTime get_hoje() { return this.hoje; }
         public string get_plano() { return this.plano; }
         public void set_plano(string plano) { this.plano = plano; }
@@ -46,7 +46,7 @@ namespace AnamSys
         public Paciente( int id)
         {
             Database con = new Database();
-            System.Data.DataTable dt = con.query("select * from paciente where id=" + id.ToString());
+            System.Data.DataTable dt = con.Query("select * from paciente where id=" + id.ToString());
             if (dt!=null)
             {
                 DateTime aux;
@@ -59,7 +59,7 @@ namespace AnamSys
                 this.cidade = dt.Rows[0]["cidade"].ToString();
                 this.uf = dt.Rows[0]["uf"].ToString();
                 this.plano = dt.Rows[0]["plano"].ToString();
-                this.obs = dt.Rows[0]["obs"].ToString();
+                this.obs = Uteis.Split(dt.Rows[0]["obs"].ToString(),"|");
                 if (DateTime.TryParse(dt.Rows[0]["hoje"].ToString(), out aux))
                     this.hoje = aux;
                 else
@@ -81,19 +81,40 @@ namespace AnamSys
                 this.cidade = "";
                 this.uf = "";
                 this.nascimento = new DateTime();
-                this.obs = "";
+                this.obs = new string[0];
                 this.plano = "";
                 this.hoje = new DateTime();
             }
 
         }
 
-        private bool reload(int id)
+        public static bool New(string nome, string rg,string cpf,string endereco, string bairro,string cidade,
+            string uf,DateTime nascimento,string[] obs,string plano)
+        {
+            try
+            {
+                Database db = new Database();
+                if (db.getLastState())
+                {
+                    string insert = "INSERT INTO paciente ('id','nome','rg','cpf','endereco','bairro','cidade','uf',"+
+                        "'nascimento','obs','hoje','plano','avatar') VALUES (NULL,"+
+                        "'"+nome+"','"+rg+"','"+cpf+"','"+endereco+"','"+bairro+"','"+cidade+"','"+uf+"','"+
+                        nascimento.ToString("yyyy-MM-dd HH:mm:ss")+"','"+Uteis.Join(obs,"|")+"','1111-11-11','k','avatar.png')";
+                    return true;
+                }
+                else
+                    return false;
+            }
+            catch { return false; }
+
+        }
+
+        private bool Reload(int id)
         {
             try
             {
                 Database con = new Database();
-                System.Data.DataTable dt = con.query("select * from paciente where id=" + id.ToString());
+                System.Data.DataTable dt = con.Query("select * from paciente where id=" + id.ToString());
                 if (dt != null)
                 {
                     DateTime aux;
@@ -105,7 +126,7 @@ namespace AnamSys
                     this.bairro = dt.Rows[0]["bairro"].ToString();
                     this.cidade = dt.Rows[0]["cidade"].ToString();
                     this.uf = dt.Rows[0]["uf"].ToString();
-                    this.obs = dt.Rows[0]["obs"].ToString();
+                    this.obs = Uteis.Split(dt.Rows[0]["obs"].ToString(),"|");
                     this.plano = dt.Rows[0]["plano"].ToString();
                     if (DateTime.TryParse(dt.Rows[0]["hoje"].ToString(), out aux))
                         this.hoje = aux;
@@ -126,7 +147,7 @@ namespace AnamSys
             }
         }
 
-        public bool update(Paciente newP)
+        public bool Update(Paciente newP)
         {
             try
             {
@@ -157,7 +178,7 @@ namespace AnamSys
                     query = query.Substring(0, query.Length - 1);
                 query += " WHERE id=" + newP.get_id().ToString();
                 Database con = new Database();
-                if ("" == con.comando(query))
+                if ("" == con.Comando(query))
                     return true;
                 else
                     return false;

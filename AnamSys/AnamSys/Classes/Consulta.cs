@@ -40,50 +40,39 @@ namespace AnamSys
                 dt += i.ToString() + "";
             return dt;
         }
-        /*
-        public static List<int> stringStringToList(string faturas)
-        {
-            List<int> l = new List<int>();
-            char[] ch = {' '};
-            int aux=-1;
-            foreach(string s in faturas.Split(ch))
-                if (int.TryParse(s,out aux))
-                    l.Add(aux);
-            return l;
-        }
-        */
+
         public Consulta()
         {
-            Database conexao = new Database(); 
-            int idd;
-            if (!int.TryParse(conexao.proximo("consulta", "id"), out idd))
-                this.id = 0;
-            else
-                this.id = idd;
-
         }
 
-        public Consulta(string id)
+        public static Consulta Load(int id)
         {
-            Database conexao = new Database();
-            int idd;
-            System.Data.DataTable dt = conexao.query("select * from consulta where id=" + id);
-            if (dt==null)
-                if (!int.TryParse(conexao.proximo("consulta", "id"), out idd))
-                    this.id = 0;
-                else
-                    this.id = idd;
-            else
+            try
             {
-                this.id = Convert.ToInt32(id);
-                this.anamnese = Convert.ToInt32(dt.Rows[0]["anamnese"]);
-                this.paciente = Convert.ToInt32(dt.Rows[0]["paciente"]);
-                this.detalhes = dt.Rows[0]["detalhes"].ToString();
-                this.plano = dt.Rows[0]["plano"].ToString();
-                this.hoje = Convert.ToDateTime(dt.Rows[0]["hoje"]);
-                this.data = Convert.ToDateTime(dt.Rows[0]["data"]);
-                this.ativa = true;
+                Database db = new Database();
+                if (db.getLastState())
+                {
+                    Consulta c = new Consulta();
+                    System.Data.DataTable dt = db.Query("select * from consulta where id=" + id);
+                    if (dt != null)
+                    {
+                        c.id = Convert.ToInt32(id);
+                        c.set_Anamnese(Convert.ToInt32(dt.Rows[0]["anamnese"]));
+                        c.set_Paciente(Convert.ToInt32(dt.Rows[0]["paciente"]));
+                        c.set_Detalhes(dt.Rows[0]["detalhes"].ToString());
+                        c.set_Plano(dt.Rows[0]["plano"].ToString());
+                        c.set_Hoje(Convert.ToDateTime(dt.Rows[0]["hoje"]));
+                        c.set_Data(Convert.ToDateTime(dt.Rows[0]["data"]));
+                        c.set_Estado(bool.Parse(dt.Rows[0]["ativa"].ToString()));
+                        return c;
+                    }
+                    else
+                        return null;
+                }
+                else
+                    return null;
             }
+            catch { return null; }
 
         }
 
@@ -92,10 +81,10 @@ namespace AnamSys
             Database conexao = new Database();
             int idd;
             if (paciente != 0)
-                if (null== conexao.query("select id from paciente where id=" + paciente.ToString()))
+                if (null== conexao.Query("select id from paciente where id=" + paciente.ToString()))
                     paciente = 0;
             if (anamnese != 0)
-                if (null == conexao.query("select id from anamnese where id=" + anamnese.ToString()))
+                if (null == conexao.Query("select id from anamnese where id=" + anamnese.ToString()))
                     anamnese = 0;
             if (!int.TryParse(conexao.proximo("consulta", "id"), out idd))
                 id = 0;
@@ -110,12 +99,35 @@ namespace AnamSys
             this.ativa = estadoDaConsulta;
         }
 
+        public static bool New(int paciente, int anamnese, string detalhes, string plano, DateTime data, bool estadoDaConsulta)
+        {
+            try
+            {
+                Database conexao = new Database();
+                if (conexao.getLastState())
+                {
+                    string ativa= "0";
+                    if (estadoDaConsulta)
+                        ativa = "1";
+                    string query = "INSERT INTO consulta ('id','paciente','detalhes','plano','anamnese','data','hoje','ativa') VALUES (NULL," + paciente + ",'" + detalhes + "','" + plano + "'," + anamnese + ",'" + data.ToString("yyyy-MM-dd HH:mm:ss") + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "',"+ativa+")";
+                    if ("" != conexao.Comando(query))
+                        return false;
+                    else
+                        return true;
+                }
+                else
+                    return false;
+            }
+            catch { return false; }
+
+        }
+
         public string save()
         {
             try 
             {
                 Database conexao = new Database();
-                System.Data.DataTable dt = conexao.query("select id from consulta where id=" + id.ToString());
+                System.Data.DataTable dt = conexao.Query("select id from consulta where id=" + id.ToString());
                 if (dt==null)
                 {//novo
                     int idd = this.id;
@@ -129,7 +141,7 @@ namespace AnamSys
                             detalhes + "','" +
                             plano + "'," +
                             anamnese + ",1,'" +
-                            data.ToString("yyyy-MM-dd HH:mm:ss") + "')", erro = conexao.comando(query);
+                            data.ToString("yyyy-MM-dd HH:mm:ss") + "')", erro = conexao.Comando(query);
                     return erro;
                 }
                 else
@@ -144,7 +156,7 @@ namespace AnamSys
                         "',anamnese=" + anamnese + 
                         ",ativa="+ok+
                         ",data='" + data.ToString("yyyy-MM-dd HH:mm:ss") + 
-                        "' WHERE id="+this.id, erro = conexao.comando(query);
+                        "' WHERE id="+this.id, erro = conexao.Comando(query);
                     return erro;
                 }
             }
@@ -154,81 +166,6 @@ namespace AnamSys
             }
 
         }
-        /*
-        public bool update(Consulta newC)
-        {
-            try
-            {
-                bool updateRequired = false;
-                if (this.id != newC.get_Id())
-                    return false;
-                string query = "update consulta set ";
-                /*
-                this.faturas = faturas;
-
-                if (this.anamnese != newC.get_Anamnese())
-                {
-                    updateRequired = true;
-                    query += "anamnese=" + newC.get_Anamnese() + ",";
-                }
-                if (this.data.CompareTo(newC.get_Data()) != 0)
-                {
-                    updateRequired = true;
-                    query += "data='" + newC.get_Data().ToString("yyyy-MM-dd HH:mm:ss") + "',";
-                }
-                if (this.hoje.CompareTo(newC.get_Hoje()) != 0)
-                {
-                    updateRequired = true;
-                    query += "hoje='" + newC.get_Hoje().ToString("yyyy-MM-dd HH:mm:ss") + "',";
-                }
-                if (this.paciente != newC.get_Paciente())
-                {
-                    updateRequired = true;
-                    query += "paciente='" + newC.get_Paciente() + "',";
-                }
-                if (this.plano != newC.get_Plano())
-                {
-                    updateRequired = true;
-                    query += "plano='" + newC.get_Plano() + "',";
-                }
-                if (this.detalhes != newC.get_Detalhes())
-                {
-                    updateRequired = true;
-                    query += "detalhes='" + newC.get_Detalhes() + "',";
-                }
-                if (this.faturas.Equals(newC.faturas))
-                {
-                    updateRequired = true;
-                    query += "faturas='" + newC.get_Faturas() + "',";
-                }
-                if (this.ativa != newC.get_Estado())
-                {
-                    updateRequired = true;
-                    if (newC.get_Estado())
-                        query += "ativar=1,";
-                    else
-                        query += "ativa=0,";
-                }
-                if (updateRequired)
-                {
-                    if (',' == query[query.Length - 1])
-                        query = query.Substring(0, query.Length - 1);
-                    query += " WHERE id=" + newC.get_Id().ToString();
-                    Database con = new Database();
-                    string res = con.comando(query);
-                    if ("" == res)
-                    {
-                        return true;
-                    }
-                    else
-                        return false;
-                }
-                else
-                    return true;
-            }
-            catch { return false; }
-        }
-*/
 
         public static List<DateTime> todasDatas()
         {
@@ -237,7 +174,7 @@ namespace AnamSys
                 Database db = new Database();
                 List<DateTime> datas= new List<DateTime>();
                 System.Data.DataTable dt = new System.Data.DataTable();
-                dt = db.query("Select data from consulta");
+                dt = db.Query("Select data from consulta");
                 if (dt == null)
                     return datas;
                 else

@@ -163,7 +163,7 @@ namespace AnamSys
             try
             {
                 Database conexao = new Database();
-                System.Data.DataTable dt = conexao.query("select * from operadora where id=" + id.ToString());
+                System.Data.DataTable dt = conexao.Query("select * from operadora where id=" + id.ToString());
                 if (dt != null)
                 {
                     this.set_Id(int.Parse(dt.Rows[0]["id"].ToString()));
@@ -185,7 +185,7 @@ namespace AnamSys
             try
             {
                 Database db = new Database();
-                System.Data.DataTable dt = db.query("select * from operadora where nome='"+nome+"'");
+                System.Data.DataTable dt = db.Query("select * from operadora where nome='"+nome+"'");
                 if (dt != null)
                 {
                     Operadora result = new Operadora();
@@ -213,7 +213,7 @@ namespace AnamSys
             {
                 Operadora[] result;
                 Database db = new Database();
-                System.Data.DataTable dt = db.query("select * from operadora");
+                System.Data.DataTable dt = db.Query("select * from operadora");
                 if (dt != null)
                 {
                     result = new Operadora[dt.Rows.Count];
@@ -245,7 +245,7 @@ namespace AnamSys
             {
                 Operadora[] result;
                 Database db = new Database();
-                System.Data.DataTable dt = db.query("select * from operadora where nome like '%" + nome + "%'");
+                System.Data.DataTable dt = db.Query("select * from operadora where nome like '%" + nome + "%'");
                 if (dt != null)
                 {
                     result = new Operadora[dt.Rows.Count];
@@ -304,7 +304,7 @@ namespace AnamSys
                 {
                     updateQuery = updateQuery.Substring(0, updateQuery.Length - 2)+ " where id="+nova.get_Id().ToString();
                     Database db = new Database();
-                    return db.comando(updateQuery);
+                    return db.Comando(updateQuery);
                 }
                 return "";
             }
@@ -340,7 +340,7 @@ namespace AnamSys
             try
             {//new Classes.Fatura(novaConsulta.get_Id(), 0, novaConsulta.get_Data(), val, conDetFormaCb.SelectedIndex, conDetParCh.Checked);
                 Database conexao = new Database();
-                System.Data.DataTable dt = conexao.query("select * from fatura where consulta=" + Consulta.ToString()+" and parcela="+Parcela.ToString());
+                System.Data.DataTable dt = conexao.Query("select * from fatura where consulta=" + Consulta.ToString()+" and parcela="+Parcela.ToString());
                 if (dt == null)
                 {//novo
                     DateTime hj = DateTime.Now;
@@ -356,7 +356,7 @@ namespace AnamSys
                              Forma.get_Id() + "," +
                              Parcela.ToString() + ",'" +
                              pg + "','" +
-                             hj.ToString("yyyy-MM-dd HH:mm:ss") + "')", erro = conexao.comando(query);
+                             hj.ToString("yyyy-MM-dd HH:mm:ss") + "')", erro = conexao.Comando(query);
                     if (erro == "")
                     {
                         this.id = int.Parse(novoId);
@@ -381,7 +381,7 @@ namespace AnamSys
                     else
                         pend = "0";
                     query += ", pendencia ='"+pend+"' WHERE id='" + dt.Rows[0]["id"].ToString() + "' and parcela='" + parcela.ToString() + "'";
-                    erro = conexao.comando(query);
+                    erro = conexao.Comando(query);
 
                     DateTime aux = new DateTime(1111, 11, 11);
                     DateTime.TryParse(dt.Rows[0]["Hoje"].ToString(), out aux);
@@ -411,7 +411,7 @@ namespace AnamSys
             try
             {
                 Database conexao = new Database();
-                System.Data.DataTable dt = conexao.query("select * from fatura where id="+Id);
+                System.Data.DataTable dt = conexao.Query("select * from fatura where id="+Id);
                 if (dt != null)
                 {
                     this.id = int.Parse(dt.Rows[0]["id"].ToString());
@@ -437,7 +437,7 @@ namespace AnamSys
             try
             {
                 Database conexao = new Database();
-                System.Data.DataTable dt = conexao.query("select * from fatura where id=" + id.ToString());
+                System.Data.DataTable dt = conexao.Query("select * from fatura where id=" + id.ToString());
                 if (dt == null)
                     return false;
                 else
@@ -507,7 +507,7 @@ namespace AnamSys
                 if (query.LastIndexOf("or") != -1)
                     query = query.Substring(0, query.Length - 3);
                 Database con = new Database();
-                System.Data.DataTable dt = con.query(query);
+                System.Data.DataTable dt = con.Query(query);
                 if (dt!=null)
                 {
 
@@ -529,7 +529,7 @@ namespace AnamSys
                 else
                 {
                     Database conexao = new Database();
-                    System.Data.DataTable dt = conexao.query("select * from fatura where consulta='" + this.consulta+"' and parcela ='"+this.get_Parcela().ToString()+"'");
+                    System.Data.DataTable dt = conexao.Query("select * from fatura where consulta='" + this.consulta+"' and parcela ='"+this.get_Parcela().ToString()+"'");
                     if (dt == null)
                     {//novo
                        string prox_id = conexao.proximo("fatura","id");
@@ -544,7 +544,7 @@ namespace AnamSys
                         else
                             query+="0";
                         query+= "','" +this.hoje.ToString("yyyy-MM-dd HH:mm:ss") + "')";
-                        return conexao.comando(query);
+                        return conexao.Comando(query);
                     }
                     else
                     {
@@ -558,7 +558,7 @@ namespace AnamSys
                         else
                             query += "0'";
                         query+=" WHERE id='" + dt.Rows[0]["id"].ToString() + "'";
-                        return conexao.comando(query);
+                        return conexao.Comando(query);
                     }
                 }
             }

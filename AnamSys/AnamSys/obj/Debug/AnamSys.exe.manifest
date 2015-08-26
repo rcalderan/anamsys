@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="AnamSys.exe" size="135168">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="AnamSys.exe" size="142848">
       <assemblyIdentity name="AnamSys" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>zwupoyVlahWyKZsCTRoTKtHvVaDX0PvXhOJLK02ljvg=</dsig:DigestValue>
+        <dsig:DigestValue>fmWT44/8EhvROLedrRYsZyX4tZTncF9jPqZPTD2o+f4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

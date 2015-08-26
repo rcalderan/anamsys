@@ -312,7 +312,7 @@ namespace AnamSys
                 DateTime auxDt;
                 string query = "select * from consulta";// where data>='" + anoAtual.ToString() + "-" + mesAtual + "-1' and data<='" + anoAtual.ToString() + "-" + mesAtual + "-31'";
 
-                DataTable marcadas = db.query(query);
+                DataTable marcadas = db.Query(query);
                 if (marcadas != null)
                 {
                     foreach (DataRow dr in marcadas.Rows)
@@ -419,7 +419,7 @@ namespace AnamSys
         {
             try
             {
-                DataTable dt = db.query("Select c.id, c.ativa,c.data, p.nome from consulta as c inner join paciente as p where c.paciente=p.id and c.ativa=1 and data>='" + DateTime.Today.ToString("yyyy-MM-dd") + "'");
+                DataTable dt = db.Query("Select c.id, c.ativa,c.data, p.nome from consulta as c inner join paciente as p where c.paciente=p.id and c.ativa=1 and data>='" + DateTime.Today.ToString("yyyy-MM-dd") + "'");
                 if (dt != null)
                 {
                     conLv.Items.Clear();
@@ -491,7 +491,7 @@ namespace AnamSys
                     query += "c.id="+s+" or ";
                 }
                 query = query.Substring(0,query.Length - 4)+")";
-                DataTable dt = db.query(query);
+                DataTable dt = db.Query(query);
                 if (dt != null)
                 {
                     conLv.Items.Clear();
@@ -556,7 +556,7 @@ namespace AnamSys
         {
             try
             {
-                cad1IdMtb.Text = db.proximo("paciente", "id");
+                cad1IdLb.Text = db.proximo("paciente", "id");
                 listaConsultas();
                 CurrentCulture = Application.CurrentCulture.Name;
                 //exibe o mes atual
@@ -575,7 +575,7 @@ namespace AnamSys
                 DateTime auxDt;
                 string query = "select * from consulta";// where data>='" + anoAtual.ToString() + "-" + mesAtual + "-1' and data<='" + anoAtual.ToString() + "-" + mesAtual + "-31'";
 
-                DataTable marcadas = db.query(query);
+                DataTable marcadas = db.Query(query);
                 if (marcadas != null)
                 {
                     foreach (DataRow dr in marcadas.Rows)
@@ -688,7 +688,7 @@ namespace AnamSys
         {
             try
             {
-                cad1IdMtb.Text = db.proximo("paciente", "id");
+                cad1IdLb.Text = db.proximo("paciente", "id");
                 cad1NomeTb.Clear();
                 cad1EnderecoTb.Clear(); 
                 cad1CpfMtb.Clear();
@@ -702,7 +702,9 @@ namespace AnamSys
                 conAvalTb.Clear();
                 conPlanoTb.Clear();
                 conPacienteLb.Text = "Nome do Paciente";
-
+                Control[] cs = cad1Pn.Controls.Find("cad1OutrosPn", false);
+                if (cs.Length != 0)
+                    cs[0].Dispose();
                 avalNomeLb.Text = "Nome";
                 planoNomeLb.Text = "Nome";
                 listaConsultas();
@@ -721,8 +723,8 @@ namespace AnamSys
             {
                 if (MessageBox.Show("Deseja atualizar dados?", "Atualizar?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    Paciente estePaciente = new Paciente(int.Parse(cad1IdMtb.Text));
-                    Paciente newPaciente = new Paciente(int.Parse(cad1IdMtb.Text));
+                    Paciente estePaciente = new Paciente(int.Parse(cad1IdLb.Text));
+                    Paciente newPaciente = new Paciente(int.Parse(cad1IdLb.Text));
                     newPaciente.set_nome(cad1NomeTb.Text);
                     newPaciente.set_cpf(cad1CpfMtb.Text);
                     newPaciente.set_rg(cad1RgMtb.Text);
@@ -730,14 +732,14 @@ namespace AnamSys
                     newPaciente.set_cidade(cad1CidadeTb.Text);
                     newPaciente.set_bairro(cad1BairroTb.Text);
                     newPaciente.set_uf(cad1UfTb.Text);
-                    newPaciente.set_obs(cad1ObsTb.Text);
+                    newPaciente.set_obs(cad1ObsTb.Lines);
                     newPaciente.set_nascimento(cadNascDtp.Value);
                     newPaciente.set_plano(conPlanoTb.Text);
-                    if (estePaciente.update(newPaciente))
+                    if (estePaciente.Update(newPaciente))
                         MessageBox.Show("Os dados cadastrais do paciente " + cad1NomeTb.Text + " foram atualizados com sucesso!");
                     else
                         MessageBox.Show("Não foi possíver atualizar os dados do paciente...");
-                    carregaPaciente(cad1IdMtb.Text);
+                    carregaPaciente(cad1IdLb.Text);
                 }
             }
             catch (Exception erro)
@@ -753,12 +755,12 @@ namespace AnamSys
             {
                 if (MessageBox.Show("Você tem certeza que deseja proceguir?\nOs dados deste cadastro serão PERDIDOS. Sem volta!", "Deletar?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    DataTable dt = db.query("select id,nome from paciente where id='" + cad1IdMtb.Text + "'");
+                    DataTable dt = db.Query("select id,nome from paciente where id='" + cad1IdLb.Text + "'");
                     if (dt != null)
                     {
                         if (DialogResult.Yes == MessageBox.Show("Você está prestes a excluir o paciente (" + dt.Rows[0]["id"].ToString() + ")" + dt.Rows[0]["nome"].ToString() + " do sistema. Deseja mesmo prosseguir?", "Deletar", MessageBoxButtons.YesNo))
                         {
-                            string erro = db.comando("DELETE from paciente where id='" + cad1IdMtb.Text + "'");
+                            string erro = db.Comando("DELETE from paciente where id='" + cad1IdLb.Text + "'");
                             if (erro == "")
                                 MessageBox.Show("Paciente DELETADO com sucesso!");
                             else
@@ -780,35 +782,31 @@ namespace AnamSys
         {
             try
             {
+                if (!Uteis.ValidaCPF(cad1CpfMtb.Text))
+                {
+                    MessageBox.Show("CPF Inválido");
+                    cad1CpfMtb.BackColor = Color.Yellow;
+                    return;
+                }
+                else
+                    cad1CpfMtb.BackColor = Color.White;
+
                 if (MessageBox.Show("Deseja Salvar?", "Salvar?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    string prox = db.proximo("paciente", "id");
-                    if (prox == cad1IdMtb.Text)
+                    DataTable dt = db.Query("select id from paciente where cpf='" + cad1CpfMtb.Text + "'");
+                    if (dt != null)
+                        MessageBox.Show("Para Atualizar o cadastro, utize o botão \"Atualizar\"");
+                    else
                     {
                         if (pictureBox1.ImageLocation == "")
                             pictureBox1.ImageLocation = "0.png";
-                        string query = "INSERT INTO paciente values(" + cad1IdMtb.Text + ",'" +
-                            cad1NomeTb.Text + "','" +
-                            cad1RgMtb.Text + "','" +
-                            cad1CpfMtb.Text + "','" +
-                            cad1EnderecoTb.Text + "','" +
-                            cad1BairroTb.Text + "','" +
-                            cad1CidadeTb.Text + "','" +
-                            cad1UfTb.Text + "','" +
-                            cadNascDtp.Value.ToString("yyyy-MM-dd") + "','" +
-                            cad1ObsTb.Text + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "','" +
-                            conPlanoTb.Text + "','"+
-                            pictureBox1.ImageLocation+"')",
-                            erro = db.comando(query);
-                        if (erro != "")
-                            MessageBox.Show(erro);
+                        if (Paciente.New(cad1NomeTb.Text, cad1RgMtb.Text, cad1CpfMtb.Text, cad1EnderecoTb.Text,
+                            cad1BairroTb.Text, cad1CidadeTb.Text, cad1UfTb.Text, cadNascDtp.Value, cad1ObsTb.Lines,
+                            conPlanoTb.Text))
+                            MessageBox.Show("O paciente " + cad1NomeTb.Text + " foi cadastrado com sucesso! ");
                         else
-                            MessageBox.Show("O paciente " + cad1NomeTb.Text + " foi cadastrado com sucesso. Seu ID é " + cad1IdMtb.Text + ".");
+                            MessageBox.Show("Não foi possível salvar paciente.");
                         limpaPaciente();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Para Atualizar o cadastro, utize o botão \"Atualizar\"");
                     }
                 }
             }
@@ -825,7 +823,7 @@ namespace AnamSys
             {
                 if (e.KeyCode == Keys.Enter)
                 {
-                    string erro = carregaPaciente(cad1IdMtb.Text);
+                    string erro = carregaPaciente(cad1IdLb.Text);
                     if (erro != "")
                         MessageBox.Show(erro);
                 }
@@ -841,13 +839,13 @@ namespace AnamSys
         {
             try
             {
-                DataTable dt = db.query("Select * from paciente where id='" + codigo + "'");
+                DataTable dt = db.Query("Select * from paciente where id='" + codigo + "'");
                 if (dt != null)
                 {
                     DataRow dr = dt.Rows[0];
                     DateTime nas;
                     cad1NomeTb.Text = dr["nome"].ToString();
-                    cad1IdMtb.Text = codigo;
+                    cad1IdLb.Text = codigo;
                     avalNomeLb.Text = dr["nome"].ToString();
                     planoNomeLb.Text = dr["nome"].ToString();
                     cad1RgMtb.Text = dr["rg"].ToString();
@@ -862,8 +860,8 @@ namespace AnamSys
                         cadNascDtp.Value = DateTime.Today;
                     cad1ObsTb.Text = dr["obs"].ToString();
                     conPlanoTb.Text = dr["plano"].ToString();
-                    conPacienteLb.Text = cad1IdMtb.Text + " - " + cad1NomeTb.Text;
-                    conDetNomeLb.Text = cad1IdMtb.Text + " - "+ cad1NomeTb.Text;
+                    conPacienteLb.Text = cad1IdLb.Text + " - " + cad1NomeTb.Text;
+                    conDetNomeLb.Text = cad1IdLb.Text + " - " + cad1NomeTb.Text;
                     /*dt = db.query("Select * from consulta where id=" + cad1IdMtb.Text);
                     conLv.Items.Clear();
                     conFinPacienteLb.Text = conPacienteLb.Text;
@@ -965,14 +963,14 @@ namespace AnamSys
                 {
                     id = conDetNomeLb.Text.Substring(0, conDetNomeLb.Text.IndexOf(" "));
                 }
-                if (null != db.query("select id from paciente where id=" + id))
+                if (null != db.Query("select id from paciente where id=" + id))
                 {
-                    DataTable dt = db.query("select id from consulta where id=" + conDetIdLb.Text);
+                    DataTable dt = db.Query("select id from consulta where id=" + conDetIdLb.Text);
                     if (null == dt)
                     {
                         DateTime data = new DateTime(conDataDtp.Value.Year, conDataDtp.Value.Month, conDataDtp.Value.Day, int.Parse(conHoraCb.Text), int.Parse(conMinCb.Text), 0);
                         Consulta novaConsulta = new Consulta(
-                            int.Parse(cad1IdMtb.Text),
+                            int.Parse(cad1IdLb.Text),
                             0,
                             conDetDetTb.Text,
                             conPlanoTb.Text,
@@ -1007,7 +1005,7 @@ namespace AnamSys
                     else
                     {//atualizar consulta
                         DateTime data = new DateTime(conDataDtp.Value.Year, conDataDtp.Value.Month, conDataDtp.Value.Day, int.Parse(conHoraCb.Text), int.Parse(conMinCb.Text), 0);
-                        Consulta novaConsulta = new Consulta(dt.Rows[0]["id"].ToString()), old = new Consulta(dt.Rows[0]["id"].ToString());
+                        Consulta novaConsulta = Consulta.Load(int.Parse(dt.Rows[0]["id"].ToString())), old = Consulta.Load(int.Parse(dt.Rows[0]["id"].ToString()));
 
                         novaConsulta.set_Data(data);
                         novaConsulta.set_Detalhes(conDetDetTb.Text);
@@ -1231,7 +1229,7 @@ namespace AnamSys
         {
             try
             {
-                DataTable dt = db.query("Select * from operadora where nome='" + conTaxNameCb.Text + "'");
+                DataTable dt = db.Query("Select * from operadora where nome='" + conTaxNameCb.Text + "'");
                 if (dt==null)
                 {//salvar
                     if (DialogResult.Yes == MessageBox.Show("Deseja mesmo Adicionar uma operadora de cartões chamada \"" + conTaxNameCb.Text + "\"??", "Salvando...", MessageBoxButtons.YesNo))
@@ -1262,11 +1260,11 @@ namespace AnamSys
 
                         }
                         query += taxas + "')";
-                        erro = db.comando(query);
+                        erro = db.Comando(query);
                         if (erro != "")
                             MessageBox.Show("Falha ao salvar: " + erro);
                         else
-                            if ((padrao == "1") && (db.comando("update operadora set ativo=0 where id!=" + id) != ""))
+                            if ((padrao == "1") && (db.Comando("update operadora set ativo=0 where id!=" + id) != ""))
                                 MessageBox.Show("Escolha uma operadora como padrão e salve!");
                     }
                     else
@@ -1481,18 +1479,18 @@ namespace AnamSys
         {
             try
             {
-                DataTable dt = db.query("select id from paciente where id=" + cad1IdMtb.Text);
+                DataTable dt = db.Query("select id from paciente where id=" + cad1IdLb.Text);
                 if (dt != null)
                 {
-                    Paciente oldP = new Paciente(int.Parse(cad1IdMtb.Text));
+                    Paciente oldP = new Paciente(int.Parse(cad1IdLb.Text));
                     string oldPlano = oldP.get_plano();
                     if (oldPlano != conPlanoTb.Text)
                     {
                         if (DialogResult.Yes == MessageBox.Show("Deseja salvar alterações?", "Salvar?", MessageBoxButtons.YesNo))
                         {
-                            Paciente newP = new Paciente(int.Parse(cad1IdMtb.Text));
+                            Paciente newP = new Paciente(int.Parse(cad1IdLb.Text));
                             newP.set_plano(conPlanoTb.Text);
-                            if (!oldP.update(newP))
+                            if (!oldP.Update(newP))
                             {
                                 MessageBox.Show("Não foi possível salvar...");
                                 conPlanoTb.Text = oldPlano;
@@ -1516,18 +1514,18 @@ namespace AnamSys
         {
             try
             {
-                DataTable dt = db.query("select id from paciente where id=" + cad1IdMtb.Text);
+                DataTable dt = db.Query("select id from paciente where id=" + cad1IdLb.Text);
                 if (dt != null)
                 {
-                    Paciente oldP = new Paciente(int.Parse(cad1IdMtb.Text));
+                    Paciente oldP = new Paciente(int.Parse(cad1IdLb.Text));
                     string oldPlano = oldP.get_plano();
                     if (oldPlano != conPlanoTb.Text)
                     {
                         if (DialogResult.Yes == MessageBox.Show("Deseja salvar alterações?", "Salvar?", MessageBoxButtons.YesNo))
                         {
-                            Paciente newP = new Paciente(int.Parse(cad1IdMtb.Text));
+                            Paciente newP = new Paciente(int.Parse(cad1IdLb.Text));
                             newP.set_plano(conPlanoTb.Text);
-                            if (!oldP.update(newP))
+                            if (!oldP.Update(newP))
                             {
                                 MessageBox.Show("Não foi possível salvar...");
                                 conPlanoTb.Text = oldPlano;
@@ -1637,7 +1635,7 @@ namespace AnamSys
                 }
                 if (i != null)
                 {
-                    DataTable dt = db.query("select * from consulta where id=" + i.SubItems[0].Text);
+                    DataTable dt = db.Query("select * from consulta where id=" + i.SubItems[0].Text);
                     if (dt != null)
                     {
                         //limpaConsulta();
@@ -1656,7 +1654,7 @@ namespace AnamSys
                             conHoraCb.Text = dia.Hour.ToString();
                             conMinCb.Text = dia.ToString("mm");
                         }
-                        dt = db.query("select * from fatura where consulta=" + i.SubItems[0].Text + " order by parcela asc");
+                        dt = db.Query("select * from fatura where consulta=" + i.SubItems[0].Text + " order by parcela asc");
                         if (dt != null)
                         {
                             Double aux_Valor;
@@ -1825,11 +1823,11 @@ namespace AnamSys
         {
             try
             {
-                int prox = Convert.ToInt32(db.proximo("paciente", "id")),atual = Convert.ToInt32(cad1IdMtb.Text);
+                int prox = Convert.ToInt32(db.proximo("paciente", "id")),atual = Convert.ToInt32(cad1IdLb.Text);
                 atual++;
                 if (atual< prox)
                 {
-                    cad1IdMtb.Text = atual.ToString();
+                    cad1IdLb.Text = atual.ToString();
                     carregaPaciente(atual.ToString());
                 }
                 else
@@ -1848,12 +1846,12 @@ namespace AnamSys
         {
             try
             {
-                int prox = Convert.ToInt32(db.proximo("paciente", "id")), atual = Convert.ToInt32(cad1IdMtb.Text);
+                int prox = Convert.ToInt32(db.proximo("paciente", "id")), atual = Convert.ToInt32(cad1IdLb.Text);
                 atual--;
                 if (0 != atual)
                 {
-                    
-                    cad1IdMtb.Text = atual.ToString();
+
+                    cad1IdLb.Text = atual.ToString();
                     carregaPaciente(atual.ToString());
                 }
 
@@ -1873,23 +1871,12 @@ namespace AnamSys
                 {
                     Point loc = new Point(principalForm.ActiveForm.Width / 2 - cad1Pn.Width / 2, principalForm.ActiveForm.Height / 2 - cad1Pn.Height / 2);
                     cad1Pn.Location = loc;
-                    DataTable dt = db.query("Select nome from paciente");
+                    DataTable dt = db.Query("Select id,nome from paciente");
                     List<string> sourse = new List<string>();
-                    string auxName;
-                    int n;
                     if (dt != null)
-                    {                        
-                        foreach(DataRow r in dt.Rows)
-                        {
-                            auxName = r["nome"].ToString();
-                            n = 1; 
-                            while (sourse.Contains(auxName))
-                            {
-                                n++;
-                                auxName = r["nome"].ToString() + " (" + n.ToString() + ")";
-                            }
-                            sourse.Add(auxName);
-                        }
+                    {
+                        foreach (DataRow r in dt.Rows)
+                            sourse.Add(r["nome"].ToString());
                         cad1NomeTb.AutoCompleteCustomSource.AddRange(sourse.ToArray());
                     }
                 }
@@ -1947,10 +1934,10 @@ namespace AnamSys
         {
             try
             {
-                if (carregaPaciente(cad1IdMtb.Text) == "")
+                if (carregaPaciente(cad1IdLb.Text) == "")
                 {
                     mostraGb(consultasPn);
-                    listaConsultas(cad1IdMtb.Text);
+                    listaConsultas(cad1IdLb.Text);
                 }
             }
             catch (Exception err)
@@ -1971,7 +1958,7 @@ namespace AnamSys
             {
                 if (conDetailsPn.Visible)
                 {
-                    string s = carregaPaciente(cad1IdMtb.Text);
+                    string s = carregaPaciente(cad1IdLb.Text);
                     if ( s!= "")
                     {
                         limpaPaciente();
@@ -2238,7 +2225,7 @@ namespace AnamSys
                 {
                     string query = "SELECT id,nome FROM paciente";
                     string[] data;
-                    DataTable pts = db.query(query);
+                    DataTable pts = db.Query(query);
                     if (pts!=null)
                     {
                         data = new string[pts.Rows.Count];
@@ -2249,7 +2236,7 @@ namespace AnamSys
                         source.AddRange(l.ToArray());
                         evoNomeTb.AutoCompleteCustomSource = source;
                     }
-                    pts = db.query("select data from evolucao group by data asc");
+                    pts = db.Query("select data from evolucao group by data asc");
                     if (pts != null)
                     {
                         data = new string[pts.Rows.Count];
@@ -2298,12 +2285,12 @@ namespace AnamSys
             try
             {
                 string query = "SELECT * FROM paciente WHERE id='" + idPaciente + "'";
-                DataTable pts = db.query(query);
+                DataTable pts = db.Query(query);
                 if (pts != null)
                 {
                     evoPacienteMtb.Text = idPaciente.ToString();
                     evoNomeTb.Text = pts.Rows[0]["nome"].ToString();
-                    pts = db.query("select id from teste where paciente='" + evoPacienteMtb.Text + "' order by id");
+                    pts = db.Query("select id from teste where paciente='" + evoPacienteMtb.Text + "' order by id");
                     if (pts != null)
                     {
                         evoTesteCb.Items.Clear();
@@ -2333,11 +2320,11 @@ namespace AnamSys
             try
             {
                 string query = "SELECT * FROM paciente WHERE nome='" + nomePacinete + "'";
-                DataTable pts = db.query(query);
+                DataTable pts = db.Query(query);
                 if (pts != null)
                 {
                     evoPacienteMtb.Text = pts.Rows[0]["id"].ToString();
-                    pts = db.query("select id from teste where paciente='" + evoPacienteMtb.Text+"' order by id");
+                    pts = db.Query("select id from teste where paciente='" + evoPacienteMtb.Text+"' order by id");
                     if (pts != null)
                     {
                         evoTesteCb.Items.Clear();
@@ -2438,16 +2425,16 @@ namespace AnamSys
         {
             try
             {
-                if (db.query("select id from paciente where id='"+evoPacienteMtb.Text+"'")==null)
+                if (db.Query("select id from paciente where id='"+evoPacienteMtb.Text+"'")==null)
                 {
                     MessageBox.Show("Antes disto, adicione um paciente...");
                     return;
                 }
-                DataTable dt = db.query("select id from teste where paciente='"+evoPacienteMtb.Text+"' and tipo='"+evoInsTipo.SelectedIndex.ToString()+"'");
+                DataTable dt = db.Query("select id from teste where paciente='"+evoPacienteMtb.Text+"' and tipo='"+evoInsTipo.SelectedIndex.ToString()+"'");
                 string prox = db.proximo("teste", "id");
                 if (dt==null)
                 {
-                    string erro = db.comando("insert into teste values("+prox+",'" + evoPacienteMtb.Text + "','" + evoInsTipo.SelectedIndex.ToString() + "')");
+                    string erro = db.Comando("insert into teste values("+prox+",'" + evoPacienteMtb.Text + "','" + evoInsTipo.SelectedIndex.ToString() + "')");
                     if ("" == erro)
                     {
 
@@ -2462,14 +2449,14 @@ namespace AnamSys
                 {
                     prox = dt.Rows[0]["id"].ToString();
                 }
-                dt = db.query("select id from evolucao where data='" + evoInsDataDtp.Value.ToString("yyyy-MM-dd") + "' and teste='"+ prox+"'");
+                dt = db.Query("select id from evolucao where data='" + evoInsDataDtp.Value.ToString("yyyy-MM-dd") + "' and teste='"+ prox+"'");
                 if (dt!=null)
                 {
                     if (MessageBox.Show("Este valor já foi definido. Deseja atualizar os dados?","Atualizar",MessageBoxButtons.YesNo)== DialogResult.Yes)
                     {
                         string query = "update evolucao set data='" + evoInsDataDtp.Value.ToString("yyyy-MM-dd") + "', unidade='" + evoInsUnidadeUd.Value.ToString() + 
                             "' where id='"+dt.Rows[0]["id"].ToString()+"'",
-                           erro = db.comando(query);
+                           erro = db.Comando(query);
                         if (erro != "")
                             MessageBox.Show("Erro ao atualizar teste: " + erro);
                         else
@@ -2484,7 +2471,7 @@ namespace AnamSys
                     string query = "INSERT INTO evolucao VALUES('"+db.proximo("evolucao","id")+"','"+
                         evoPacienteMtb.Text + "','" + 
                         prox+"','"+evoInsDataDtp.Value.ToString("yyyy-MM-dd")+"','"+evoInsUnidadeUd.Value.ToString()+"')",
-                        erro=db.comando(query);
+                        erro=db.Comando(query);
                     if (erro != "")
                         MessageBox.Show(erro);
                     else
@@ -2538,7 +2525,7 @@ namespace AnamSys
             try
             {
                 string query = "select e.data,e.unidade, t.tipo from evolucao as e inner join teste as t where e.teste=t.id and and t.tipo= e.paciente='" + evoPacienteMtb.Text + "' and e.data>='" + evoDeDtp.Value.ToString("yyyy-MM-dd") + "' and e.data<='" + evoAteDtp.Value.ToString("yyyy-MM-dd") + "' order by e.data asc";
-                DataTable dt = db.query(query);
+                DataTable dt = db.Query(query);
                 if (dt != null)
                 {
                     evoChart.Show();
@@ -2607,7 +2594,7 @@ namespace AnamSys
         {
             try
             {
-                DataTable dt = db.query("select id from teste where paciente='"+evoPacienteMtb.Text+"' and tipo='"+evoInsTipo.SelectedIndex.ToString()+"'");
+                DataTable dt = db.Query("select id from teste where paciente='"+evoPacienteMtb.Text+"' and tipo='"+evoInsTipo.SelectedIndex.ToString()+"'");
                 if (dt!=null)
                 {
 
@@ -2617,7 +2604,7 @@ namespace AnamSys
                     if (DialogResult.Yes==MessageBox.Show("Inserir novo tipo de teste com unidade \""+evoInsTipo.Text+"\"? Lembrando que não é permitido criar mais de um teste com a mesma unidade para o mesmo paciente.","Novo",MessageBoxButtons.YesNo))
                     {
                         string prox = db.proximo("teste", "id"),
-                            erro = db.comando("insert into teste values(" + prox + "," + evoPacienteMtb.Text + "," + evoInsTipo.SelectedIndex.ToString() + ")");
+                            erro = db.Comando("insert into teste values(" + prox + "," + evoPacienteMtb.Text + "," + evoInsTipo.SelectedIndex.ToString() + ")");
                         if (erro == "")
                         {
                             loadChart();
@@ -2678,7 +2665,7 @@ namespace AnamSys
                 if (e.KeyCode == Keys.Enter)
                 {
                     string query = "Select * from consulta as c inner join paciente as p where c.paciente = p.id and p.nome like '%" + conPesqTb.Text + "%'";
-                    DataTable dt = db.query(query);
+                    DataTable dt = db.Query(query);
                     conLv.Items.Clear();
                     conFinPacienteLb.Text = conPacienteLb.Text;
                     if (dt != null)
@@ -2705,10 +2692,31 @@ namespace AnamSys
             {
                 if (e.KeyCode == Keys.Enter)
                 {
-                    DataTable dt = db.query("select id from paciente where nome='"+cad1NomeTb.Text+"'");
+                    DataTable dt = db.Query("select id,nome from paciente where nome='"+cad1NomeTb.Text+"'");
                     if (dt != null)
                     {
-                        carregaPaciente(dt.Rows[0]["id"].ToString());
+                        if (dt.Rows.Count==1)
+                            carregaPaciente(dt.Rows[0]["id"].ToString());
+                        else
+                        {
+                            Panel pn = new Panel();
+                            List<Control> adds = new List<Control>();
+                            pn.Name = "cad1OutrosPn";
+                            Label topLabel = new Label();
+                            topLabel.Text = "Escolha o paciente:";
+                            topLabel.Dock = DockStyle.Top;
+                            CheckBox[] chs = new CheckBox[dt.Rows.Count];
+                            for (int i = 0; i < dt.Rows.Count; i++ )
+                            {
+                                chs[i] = new CheckBox();
+                                chs[i].Text = dt.Rows[i]["nome"].ToString();
+                                chs[i].Dock = DockStyle.Fill;
+                                chs[i].Click += principalForm_Click;
+                                adds.Add(chs[i]);
+                            }
+                            cad1Pn.Controls.AddRange(adds.ToArray());
+                            Uteis.centralizaControl(pn);
+                        }
                     }
                     else
                         limpaPaciente();
@@ -2719,6 +2727,13 @@ namespace AnamSys
                 if (debug_mode)
                     MessageBox.Show(err.Message);
             }
+        }
+
+        void principalForm_Click(object sender, EventArgs e)
+        {
+            CheckBox snd = (CheckBox)sender;
+            carregaPaciente(Uteis.getIdFromString(snd.Text).ToString());
+            snd.Parent.Dispose();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -2774,7 +2789,7 @@ namespace AnamSys
             try
             {
                 string query = "select * from fatura";
-                DataTable dt = db.query(query);
+                DataTable dt = db.Query(query);
                 if (dt!=null)
                 {
                     List<ListViewItem> itens = new List<ListViewItem>();
@@ -2833,7 +2848,7 @@ namespace AnamSys
 
                     if (DialogResult.Yes == MessageBox.Show("Deseja mesmo Adicionar uma operadora de cartões chamada \"" + conTaxNameCb.Text + "\"??", "Salvando...", MessageBoxButtons.YesNo))
                     {
-                        DataTable dt = db.query("Select * from operadora where nome='" + conTaxNameCb.Text + "'");
+                        DataTable dt = db.Query("Select * from operadora where nome='" + conTaxNameCb.Text + "'");
                         if (dt == null)
                         {//salvar
                             string id, query, padrao, taxas = "", erro;
@@ -2842,7 +2857,7 @@ namespace AnamSys
                             TextBox aux;
                             if (conTaxEsteCh.Checked)
                             {
-                                if (db.comando("update operadora set padrao=0") == "")
+                                if (db.Comando("update operadora set padrao=0") == "")
                                     padrao = "1";
                                 else
                                 {
@@ -2870,7 +2885,7 @@ namespace AnamSys
 
                             }
                             query += taxas + "',"+padrao+")";
-                            erro = db.comando(query);
+                            erro = db.Comando(query);
                             if (erro != "")
                                 MessageBox.Show("Falha ao salvar: " + erro);
                             else
@@ -2894,14 +2909,14 @@ namespace AnamSys
         {
             try
             {
-                DataTable dt = db.query("Select * from operadora where nome='" + conTaxNameCb.Text + "'");
+                DataTable dt = db.Query("Select * from operadora where nome='" + conTaxNameCb.Text + "'");
                 if ((conTaxNameCb.Text == "") || (dt == null))
                     MessageBox.Show("Nada a ser excluido!");
                 else
                 {
                     if (DialogResult.Yes == MessageBox.Show("Deseja mesmo DESATIVAR a operadora \"" + conTaxNameCb.Text + "\" do banco de dados??", "Excluir", MessageBoxButtons.YesNo))
                     {
-                        string erro = db.comando("upadte operadora set ativo=0 where nome='" + conTaxNameCb.Text + "'");
+                        string erro = db.Comando("upadte operadora set ativo=0 where nome='" + conTaxNameCb.Text + "'");
                         if (erro != "")
                             MessageBox.Show("Não foi possível desativar operadora: erro\"" + erro + "\"");
                         else
@@ -2975,6 +2990,17 @@ namespace AnamSys
                     MessageBox.Show(err.Message);
             }
         }
+
+        private void cad1CpfMtb_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode==Keys.Enter)
+            {
+                if (!Uteis.ValidaCPF(cad1CpfMtb.Text))
+                    cad1CpfMtb.BackColor = Color.Yellow;
+                else
+                    cad1CpfMtb.BackColor = Color.White;
+            }
+        }
         /*
          * try
             {
@@ -2986,5 +3012,233 @@ namespace AnamSys
                     MessageBox.Show(err.Message);
             }
          */
+    }
+
+    class Uteis
+    {
+        public static bool ValidaCPF(string cpf)
+        {
+            try
+            {
+                /*Validar cpf*/
+                int c1 = int.Parse(cpf.Substring(0, 1)),
+                    c2 = int.Parse(cpf.Substring(1, 1)),
+                    c3 = int.Parse(cpf.Substring(2, 1)),
+                    c4 = int.Parse(cpf.Substring(4, 1)),
+                    c5 = int.Parse(cpf.Substring(5, 1)),
+                    c6 = int.Parse(cpf.Substring(6, 1)),
+                    c7 = int.Parse(cpf.Substring(8, 1)),
+                    c8 = int.Parse(cpf.Substring(9, 1)),
+                    c9 = int.Parse(cpf.Substring(10, 1)),
+                    c10 = int.Parse(cpf.Substring(12, 1)),
+                    c11 = int.Parse(cpf.Substring(13, 1)),
+                    soma1 = c1 * 10 + c2 * 9 + c3 * 8 + c4 * 7 + c5 * 6 + c6 * 5 + c7 * 4 + c8 * 3 + c9 * 2,
+                    resto1 = soma1 % 11,
+                    soma2 = c1 * 11 + c2 * 10 + c3 * 9 + c4 * 8 + c5 * 7 + c6 * 6 + c7 * 5 + c8 * 4 + c9 * 3 + c10 * 2,
+                    resto2 = soma2 % 11;
+                if (resto1 < 2)
+                    resto1 = 0;
+                else
+                    resto1 = 11 - resto1;
+                if (resto2 < 2)
+                    resto2 = 0;
+                else
+                    resto2 = 11 - resto2;
+                if ((resto1 != c10) ||
+                    (resto2 != c11) ||
+                    (cpf == "000.000.000-00") ||
+                    (cpf == "111.111.111-11") ||
+                    (cpf == "222.222.222-22") ||
+                    (cpf == "333.333.333-33") ||
+                    (cpf == "444.444.444-44") ||
+                    (cpf == "555.555.555-55") ||
+                    (cpf == "666.666.666-66") ||
+                    (cpf == "777.777.777-77") ||
+                    (cpf == "888.888.888-88") ||
+                    (cpf == "999.999.999-99"))
+                {
+                    return false;
+                }
+                else
+                    return true;
+            }
+            catch
+            { return false; }
+        }
+        public static void centralizaControl(Control control)
+        {
+            control.Location = new Point(control.Parent.Width / 2 - control.Width / 2, control.Parent.Height / 2 - control.Height / 2);
+            control.BringToFront();
+        }
+
+        public static string getNameFromString(string s)
+        {
+            try
+            {
+                int index = s.IndexOf(" - ");
+                if (index == -1)
+                    return "";
+                else
+                    return s.Substring(index + 3, s.Length - (index + 3));
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
+        public static int getIdFromString(string s)
+        {
+            try
+            {
+                int aux, index = s.IndexOf(" - ");
+                if (index == -1)
+                    return -1;
+                else
+                {
+                    if (int.TryParse(s.Substring(0, index), out aux))
+                        return aux;
+                    else
+                        return -1;
+                }
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
+        public static string[] Split(string str, string chars)
+        {
+            List<string> splited = new List<string>();
+            str = str.Replace(chars, "|*$");
+            int i = str.IndexOf(chars);
+            string piece = str;
+            if (str.Length > 0)
+            {
+                if (i == -1)
+                    splited.Add(str);
+                while (i != -1)
+                {
+                    piece = str.Substring(0, i);
+                    splited.Add(piece);
+                    if (str.Length > 3)
+                    {
+                        str = str.Substring(i + chars.Length, str.Length - (piece.Length + chars.Length));
+                        i = str.IndexOf(chars);
+                        if (i == -1)
+                            splited.Add(str);
+                    }
+                    else
+                        i = -1;
+                }
+                return splited.ToArray();
+            }
+            else
+                return new string[0];
+        }
+        public static string Join(string[] array, string chars)
+        {
+            string res = "";
+            if (array.Length > 0)
+            {
+                res = array[0].Replace("|*$",chars);
+                for (int i = 1; i < array.Length; i++)
+                    res += chars + array[i].Replace("|*$", chars);
+            }
+            return res;
+        }
+
+        public static string SerializeItens(System.Windows.Forms.ListViewItem[] items)
+        {
+            try
+            {
+                if (items.Length > 0)
+                {
+                    string serialized = "", scaped;
+                    for (int i = 0; i < items.Length; i++)
+                    {
+                        serialized += "[";
+                        for (int j = 0; j < items[i].SubItems.Count; j++)
+                        {
+                            scaped = items[i].SubItems[j].Text.Replace('[', '|');
+                            scaped = scaped.Replace(']', '&');
+                            scaped = scaped.Replace(',', ';');
+                            serialized += "[" + scaped + "],";
+                        }
+                        serialized = serialized.Substring(0, serialized.Length - 1);
+                        serialized += "],";
+                    }
+                    serialized = serialized.Substring(0, serialized.Length - 1);
+                    return serialized;
+                }
+                else
+                    return "";
+            }
+            catch
+            { return ""; }
+        }
+
+        public static System.Windows.Forms.ListViewItem[] UnserializeItens(string serialized)
+        {
+            try
+            {
+                List<System.Windows.Forms.ListViewItem> list = new List<System.Windows.Forms.ListViewItem>();
+                if (serialized.Length > 0)
+                {/*   
+                      *   [[x],[y]], <-lv1 2subs
+                      *   [[e],[d],[g]], <-lv2 3 subs
+                      *   [[a]] <lv3 1 sub 
+                      *  
+                      */
+                    string auxS = serialized, unScape;
+                    System.Windows.Forms.ListViewItem auxLi;
+                    List<string> subs = new List<string>();
+                    int indexAbre = auxS.IndexOf("["), indexFecha;
+                    while (auxS.IndexOf("[") != -1)
+                    {
+                        if (auxS[indexAbre + 1] == '[')
+                        {//subs
+                            indexAbre = indexAbre + 2;
+                        }
+                        else
+                            indexAbre++;
+                        indexFecha = auxS.IndexOf("]");
+                        unScape = auxS.Substring(indexAbre, indexFecha - indexAbre);
+                        subs.Add(unScape);
+                        if (auxS[indexFecha + 1] == ',')
+                        {
+                            auxS = auxS.Substring(indexFecha + 1, auxS.Length - (indexFecha + 1));
+                        }
+                        else
+                        {
+                            //subs.RemoveAt(subs.Count - 1);
+                            foreach (string str in subs)
+                            {
+                                unScape = str.Replace('|', '[');
+                                unScape = unScape.Replace('&', ']');
+                                unScape = unScape.Replace(';', ',');
+                            }
+                            auxLi = new System.Windows.Forms.ListViewItem(subs.ToArray());
+                            subs.Clear();
+                            list.Add(auxLi);
+                            auxS = auxS.Substring(indexFecha + 1, auxS.Length - (indexFecha + 1));
+                            indexAbre = auxS.IndexOf(',');
+                            if (indexAbre != -1)
+                                auxS = auxS.Substring(indexAbre + 1, auxS.Length - (indexAbre + 1));
+                        }
+                        indexAbre = auxS.IndexOf("[");
+                    }
+                    System.Windows.Forms.ListViewItem[] ar = list.ToArray();
+                    if (ar == null)
+                        ar = new System.Windows.Forms.ListViewItem[0];
+                    return ar;
+                }
+                else
+                    return new System.Windows.Forms.ListViewItem[0];
+            }
+            catch
+            { return null; }
+        }
     }
 }
