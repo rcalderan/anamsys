@@ -70,21 +70,6 @@ namespace AnamSys
                 else
                     this.nascimento = new DateTime();
             }
-            else
-            {
-                this.id = int.Parse(con.proximo("paciente", "id"));
-                this.nome ="";
-                this.rg = "";
-                this.cpf = "";
-                this.endereco = "";
-                this.bairro = "";
-                this.cidade = "";
-                this.uf = "";
-                this.nascimento = new DateTime();
-                this.obs = new string[0];
-                this.plano = "";
-                this.hoje = new DateTime();
-            }
 
         }
 
@@ -100,7 +85,10 @@ namespace AnamSys
                         "'nascimento','obs','hoje','plano','avatar') VALUES (NULL,"+
                         "'"+nome+"','"+rg+"','"+cpf+"','"+endereco+"','"+bairro+"','"+cidade+"','"+uf+"','"+
                         nascimento.ToString("yyyy-MM-dd HH:mm:ss")+"','"+Uteis.Join(obs,"|")+"','1111-11-11','k','avatar.png')";
-                    return true;
+                    if (db.Comando(insert) == "")
+                        return true;
+                    else
+                        return false;
                 }
                 else
                     return false;
@@ -109,42 +97,76 @@ namespace AnamSys
 
         }
 
-        private bool Reload(int id)
+        public static string[] PacientesToAutocompleteSource()
         {
             try
             {
-                Database con = new Database();
-                System.Data.DataTable dt = con.Query("select * from paciente where id=" + id.ToString());
-                if (dt != null)
+                Database db = new Database();
+                if (db.getLastState())
                 {
-                    DateTime aux;
-                    this.id = id;
-                    this.nome = dt.Rows[0]["nome"].ToString();
-                    this.rg = dt.Rows[0]["rg"].ToString();
-                    this.cpf = dt.Rows[0]["cpf"].ToString();
-                    this.endereco = dt.Rows[0]["endereco"].ToString();
-                    this.bairro = dt.Rows[0]["bairro"].ToString();
-                    this.cidade = dt.Rows[0]["cidade"].ToString();
-                    this.uf = dt.Rows[0]["uf"].ToString();
-                    this.obs = Uteis.Split(dt.Rows[0]["obs"].ToString(),"|");
-                    this.plano = dt.Rows[0]["plano"].ToString();
-                    if (DateTime.TryParse(dt.Rows[0]["hoje"].ToString(), out aux))
-                        this.hoje = aux;
+                    System.Data.DataTable dt = db.Query("select id,nome,nascimento from paciente");
+                    if (dt != null)
+                    {
+                        List<string> ret = new List<string>();
+                        foreach(System.Data.DataRow dr in dt.Rows)
+                        {
+                            ret.Add(dr["id"].ToString() + " - " + dr["nome"].ToString() + " (" + dr["nascimento"].ToString() + ")");
+                        }
+                        return ret.ToArray();
+                    }
                     else
-                        this.hoje = new DateTime();
-                    if (DateTime.TryParse(dt.Rows[0]["nascimento"].ToString(), out aux))
-                        this.nascimento = aux;
+                        return new string[0];
+                }
+                else
+                    return new string[0];
+            }
+            catch
+            {
+                return new string[0];
+            }
+        }
+
+        public static Paciente Load(int id)
+        {
+            try
+            {
+                Paciente p = new Paciente(id);
+                if (p.id != null)
+                {
+                    return p;
+                }
+                else
+                    return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public static bool Delete(int ID)
+        {
+            try
+            {
+                Database db = new Database();
+                if (db.getLastState())
+                {
+                    System.Data.DataTable dt = db.Query("select id,nome from paciente where id=" + ID.ToString());
+                    if (dt != null)
+                    {
+                        if ("" != db.Comando("DELETE from paciente where id=" + ID))
+                            return false;
+                        else
+                            return true;
+                    }
                     else
-                        this.nascimento = new DateTime();
-                    return true;
+                        return false;
                 }
                 else
                     return false;
             }
             catch
-            {
-                return false;
-            }
+            { return false; }
         }
 
         public bool Update(Paciente newP)
@@ -173,7 +195,7 @@ namespace AnamSys
                 if (this.plano != newP.get_plano())
                     query += "plano='" + newP.get_plano() + "',";
                 if (this.obs != newP.get_obs())
-                    query += "obs='" + newP.get_obs() + "',";
+                    query += "obs='" + Uteis.Join(newP.get_obs(),"|") + "',";
                 if (',' == query[query.Length - 1])
                     query = query.Substring(0, query.Length - 1);
                 query += " WHERE id=" + newP.get_id().ToString();

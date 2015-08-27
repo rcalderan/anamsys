@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.cadastrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pacienteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -102,7 +102,6 @@
             this.conDetValorTb = new System.Windows.Forms.TextBox();
             this.conNovoBt = new System.Windows.Forms.Button();
             this.conNovaBt = new System.Windows.Forms.Button();
-            this.conPacienteLb = new System.Windows.Forms.Label();
             this.conTodasLb = new System.Windows.Forms.Label();
             this.agentaPn = new System.Windows.Forms.Panel();
             this.label18 = new System.Windows.Forms.Label();
@@ -196,16 +195,19 @@
             this.label30 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.cad1Pn = new System.Windows.Forms.Panel();
+            this.cad1PicBox = new System.Windows.Forms.PictureBox();
             this.cad1ConsultasBt = new System.Windows.Forms.Button();
             this.cad1AntLb = new System.Windows.Forms.Label();
             this.cad1LimpaLb = new System.Windows.Forms.Label();
             this.cad1XLb = new System.Windows.Forms.Label();
             this.cad1ProxLv = new System.Windows.Forms.Label();
-            this.cadNascDtp = new System.Windows.Forms.DateTimePicker();
-            this.label9 = new System.Windows.Forms.Label();
+            this.cad1NascDtp = new System.Windows.Forms.DateTimePicker();
+            this.cad1IdLb = new System.Windows.Forms.Label();
+            this.cad1CaleLb = new System.Windows.Forms.Label();
             this.consultasPn = new System.Windows.Forms.Panel();
             this.consultasXLb = new System.Windows.Forms.Label();
             this.consultasLLb = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.label70 = new System.Windows.Forms.Label();
             this.conPesqTb = new System.Windows.Forms.TextBox();
             this.finPn = new System.Windows.Forms.Panel();
@@ -262,9 +264,8 @@
             this.evoLpLb = new System.Windows.Forms.Label();
             this.evoXLb = new System.Windows.Forms.Label();
             this.directoryEntry1 = new System.DirectoryServices.DirectoryEntry();
-            this.cad1IdLb = new System.Windows.Forms.Label();
-            this.cad1PicBox = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.conPacienteCb = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.conDetailsPn.SuspendLayout();
             this.conDetParPn.SuspendLayout();
@@ -281,6 +282,7 @@
             this.conOperPn.SuspendLayout();
             this.conTaxPn.SuspendLayout();
             this.cad1Pn.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cad1PicBox)).BeginInit();
             this.consultasPn.SuspendLayout();
             this.finPn.SuspendLayout();
             this.panel6.SuspendLayout();
@@ -292,7 +294,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.evoInsUnidadeUd)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.evoChart)).BeginInit();
             this.panel9.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cad1PicBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -629,7 +630,7 @@
             this.conDetailsPn.Controls.Add(this.conDetAddLb);
             this.conDetailsPn.Controls.Add(this.label55);
             this.conDetailsPn.Controls.Add(this.panel12);
-            this.conDetailsPn.Location = new System.Drawing.Point(160, 35);
+            this.conDetailsPn.Location = new System.Drawing.Point(299, 50);
             this.conDetailsPn.Name = "conDetailsPn";
             this.conDetailsPn.Size = new System.Drawing.Size(467, 427);
             this.conDetailsPn.TabIndex = 75;
@@ -1049,16 +1050,6 @@
             this.conNovaBt.Text = "Inserir nova Consulta";
             this.conNovaBt.UseVisualStyleBackColor = true;
             this.conNovaBt.Click += new System.EventHandler(this.conNovaBt_Click);
-            // 
-            // conPacienteLb
-            // 
-            this.conPacienteLb.AutoSize = true;
-            this.conPacienteLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.conPacienteLb.Location = new System.Drawing.Point(15, 6);
-            this.conPacienteLb.Name = "conPacienteLb";
-            this.conPacienteLb.Size = new System.Drawing.Size(124, 17);
-            this.conPacienteLb.TabIndex = 3;
-            this.conPacienteLb.Text = "Nome do Paciente";
             // 
             // conTodasLb
             // 
@@ -2085,7 +2076,7 @@
             this.cad1Pn.Controls.Add(this.cad1XLb);
             this.cad1Pn.Controls.Add(this.cad1ProxLv);
             this.cad1Pn.Controls.Add(this.cad1NovoBt);
-            this.cad1Pn.Controls.Add(this.cadNascDtp);
+            this.cad1Pn.Controls.Add(this.cad1NascDtp);
             this.cad1Pn.Controls.Add(this.cad1AtualizaBt);
             this.cad1Pn.Controls.Add(this.label3);
             this.cad1Pn.Controls.Add(this.cad1NomeTb);
@@ -2101,7 +2092,7 @@
             this.cad1Pn.Controls.Add(this.cad1CpfMtb);
             this.cad1Pn.Controls.Add(this.label10);
             this.cad1Pn.Controls.Add(this.label7);
-            this.cad1Pn.Controls.Add(this.label9);
+            this.cad1Pn.Controls.Add(this.cad1CaleLb);
             this.cad1Pn.Controls.Add(this.label8);
             this.cad1Pn.Controls.Add(this.cad1ObsTb);
             this.cad1Pn.Controls.Add(this.label5);
@@ -2115,6 +2106,17 @@
             this.cad1Pn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.control_MouseDown);
             this.cad1Pn.MouseMove += new System.Windows.Forms.MouseEventHandler(this.control_MouseMove);
             this.cad1Pn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.control_MouseUp);
+            // 
+            // cad1PicBox
+            // 
+            this.cad1PicBox.Image = global::AnamSys.Properties.Resources._0;
+            this.cad1PicBox.InitialImage = null;
+            this.cad1PicBox.Location = new System.Drawing.Point(506, 33);
+            this.cad1PicBox.Name = "cad1PicBox";
+            this.cad1PicBox.Size = new System.Drawing.Size(122, 122);
+            this.cad1PicBox.TabIndex = 15;
+            this.cad1PicBox.TabStop = false;
+            this.cad1PicBox.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // cad1ConsultasBt
             // 
@@ -2170,37 +2172,50 @@
             this.cad1ProxLv.Text = ">";
             this.cad1ProxLv.Click += new System.EventHandler(this.cad1ProxLv_Click);
             // 
-            // cadNascDtp
+            // cad1NascDtp
             // 
-            this.cadNascDtp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cadNascDtp.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.cadNascDtp.Location = new System.Drawing.Point(404, 34);
-            this.cadNascDtp.Name = "cadNascDtp";
-            this.cadNascDtp.Size = new System.Drawing.Size(100, 26);
-            this.cadNascDtp.TabIndex = 4;
+            this.cad1NascDtp.CalendarTitleBackColor = System.Drawing.SystemColors.Desktop;
+            this.cad1NascDtp.CalendarTitleForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.cad1NascDtp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cad1NascDtp.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.cad1NascDtp.Location = new System.Drawing.Point(404, 34);
+            this.cad1NascDtp.Name = "cad1NascDtp";
+            this.cad1NascDtp.Size = new System.Drawing.Size(100, 26);
+            this.cad1NascDtp.TabIndex = 4;
             // 
-            // label9
+            // cad1IdLb
             // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(401, 22);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(104, 13);
-            this.label9.TabIndex = 0;
-            this.label9.Text = "Data de Nascimento";
+            this.cad1IdLb.AutoSize = true;
+            this.cad1IdLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cad1IdLb.Location = new System.Drawing.Point(21, 40);
+            this.cad1IdLb.Name = "cad1IdLb";
+            this.cad1IdLb.Size = new System.Drawing.Size(18, 13);
+            this.cad1IdLb.TabIndex = 0;
+            this.cad1IdLb.Text = "ID";
+            // 
+            // cad1CaleLb
+            // 
+            this.cad1CaleLb.AutoSize = true;
+            this.cad1CaleLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cad1CaleLb.Location = new System.Drawing.Point(401, 22);
+            this.cad1CaleLb.Name = "cad1CaleLb";
+            this.cad1CaleLb.Size = new System.Drawing.Size(104, 13);
+            this.cad1CaleLb.TabIndex = 0;
+            this.cad1CaleLb.Text = "Data de Nascimento";
             // 
             // consultasPn
             // 
             this.consultasPn.BackColor = System.Drawing.Color.PowderBlue;
+            this.consultasPn.Controls.Add(this.conPacienteCb);
             this.consultasPn.Controls.Add(this.conDetailsPn);
             this.consultasPn.Controls.Add(this.consultasXLb);
-            this.consultasPn.Controls.Add(this.conPacienteLb);
             this.consultasPn.Controls.Add(this.conNovaBt);
             this.consultasPn.Controls.Add(this.label16);
             this.consultasPn.Controls.Add(this.conLv);
             this.consultasPn.Controls.Add(this.conTodasLb);
             this.consultasPn.Controls.Add(this.agentaPn);
             this.consultasPn.Controls.Add(this.consultasLLb);
+            this.consultasPn.Controls.Add(this.label9);
             this.consultasPn.Controls.Add(this.label70);
             this.consultasPn.Controls.Add(this.conPesqTb);
             this.consultasPn.Location = new System.Drawing.Point(40, 24);
@@ -2231,6 +2246,15 @@
             this.consultasLLb.TabIndex = 0;
             this.consultasLLb.Text = "Lp";
             this.consultasLLb.Click += new System.EventHandler(this.consultasLLb_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(15, 3);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(49, 13);
+            this.label9.TabIndex = 0;
+            this.label9.Text = "Paciente";
             // 
             // label70
             // 
@@ -2639,28 +2663,28 @@
             // evoChart
             // 
             this.evoChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            chartArea2.AxisX.LabelStyle.Format = "dd/MMM";
-            chartArea2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            chartArea2.Name = "ChartArea1";
-            this.evoChart.ChartAreas.Add(chartArea2);
-            legend2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            legend2.Name = "Legend1";
-            this.evoChart.Legends.Add(legend2);
+            chartArea1.AxisX.LabelStyle.Format = "dd/MMM";
+            chartArea1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            chartArea1.Name = "ChartArea1";
+            this.evoChart.ChartAreas.Add(chartArea1);
+            legend1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            legend1.Name = "Legend1";
+            this.evoChart.Legends.Add(legend1);
             this.evoChart.Location = new System.Drawing.Point(274, 88);
             this.evoChart.Name = "evoChart";
             this.evoChart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright;
-            series3.ChartArea = "ChartArea1";
-            series3.Legend = "Legend1";
-            series3.Name = "Dados";
-            series3.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.String;
-            series4.BorderColor = System.Drawing.Color.Blue;
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series4.Legend = "Legend1";
-            series4.Name = "Desempenho";
-            series4.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.String;
-            this.evoChart.Series.Add(series3);
-            this.evoChart.Series.Add(series4);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Dados";
+            series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.String;
+            series2.BorderColor = System.Drawing.Color.Blue;
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series2.Legend = "Legend1";
+            series2.Name = "Desempenho";
+            series2.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.String;
+            this.evoChart.Series.Add(series1);
+            this.evoChart.Series.Add(series2);
             this.evoChart.Size = new System.Drawing.Size(590, 245);
             this.evoChart.TabIndex = 7;
             this.evoChart.Text = "chart1";
@@ -2848,27 +2872,6 @@
             this.evoXLb.Text = "X";
             this.evoXLb.Click += new System.EventHandler(this.evoXLb_Click);
             // 
-            // cad1IdLb
-            // 
-            this.cad1IdLb.AutoSize = true;
-            this.cad1IdLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cad1IdLb.Location = new System.Drawing.Point(21, 40);
-            this.cad1IdLb.Name = "cad1IdLb";
-            this.cad1IdLb.Size = new System.Drawing.Size(18, 13);
-            this.cad1IdLb.TabIndex = 0;
-            this.cad1IdLb.Text = "ID";
-            // 
-            // cad1PicBox
-            // 
-            this.cad1PicBox.Image = global::AnamSys.Properties.Resources._0;
-            this.cad1PicBox.InitialImage = null;
-            this.cad1PicBox.Location = new System.Drawing.Point(506, 33);
-            this.cad1PicBox.Name = "cad1PicBox";
-            this.cad1PicBox.Size = new System.Drawing.Size(122, 122);
-            this.cad1PicBox.TabIndex = 15;
-            this.cad1PicBox.TabStop = false;
-            this.cad1PicBox.Click += new System.EventHandler(this.pictureBox1_Click);
-            // 
             // pictureBox1
             // 
             this.pictureBox1.Location = new System.Drawing.Point(506, 33);
@@ -2878,18 +2881,27 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
+            // conPacienteCb
+            // 
+            this.conPacienteCb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.conPacienteCb.FormattingEnabled = true;
+            this.conPacienteCb.Location = new System.Drawing.Point(18, 16);
+            this.conPacienteCb.Name = "conPacienteCb";
+            this.conPacienteCb.Size = new System.Drawing.Size(747, 28);
+            this.conPacienteCb.TabIndex = 79;
+            // 
             // principalForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1028, 662);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.consultasPn);
             this.Controls.Add(this.cad1Pn);
             this.Controls.Add(this.avalPn);
             this.Controls.Add(this.planoPn);
             this.Controls.Add(this.EvoPn);
             this.Controls.Add(this.finPn);
-            this.Controls.Add(this.consultasPn);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "principalForm";
             this.Text = "AnamSys";
@@ -2924,6 +2936,7 @@
             this.conTaxPn.PerformLayout();
             this.cad1Pn.ResumeLayout(false);
             this.cad1Pn.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cad1PicBox)).EndInit();
             this.consultasPn.ResumeLayout(false);
             this.consultasPn.PerformLayout();
             this.finPn.ResumeLayout(false);
@@ -2944,7 +2957,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.evoChart)).EndInit();
             this.panel9.ResumeLayout(false);
             this.panel9.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cad1PicBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -2983,7 +2995,6 @@
         private System.Windows.Forms.ToolStripMenuItem agendaToolStripMenuItem;
         private System.Windows.Forms.TextBox conAvalTb;
         private System.Windows.Forms.DateTimePicker conDataDtp;
-        private System.Windows.Forms.Label conPacienteLb;
         private System.Windows.Forms.TextBox conPlanoTb;
         private System.Windows.Forms.ToolStripMenuItem fichaEvolutivaToolStripMenuItem;
         private System.Windows.Forms.Button conNovoBt;
@@ -3098,8 +3109,8 @@
         private System.Windows.Forms.TextBox conDetParTotTb;
         private System.Windows.Forms.CheckBox conDetParCh;
         private System.Windows.Forms.Panel cad1Pn;
-        private System.Windows.Forms.DateTimePicker cadNascDtp;
-        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.DateTimePicker cad1NascDtp;
+        private System.Windows.Forms.Label cad1CaleLb;
         private System.Windows.Forms.Panel conDetParPn;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
@@ -3186,6 +3197,8 @@
         private System.Windows.Forms.ToolStripMenuItem backupToolStripMenuItem;
         private System.DirectoryServices.DirectoryEntry directoryEntry1;
         private System.Windows.Forms.Label cad1IdLb;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.ComboBox conPacienteCb;
     }
 }
 

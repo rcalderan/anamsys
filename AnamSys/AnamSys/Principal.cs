@@ -698,16 +698,19 @@ namespace AnamSys
                 cad1UfTb.Clear();
                 cad1ObsTb.Clear();
                 conDataDtp.Value = DateTime.Today;
-                cadNascDtp.Value = DateTime.Today;
+                cad1NascDtp.Value = DateTime.Today;
                 conAvalTb.Clear();
-                conPlanoTb.Clear();
-                conPacienteLb.Text = "Nome do Paciente";
+                conPlanoTb.Clear();;
+                conPacienteCb.Items.Clear();
+                conPacienteCb.Items.AddRange(Paciente.PacientesToAutocompleteSource());
                 Control[] cs = cad1Pn.Controls.Find("cad1OutrosPn", false);
                 if (cs.Length != 0)
                     cs[0].Dispose();
                 avalNomeLb.Text = "Nome";
                 planoNomeLb.Text = "Nome";
                 listaConsultas();
+                cad1CpfMtb.BackColor = Color.White;
+                cad1CaleLb.ForeColor = Color.Black;
             }
             catch (Exception erro)
             {
@@ -723,23 +726,28 @@ namespace AnamSys
             {
                 if (MessageBox.Show("Deseja atualizar dados?", "Atualizar?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    Paciente estePaciente = new Paciente(int.Parse(cad1IdLb.Text));
-                    Paciente newPaciente = new Paciente(int.Parse(cad1IdLb.Text));
-                    newPaciente.set_nome(cad1NomeTb.Text);
-                    newPaciente.set_cpf(cad1CpfMtb.Text);
-                    newPaciente.set_rg(cad1RgMtb.Text);
-                    newPaciente.set_endereco(cad1EnderecoTb.Text);
-                    newPaciente.set_cidade(cad1CidadeTb.Text);
-                    newPaciente.set_bairro(cad1BairroTb.Text);
-                    newPaciente.set_uf(cad1UfTb.Text);
-                    newPaciente.set_obs(cad1ObsTb.Lines);
-                    newPaciente.set_nascimento(cadNascDtp.Value);
-                    newPaciente.set_plano(conPlanoTb.Text);
-                    if (estePaciente.Update(newPaciente))
-                        MessageBox.Show("Os dados cadastrais do paciente " + cad1NomeTb.Text + " foram atualizados com sucesso!");
+                    Paciente estePaciente = Paciente.Load(int.Parse(cad1IdLb.Text));
+                    Paciente newPaciente = Paciente.Load(int.Parse(cad1IdLb.Text));
+                    if ((estePaciente != null) && (newPaciente != null))
+                    {
+                        newPaciente.set_nome(cad1NomeTb.Text);
+                        newPaciente.set_cpf(cad1CpfMtb.Text);
+                        newPaciente.set_rg(cad1RgMtb.Text);
+                        newPaciente.set_endereco(cad1EnderecoTb.Text);
+                        newPaciente.set_cidade(cad1CidadeTb.Text);
+                        newPaciente.set_bairro(cad1BairroTb.Text);
+                        newPaciente.set_uf(cad1UfTb.Text);
+                        newPaciente.set_obs(cad1ObsTb.Lines);
+                        newPaciente.set_nascimento(cad1NascDtp.Value);
+                        newPaciente.set_plano(conPlanoTb.Text);
+                        if (estePaciente.Update(newPaciente))
+                            MessageBox.Show("Os dados cadastrais do paciente " + cad1NomeTb.Text + " foram atualizados com sucesso!");
+                        else
+                            MessageBox.Show("Não foi possíver atualizar os dados do paciente...");
+                    }
                     else
                         MessageBox.Show("Não foi possíver atualizar os dados do paciente...");
-                    carregaPaciente(cad1IdLb.Text);
+                    carregaPaciente(int.Parse(cad1IdLb.Text));
                 }
             }
             catch (Exception erro)
@@ -755,21 +763,12 @@ namespace AnamSys
             {
                 if (MessageBox.Show("Você tem certeza que deseja proceguir?\nOs dados deste cadastro serão PERDIDOS. Sem volta!", "Deletar?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    DataTable dt = db.Query("select id,nome from paciente where id='" + cad1IdLb.Text + "'");
-                    if (dt != null)
-                    {
-                        if (DialogResult.Yes == MessageBox.Show("Você está prestes a excluir o paciente (" + dt.Rows[0]["id"].ToString() + ")" + dt.Rows[0]["nome"].ToString() + " do sistema. Deseja mesmo prosseguir?", "Deletar", MessageBoxButtons.YesNo))
-                        {
-                            string erro = db.Comando("DELETE from paciente where id='" + cad1IdLb.Text + "'");
-                            if (erro == "")
-                                MessageBox.Show("Paciente DELETADO com sucesso!");
-                            else
-                                MessageBox.Show("Erro ao tentar deletar: " + erro);
-                            limpaPaciente();
-                        }
-                    }
+                    if (Paciente.Delete(int.Parse(cad1IdLb.Text)))
+                        MessageBox.Show("Paciente DELETADO com sucesso!");
+                    else
+                        MessageBox.Show("Não foi possível deletar paciente!");
+                    limpaPaciente();
                 }
-
             }
             catch (Exception erro)
             {
@@ -784,12 +783,20 @@ namespace AnamSys
             {
                 if (!Uteis.ValidaCPF(cad1CpfMtb.Text))
                 {
-                    MessageBox.Show("CPF Inválido");
                     cad1CpfMtb.BackColor = Color.Yellow;
-                    return;
+                    if (DialogResult.No== MessageBox.Show("CPF está Incorreto! Deseja continuar?","CPF Inválido",MessageBoxButtons.YesNo))
+                        return;
                 }
                 else
                     cad1CpfMtb.BackColor = Color.White;
+                if (cad1NascDtp.Value == DateTime.Today)
+                {
+                    cad1CaleLb.ForeColor = Color.Red;
+                    MessageBox.Show("Informe a DATA de nascimento do paciente.");
+                    return;
+                }
+                else
+                    cad1CaleLb.ForeColor = Color.Black;
 
                 if (MessageBox.Show("Deseja Salvar?", "Salvar?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
@@ -801,7 +808,7 @@ namespace AnamSys
                         if (pictureBox1.ImageLocation == "")
                             pictureBox1.ImageLocation = "0.png";
                         if (Paciente.New(cad1NomeTb.Text, cad1RgMtb.Text, cad1CpfMtb.Text, cad1EnderecoTb.Text,
-                            cad1BairroTb.Text, cad1CidadeTb.Text, cad1UfTb.Text, cadNascDtp.Value, cad1ObsTb.Lines,
+                            cad1BairroTb.Text, cad1CidadeTb.Text, cad1UfTb.Text, cad1NascDtp.Value, cad1ObsTb.Lines,
                             conPlanoTb.Text))
                             MessageBox.Show("O paciente " + cad1NomeTb.Text + " foi cadastrado com sucesso! ");
                         else
@@ -823,7 +830,7 @@ namespace AnamSys
             {
                 if (e.KeyCode == Keys.Enter)
                 {
-                    string erro = carregaPaciente(cad1IdLb.Text);
+                    string erro = carregaPaciente(int.Parse(cad1IdLb.Text));
                     if (erro != "")
                         MessageBox.Show(erro);
                 }
@@ -835,17 +842,17 @@ namespace AnamSys
             }
         }
 
-        private string carregaPaciente(string codigo)
+        private string carregaPaciente(int id)
         {
             try
             {
-                DataTable dt = db.Query("Select * from paciente where id='" + codigo + "'");
+                DataTable dt = db.Query("Select * from paciente where id='" + id.ToString() + "'");
                 if (dt != null)
                 {
                     DataRow dr = dt.Rows[0];
                     DateTime nas;
                     cad1NomeTb.Text = dr["nome"].ToString();
-                    cad1IdLb.Text = codigo;
+                    cad1IdLb.Text = id.ToString();
                     avalNomeLb.Text = dr["nome"].ToString();
                     planoNomeLb.Text = dr["nome"].ToString();
                     cad1RgMtb.Text = dr["rg"].ToString();
@@ -855,17 +862,56 @@ namespace AnamSys
                     cad1CidadeTb.Text = dr["cidade"].ToString();
                     cad1UfTb.Text = dr["uf"].ToString();
                     if (DateTime.TryParse(dr["nascimento"].ToString(), out nas))
-                        cadNascDtp.Value = nas;
+                        cad1NascDtp.Value = nas;
                     else
-                        cadNascDtp.Value = DateTime.Today;
-                    cad1ObsTb.Text = dr["obs"].ToString();
+                        cad1NascDtp.Value = DateTime.Today;
+                    cad1ObsTb.Lines = Uteis.Split(dr["obs"].ToString(),"|");
                     conPlanoTb.Text = dr["plano"].ToString();
-                    conPacienteLb.Text = cad1IdLb.Text + " - " + cad1NomeTb.Text;
+                    conPacienteCb.Items.Clear();
+                    conPacienteCb.Items.AddRange(Paciente.PacientesToAutocompleteSource());
+                    conPacienteCb.Text = cad1IdLb.Text + " - " + cad1NomeTb.Text + " (" + nas.ToString("dd/MM/yyyy") + ")";
                     conDetNomeLb.Text = cad1IdLb.Text + " - " + cad1NomeTb.Text;
-                    /*dt = db.query("Select * from consulta where id=" + cad1IdMtb.Text);
-                    conLv.Items.Clear();
-                    conFinPacienteLb.Text = conPacienteLb.Text;
-                    listaConsultas(codigo);*/
+                    return "";
+                }
+                else
+                    return "Paciente não encontrado";
+
+            }
+            catch (Exception err)
+            {
+                return "Não Foi Possível carregar Paciente... " + err.Message;
+            }
+        }
+
+        private string carregaPaciente(string cpf)
+        {
+            try
+            {
+                DataTable dt = db.Query("Select * from paciente where cpf='" + cpf + "'");
+                if (dt != null)
+                {
+                    DataRow dr = dt.Rows[0];
+                    DateTime nas;
+                    cad1NomeTb.Text = dr["nome"].ToString();
+                    cad1IdLb.Text = dr["id"].ToString();
+                    avalNomeLb.Text = dr["nome"].ToString();
+                    planoNomeLb.Text = dr["nome"].ToString();
+                    cad1RgMtb.Text = dr["rg"].ToString();
+                    cad1CpfMtb.Text = cpf;
+                    cad1EnderecoTb.Text = dr["endereco"].ToString();
+                    cad1BairroTb.Text = dr["bairro"].ToString();
+                    cad1CidadeTb.Text = dr["cidade"].ToString();
+                    cad1UfTb.Text = dr["uf"].ToString();
+                    if (DateTime.TryParse(dr["nascimento"].ToString(), out nas))
+                        cad1NascDtp.Value = nas;
+                    else
+                        cad1NascDtp.Value = DateTime.Today;
+                    cad1ObsTb.Lines = Uteis.Split(dr["obs"].ToString(),"|");
+                    conPlanoTb.Text = dr["plano"].ToString();
+                    conPacienteCb.Items.Clear();
+                    conPacienteCb.Items.AddRange(Paciente.PacientesToAutocompleteSource());
+                    conPacienteCb.Text = cad1IdLb.Text + " - " + cad1NomeTb.Text + " (" + nas.ToString("dd/MM/yyyy") + ")";
+                    conDetNomeLb.Text = cad1IdLb.Text + " - " + cad1NomeTb.Text;
                     return "";
                 }
                 else
@@ -1639,7 +1685,7 @@ namespace AnamSys
                     if (dt != null)
                     {
                         //limpaConsulta();
-                        if (carregaPaciente(dt.Rows[0]["paciente"].ToString()) != "")
+                        if (carregaPaciente(int.Parse(dt.Rows[0]["paciente"].ToString())) != "")
                         {
                             MessageBox.Show("Erro. Paciente (" + i.SubItems[1].Text + ") " + i.SubItems[1].Text + " NÃO não encontrado, favor cadastre novamente!");
                             mostraGb(cad1Pn);
@@ -1828,7 +1874,7 @@ namespace AnamSys
                 if (atual< prox)
                 {
                     cad1IdLb.Text = atual.ToString();
-                    carregaPaciente(atual.ToString());
+                    carregaPaciente(atual);
                 }
                 else
                     limpaPaciente();
@@ -1852,7 +1898,7 @@ namespace AnamSys
                 {
 
                     cad1IdLb.Text = atual.ToString();
-                    carregaPaciente(atual.ToString());
+                    carregaPaciente(atual);
                 }
 
             }
@@ -1934,7 +1980,7 @@ namespace AnamSys
         {
             try
             {
-                if (carregaPaciente(cad1IdLb.Text) == "")
+                if (carregaPaciente(int.Parse(cad1IdLb.Text)) == "")
                 {
                     mostraGb(consultasPn);
                     listaConsultas(cad1IdLb.Text);
@@ -1958,7 +2004,7 @@ namespace AnamSys
             {
                 if (conDetailsPn.Visible)
                 {
-                    string s = carregaPaciente(cad1IdLb.Text);
+                    string s = carregaPaciente(int.Parse(cad1IdLb.Text));
                     if ( s!= "")
                     {
                         limpaPaciente();
@@ -2168,6 +2214,8 @@ namespace AnamSys
             {
                 if (consultasPn.Visible)
                 {
+                    conPacienteCb.Items.Clear();
+                    conPacienteCb.Items.AddRange(Paciente.PacientesToAutocompleteSource());
                 }
             }
             catch (Exception err)
@@ -2667,7 +2715,7 @@ namespace AnamSys
                     string query = "Select * from consulta as c inner join paciente as p where c.paciente = p.id and p.nome like '%" + conPesqTb.Text + "%'";
                     DataTable dt = db.Query(query);
                     conLv.Items.Clear();
-                    conFinPacienteLb.Text = conPacienteLb.Text;
+                    conFinPacienteLb.Text = conPacienteCb.Text;
                     if (dt != null)
                     {
                         string codigos="";
@@ -2692,34 +2740,42 @@ namespace AnamSys
             {
                 if (e.KeyCode == Keys.Enter)
                 {
-                    DataTable dt = db.Query("select id,nome from paciente where nome='"+cad1NomeTb.Text+"'");
+                    DataTable dt = db.Query("select id,nome,nascimento from paciente where nome='"+cad1NomeTb.Text+"'");
                     if (dt != null)
                     {
                         if (dt.Rows.Count==1)
-                            carregaPaciente(dt.Rows[0]["id"].ToString());
+                            carregaPaciente(int.Parse(dt.Rows[0]["id"].ToString()));
                         else
                         {
-                            Panel pn = new Panel();
+                            TableLayoutPanel pn = new TableLayoutPanel();
+                            pn.ColumnCount = 1;
+                            pn.RowCount = dt.Rows.Count;
+                            RowStyle rs = new RowStyle(SizeType.Percent, 40);
                             List<Control> adds = new List<Control>();
                             pn.Name = "cad1OutrosPn";
-                            Label topLabel = new Label();
-                            topLabel.Text = "Escolha o paciente:";
-                            topLabel.Dock = DockStyle.Top;
-                            CheckBox[] chs = new CheckBox[dt.Rows.Count];
+                            pn.Width = 500;
+                            Button[] chs = new Button[dt.Rows.Count];
+                            DateTime nasc;
+                            int he = 0;
                             for (int i = 0; i < dt.Rows.Count; i++ )
                             {
-                                chs[i] = new CheckBox();
-                                chs[i].Text = dt.Rows[i]["nome"].ToString();
+                                if (!DateTime.TryParse(dt.Rows[i]["nascimento"].ToString(),out nasc))
+                                    nasc = DateTime.Today;
+                                chs[i] = new Button();
+                                chs[i].Height = 30;
+                                he += chs[i].Height+6;
+                                chs[i].Text = dt.Rows[i]["id"].ToString()+" - "+dt.Rows[i]["nome"].ToString()+" ("+nasc.ToString("dd/MM/yyyy")+")";
                                 chs[i].Dock = DockStyle.Fill;
                                 chs[i].Click += principalForm_Click;
+                                pn.Controls.Add(chs[i]);
+                                //pn.SetRow(chs[i], i);
                                 adds.Add(chs[i]);
                             }
-                            cad1Pn.Controls.AddRange(adds.ToArray());
+                            pn.Height = he;
+                            cad1Pn.Controls.Add(pn);
                             Uteis.centralizaControl(pn);
                         }
                     }
-                    else
-                        limpaPaciente();
                 }
             }
             catch (Exception err)
@@ -2731,8 +2787,8 @@ namespace AnamSys
 
         void principalForm_Click(object sender, EventArgs e)
         {
-            CheckBox snd = (CheckBox)sender;
-            carregaPaciente(Uteis.getIdFromString(snd.Text).ToString());
+            Button snd = (Button)sender;
+            carregaPaciente(Uteis.getIdFromString(snd.Text));
             snd.Parent.Dispose();
         }
 
@@ -2996,9 +3052,14 @@ namespace AnamSys
             if (e.KeyCode==Keys.Enter)
             {
                 if (!Uteis.ValidaCPF(cad1CpfMtb.Text))
+                {
                     cad1CpfMtb.BackColor = Color.Yellow;
+                }
                 else
+                {
                     cad1CpfMtb.BackColor = Color.White;
+                    carregaPaciente(cad1CpfMtb.Text);
+                }
             }
         }
         /*
@@ -3111,7 +3172,6 @@ namespace AnamSys
         public static string[] Split(string str, string chars)
         {
             List<string> splited = new List<string>();
-            str = str.Replace(chars, "|*$");
             int i = str.IndexOf(chars);
             string piece = str;
             if (str.Length > 0)
@@ -3142,9 +3202,9 @@ namespace AnamSys
             string res = "";
             if (array.Length > 0)
             {
-                res = array[0].Replace("|*$",chars);
+                res = array[0];
                 for (int i = 1; i < array.Length; i++)
-                    res += chars + array[i].Replace("|*$", chars);
+                    res += chars + array[i];
             }
             return res;
         }
