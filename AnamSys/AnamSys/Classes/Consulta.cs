@@ -99,7 +99,7 @@ namespace AnamSys
             this.ativa = estadoDaConsulta;
         }
 
-        public static bool New(int paciente, int anamnese, string detalhes, string plano, DateTime data, bool estadoDaConsulta)
+        public static bool New(int paciente, int anamnese, string detalhes, string plano, DateTime data, bool estadoDaConsulta,double valor,int parcela,Financeiro.FormaDePagamento forma, bool pg)
         {
             try
             {
@@ -113,7 +113,21 @@ namespace AnamSys
                     if ("" != conexao.Comando(query))
                         return false;
                     else
-                        return true;
+                    {// faturar
+                        System.Data.DataTable dt = conexao.Query("Select id from consulta where paciente="+paciente.ToString()+" order by id desc limit 1");
+                        if (dt != null)
+                        {
+                            if (!Fatura.New(int.Parse(dt.Rows[0]["id"].ToString()), parcela, data, valor, forma, pg))
+                            {//////////////
+                                conexao.Comando("delete from consulta where id=" + dt.Rows[0]["id"].ToString());
+                                return false;
+                            }
+                            else
+                                return true;
+                        }
+                        else 
+                            return false;
+                    }
                 }
                 else
                     return false;

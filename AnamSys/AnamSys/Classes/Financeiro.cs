@@ -334,6 +334,64 @@ namespace AnamSys
         public DateTime get_Hoje() { return this.hoje; }
         public bool get_Pendencia() { return this.pendencia; }
 
+        public static bool New(int Consulta, int Parcela, DateTime Data, double Valor, FormaDePagamento Forma, bool Pendencia)
+        {
+            try
+            {//new Classes.Fatura(novaConsulta.get_Id(), 0, novaConsulta.get_Data(), val, conDetFormaCb.SelectedIndex, conDetParCh.Checked);
+                Database conexao = new Database();
+                if (conexao.getLastState())
+                {
+                    System.Data.DataTable dt = conexao.Query("select * from fatura where consulta=" + Consulta.ToString() + " and parcela=" + Parcela.ToString());
+                    if (dt == null)
+                    {//novo
+                        string novoId = conexao.proximo("fatura", "id"), pg;
+                        if (Pendencia)
+                            pg = "1";
+                        else
+                            pg = "0";
+                        string query = "INSERT INTO fatura VALUES(" + novoId + "," +
+                                 Consulta.ToString() + ",'" +
+                                 Data.ToString("yyyy-MM-dd HH:mm:ss") + "','" +
+                                 Valor + "'," +
+                                 Forma.get_Id() + "," +
+                                 Parcela.ToString() + ",'" +
+                                 pg + "','" +
+                                 DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "')", 
+                                 erro = conexao.Comando(query);
+                        if (erro == "")
+                        {
+                            return true;
+                        }
+                        else
+                            return false;
+                    }
+                    else
+                    {
+                        string erro, pend, query = "update fatura set data='" + Data.ToString("yyyy-MM-dd HH:mm:ss") +
+                            "',valor='" + Valor +
+                            "',forma='" + Forma.get_Id() + "'";
+                        if (Pendencia)
+                            pend = "1";
+                        else
+                            pend = "0";
+                        query += ", pendencia ='" + pend + "' WHERE id='" + dt.Rows[0]["id"].ToString() + "' and parcela='" + Parcela.ToString() + "'";
+                        erro = conexao.Comando(query);
+                        if (erro != "")
+                        {
+                            return false;
+                        }
+                        else
+                            return true;
+                    }
+                }
+                else
+                    return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
         public Fatura(int Consulta, int Parcela, DateTime Data, double Valor, FormaDePagamento Forma, bool Pendencia)
         {

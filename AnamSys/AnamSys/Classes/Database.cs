@@ -54,8 +54,9 @@ namespace AnamSys
                     return null;
                 }
             }
-            catch
+            catch(Exception e)
             {
+                string msg = e.Message;
                 state = false;
                 return null;
             }

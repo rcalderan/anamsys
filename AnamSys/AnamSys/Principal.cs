@@ -419,7 +419,7 @@ namespace AnamSys
         {
             try
             {
-                DataTable dt = db.Query("Select c.id, c.ativa,c.data, p.nome from consulta as c inner join paciente as p where c.paciente=p.id and c.ativa=1 and data>='" + DateTime.Today.ToString("yyyy-MM-dd") + "'");
+                DataTable dt = db.Query("Select c.id, c.ativa,c.data, p.nome from consulta as c inner join paciente as p where c.paciente=p.id and c.ativa=1 and c.data>='" + DateTime.Today.ToString("yyyy-MM-dd") + "'");
                 if (dt != null)
                 {
                     conLv.Items.Clear();
@@ -701,8 +701,7 @@ namespace AnamSys
                 cad1NascDtp.Value = DateTime.Today;
                 conAvalTb.Clear();
                 conPlanoTb.Clear();;
-                conPacienteCb.Items.Clear();
-                conPacienteCb.Items.AddRange(Paciente.PacientesToAutocompleteSource());
+                conPacienteTb.AutoCompleteCustomSource.AddRange(Paciente.PacientesToAutocompleteSource(false));
                 Control[] cs = cad1Pn.Controls.Find("cad1OutrosPn", false);
                 if (cs.Length != 0)
                     cs[0].Dispose();
@@ -867,10 +866,7 @@ namespace AnamSys
                         cad1NascDtp.Value = DateTime.Today;
                     cad1ObsTb.Lines = Uteis.Split(dr["obs"].ToString(),"|");
                     conPlanoTb.Text = dr["plano"].ToString();
-                    conPacienteCb.Items.Clear();
-                    conPacienteCb.Items.AddRange(Paciente.PacientesToAutocompleteSource());
-                    conPacienteCb.Text = cad1IdLb.Text + " - " + cad1NomeTb.Text + " (" + nas.ToString("dd/MM/yyyy") + ")";
-                    conDetNomeLb.Text = cad1IdLb.Text + " - " + cad1NomeTb.Text;
+                    conPacienteTb.AutoCompleteCustomSource.AddRange(Paciente.PacientesToAutocompleteSource(false));
                     return "";
                 }
                 else
@@ -908,10 +904,7 @@ namespace AnamSys
                         cad1NascDtp.Value = DateTime.Today;
                     cad1ObsTb.Lines = Uteis.Split(dr["obs"].ToString(),"|");
                     conPlanoTb.Text = dr["plano"].ToString();
-                    conPacienteCb.Items.Clear();
-                    conPacienteCb.Items.AddRange(Paciente.PacientesToAutocompleteSource());
-                    conPacienteCb.Text = cad1IdLb.Text + " - " + cad1NomeTb.Text + " (" + nas.ToString("dd/MM/yyyy") + ")";
-                    conDetNomeLb.Text = cad1IdLb.Text + " - " + cad1NomeTb.Text;
+                    conPacienteTb.AutoCompleteCustomSource.AddRange(Paciente.PacientesToAutocompleteSource(false));
                     return "";
                 }
                 else
@@ -993,6 +986,11 @@ namespace AnamSys
         {
             try
             {
+                if (conPacienteIdLb.Text =="0")
+                {
+                    MessageBox.Show("Informe o paciente! (ID = 0)");
+                    return;
+                }
                 if (string.IsNullOrWhiteSpace(conDetValorTb.Text)||(string.IsNullOrEmpty(conDetValorTb.Text)))
                 {
                     MessageBox.Show("Valor da Consulta incorreto.");
@@ -1004,47 +1002,37 @@ namespace AnamSys
                     MessageBox.Show("Selecione a forma de pagamento");
                     return;
                 }
-                string id="";
-                if (-1 != conDetNomeLb.Text.IndexOf(" "))
-                {
-                    id = conDetNomeLb.Text.Substring(0, conDetNomeLb.Text.IndexOf(" "));
-                }
-                if (null != db.Query("select id from paciente where id=" + id))
+                if (null != db.Query("select id from paciente where id=" + conPacienteIdLb.Text))
                 {
                     DataTable dt = db.Query("select id from consulta where id=" + conDetIdLb.Text);
                     if (null == dt)
                     {
+                        double val;
+                        if (!double.TryParse(conDetValorTb.Text, out val))
+                            val = 0;
                         DateTime data = new DateTime(conDataDtp.Value.Year, conDataDtp.Value.Month, conDataDtp.Value.Day, int.Parse(conHoraCb.Text), int.Parse(conMinCb.Text), 0);
-                        Consulta novaConsulta = new Consulta(
-                            int.Parse(cad1IdLb.Text),
+                        if (conDetPgCh.Checked)
+                            data = DateTime.Now;
+                        if (Consulta.New(int.Parse(cad1IdLb.Text),
                             0,
                             conDetDetTb.Text,
                             conPlanoTb.Text,
-                            DateTime.Now,
                             data,
-                            true);
-                        string erro = novaConsulta.save();
-                        if (erro != "")
-                            MessageBox.Show(erro);
+                            true,
+                            val,
+                            0,
+                            Financeiro.FormaDePagamento.GetFromId(conDetFormaCb.SelectedIndex),
+                            conDetPgCh.Checked
+                            ))
+                        {
+                            MessageBox.Show("A consulta de " + cad1NomeTb.Text + " foi marcada para " + data.ToShortDateString() + " às " + conHoraCb.Text + ":" + conMinCb.Text);
+                            conDetailsPn.Hide();
+                            listaConsultas();
+                        }
                         else
                         {
-                            //agora registra fatura
-                            double val;
-                            if (!double.TryParse(conDetValorTb.Text, out val))
-                                val = 0;
-                            Fatura fat;
-                            if (conDetPgCh.Checked)
-                                fat = new Fatura(novaConsulta.get_Id(), 0, DateTime.Now, val, Financeiro.FormaDePagamento.GetFromId(conDetFormaCb.SelectedIndex), conDetPgCh.Checked);
-                            else
-                                fat = new Fatura(novaConsulta.get_Id(), 0, novaConsulta.get_Data(), val, Financeiro.FormaDePagamento.GetFromId(conDetFormaCb.SelectedIndex), conDetPgCh.Checked);
-
-                            if ((debug_mode) && (fat.get_Id() == -1))
-                                MessageBox.Show("Erro ao criar nova Fatura: id= -1");
-                            else
-                            {
-                                MessageBox.Show("A consulta de " + cad1NomeTb.Text + " foi marcada para " + data.ToShortDateString() + " às " + conHoraCb.Text + ":" + conMinCb.Text);
-                                conDetailsPn.Hide();
-                            }
+                            MessageBox.Show("Não Foi possível registrar nova consulta...");
+                            return;
                         }
                         listaConsultas();
                     }
@@ -1081,7 +1069,9 @@ namespace AnamSys
                 }
                 else
                 {
-                    mostraGb(cad1Pn);
+                    conPacienteIdLb.Text = "0";
+                    MessageBox.Show("Paciente não encontrado!");
+                    return;
                 }
 
             }
@@ -1634,6 +1624,7 @@ namespace AnamSys
             try
             {
                 conDetIdLb.Text = db.proximo("consulta", "id");
+                conPacienteIdLb.Text = "0";
                 conDataDtp.Value = DateTime.Now;
                 conHoraCb.SelectedIndex = conDataDtp.Value.Hour;
                 conDetDetTb.Clear();
@@ -1915,16 +1906,8 @@ namespace AnamSys
             {
                 if (cad1Pn.Visible)
                 {
-                    Point loc = new Point(principalForm.ActiveForm.Width / 2 - cad1Pn.Width / 2, principalForm.ActiveForm.Height / 2 - cad1Pn.Height / 2);
-                    cad1Pn.Location = loc;
-                    DataTable dt = db.Query("Select id,nome from paciente");
-                    List<string> sourse = new List<string>();
-                    if (dt != null)
-                    {
-                        foreach (DataRow r in dt.Rows)
-                            sourse.Add(r["nome"].ToString());
-                        cad1NomeTb.AutoCompleteCustomSource.AddRange(sourse.ToArray());
-                    }
+                    Uteis.centralizaControl(cad1Pn);
+                    cad1NomeTb.AutoCompleteCustomSource.AddRange(Paciente.PacientesToAutocompleteSource(false));
                 }
 
             }
@@ -2003,14 +1986,7 @@ namespace AnamSys
             try
             {
                 if (conDetailsPn.Visible)
-                {
-                    string s = carregaPaciente(int.Parse(cad1IdLb.Text));
-                    if ( s!= "")
-                    {
-                        limpaPaciente();
-                        mostraGb(cad1Pn);
-                    }
-                        
+                {                        
                 }
 
             }
@@ -2214,8 +2190,8 @@ namespace AnamSys
             {
                 if (consultasPn.Visible)
                 {
-                    conPacienteCb.Items.Clear();
-                    conPacienteCb.Items.AddRange(Paciente.PacientesToAutocompleteSource());
+                    conPacienteTb.AutoCompleteCustomSource.AddRange(Paciente.PacientesToAutocompleteSource(false));
+                    listaConsultas();
                 }
             }
             catch (Exception err)
@@ -2715,7 +2691,7 @@ namespace AnamSys
                     string query = "Select * from consulta as c inner join paciente as p where c.paciente = p.id and p.nome like '%" + conPesqTb.Text + "%'";
                     DataTable dt = db.Query(query);
                     conLv.Items.Clear();
-                    conFinPacienteLb.Text = conPacienteCb.Text;
+                    conFinPacienteLb.Text = conPacienteTb.Text;
                     if (dt != null)
                     {
                         string codigos="";
@@ -3061,6 +3037,67 @@ namespace AnamSys
                     carregaPaciente(cad1CpfMtb.Text);
                 }
             }
+        }
+
+        private void conPacienteTb_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode ==Keys.Enter)
+            {
+                DataTable dt = db.Query("select * from paciente where nome like '%" + conPacienteTb.Text + "%'");
+                if (dt != null)
+                {
+                    if (dt.Rows.Count > 1)
+                    {
+                        TableLayoutPanel pn = new TableLayoutPanel();
+                        pn.ColumnCount = 1;
+                        pn.RowCount = dt.Rows.Count;
+                        RowStyle rs = new RowStyle(SizeType.Percent, 40);
+                        List<Control> adds = new List<Control>();
+                        pn.Name = "conOutrosPn";
+                        pn.Width = 500;
+                        Button[] chs = new Button[dt.Rows.Count];
+                        DateTime nasc;
+                        int he = 0;
+                        for (int i = 0; i < dt.Rows.Count; i++)
+                        {
+                            if (!DateTime.TryParse(dt.Rows[i]["nascimento"].ToString(), out nasc))
+                                nasc = DateTime.Today;
+                            chs[i] = new Button();
+                            chs[i].Height = 30;
+                            he += chs[i].Height + 6;
+                            chs[i].Text = dt.Rows[i]["id"].ToString() + " - " + dt.Rows[i]["nome"].ToString() + " (" + nasc.ToString("dd/MM/yyyy") + ")";
+                            chs[i].Dock = DockStyle.Fill;
+                            chs[i].Click +=consultasPaciente_Click;
+                            pn.Controls.Add(chs[i]);
+                            adds.Add(chs[i]);
+                        }
+                        pn.Height = he;
+                        conDetailsPn.Controls.Add(pn);
+                        Uteis.centralizaControl(pn);
+                    }
+                    else
+                    {
+                        conPacienteIdLb.Text = dt.Rows[0]["id"].ToString();
+                    }
+                }
+                else
+                {
+                    conPacienteIdLb.Text = "0";
+                    if (DialogResult.Yes == MessageBox.Show("Nome não encontrado. Deseja cadastrar novo paciente?","Cadastrar Novo",MessageBoxButtons.YesNo))
+                    {
+                        limpaPaciente();
+                        mostraGb(cad1Pn);
+                    }
+                }
+
+            }
+        }
+
+        void consultasPaciente_Click(object sender, EventArgs e)
+        {
+            Button snd = (Button)sender;
+            conPacienteIdLb.Text = Uteis.getIdFromString(snd.Text).ToString();
+            snd.Parent.Dispose();
         }
         /*
          * try

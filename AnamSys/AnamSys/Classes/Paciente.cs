@@ -97,7 +97,7 @@ namespace AnamSys
 
         }
 
-        public static string[] PacientesToAutocompleteSource()
+        public static string[] PacientesToAutocompleteSource(bool incluirID)
         {
             try
             {
@@ -110,7 +110,11 @@ namespace AnamSys
                         List<string> ret = new List<string>();
                         foreach(System.Data.DataRow dr in dt.Rows)
                         {
-                            ret.Add(dr["id"].ToString() + " - " + dr["nome"].ToString() + " (" + dr["nascimento"].ToString() + ")");
+                            if (incluirID)
+                                ret.Add(dr["nome"].ToString() + " (" + dr["id"].ToString() + ")");
+                            else
+                                ret.Add(dr["nome"].ToString());
+
                         }
                         return ret.ToArray();
                     }
