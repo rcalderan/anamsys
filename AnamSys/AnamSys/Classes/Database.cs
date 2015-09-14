@@ -118,7 +118,7 @@ namespace AnamSys
         private static Dictionary<string, string> sqlite_tables = new Dictionary<string, string>(){
             {"consulta","CREATE TABLE 'consulta' ('id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 'paciente' INTEGER NOT NULL,'hoje' DATETIME NOT NULL DEFAULT CURRENT_DATE,'detalhes' TEXT,'plano' TEXT, 'anamnese' INTEGER, 'ativa' INTEGER NOT NULL DEFAULT 1,'data' DATETIME)"},
             {"paciente","CREATE TABLE 'paciente' ('id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 'nome' TEXT, 'rg' TEXT, 'cpf' TEXT, 'endereco' TEXT, 'bairro' TEXT, 'cidade' TEXT, 'uf' TEXT,'nascimento' DATETIME,'obs' TEXT, 'hoje' DATETIME, 'plano' TEXT DEFAULT '', 'avatar' TEXT DEFAULT 'avatar.png')"},
-            {"fatura","CREATE TABLE 'fatura' ('id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'consulta' INTEGER,'data' DATETIME, 'valor' REAL, 'forma' NUMERIC, 'parcela' INTEGER, 'pendencia' BOOLEAN, 'hoje' DATETIME)"}
+            {"fatura","CREATE TABLE 'fatura' ('id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'consulta' INTEGER,'data' DATETIME, 'valor' REAL, 'forma' NUMERIC, 'parcela' INTEGER, 'pg' BOOLEAN, 'hoje' DATETIME)"}
         };
 
         private static Dictionary<string, string> sqlite_FirstInsert = new Dictionary<string, string>(){

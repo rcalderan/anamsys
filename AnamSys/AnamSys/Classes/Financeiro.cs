@@ -24,19 +24,29 @@ namespace AnamSys
                 return this.Id;
             }
 
-            public static FormaDePagamento Dinheiro 
+            public static FormaDePagamento NA 
             { 
                 get 
                 {
-                    FormaDePagamento din = new FormaDePagamento(0, "Dinheiro");
-                    return din; 
+                    FormaDePagamento na = new FormaDePagamento(0, "N/A");
+                    return na; 
                 } 
             }
+
+            public static FormaDePagamento Dinheiro
+            {
+                get
+                {
+                    FormaDePagamento din = new FormaDePagamento(1, "Dinheiro");
+                    return din;
+                }
+            }
+
             public static FormaDePagamento Debito
             {
                 get
                 {
-                    FormaDePagamento deb = new FormaDePagamento(1, "Débito");
+                    FormaDePagamento deb = new FormaDePagamento(2, "Débito");
                     return deb;
                 }
             }
@@ -44,7 +54,7 @@ namespace AnamSys
             { 
                 get
                 {
-                    FormaDePagamento forma = new FormaDePagamento(2, "Cheque");
+                    FormaDePagamento forma = new FormaDePagamento(3, "Cheque");
                     return forma;
                 } 
             }
@@ -52,7 +62,7 @@ namespace AnamSys
             {
                 get
                 {
-                    FormaDePagamento forma = new FormaDePagamento(3, "Crédito à Vista");
+                    FormaDePagamento forma = new FormaDePagamento(4, "Crédito à Vista");
                     return forma;
                 } 
             }
@@ -60,19 +70,11 @@ namespace AnamSys
             { 
                 get
                 {
-                    FormaDePagamento forma = new FormaDePagamento(4, "Crédito Parcelado");
+                    FormaDePagamento forma = new FormaDePagamento(5, "Crédito Parcelado");
                     return forma;
                 } 
             }
 
-            public static FormaDePagamento None
-            {
-                get
-                {
-                    FormaDePagamento forma = new FormaDePagamento(-1, "Forma Desconhecida");
-                    return forma;
-                }
-            }
 
             public static int GetId(FormaDePagamento forma)
             {
@@ -91,7 +93,7 @@ namespace AnamSys
                                 if (forma.Equals(CreditoParcelado))
                                     return CreditoParcelado.Id;
                                 else
-                                    return None.Id;
+                                    return NA.Id;
             }
 
             public static FormaDePagamento GetFromId(int id)
@@ -99,17 +101,19 @@ namespace AnamSys
                 switch(id)
                 {
                     case 0:
-                        return Dinheiro;
+                        return NA;
                     case 1:
-                        return Debito;
+                        return Dinheiro;
                     case 2:
-                        return Cheque;
+                        return Debito;
                     case 3:
-                        return CreditoAVista;
+                        return Cheque;
                     case 4:
+                        return CreditoAVista;
+                    case 5:
                         return CreditoParcelado;
                     default:
-                        return None;
+                        return NA;
                 }
             }
         }
@@ -322,7 +326,7 @@ namespace AnamSys
         private double valor;
         private FormaDePagamento forma;
         private int parcela;
-        private bool pendencia;
+        private bool pg;
 
         public int get_Id() { return this.id; }
         public int get_Consulta() { return this.consulta; }
@@ -332,9 +336,9 @@ namespace AnamSys
 
         public DateTime get_Data() { return this.data; }
         public DateTime get_Hoje() { return this.hoje; }
-        public bool get_Pendencia() { return this.pendencia; }
+        public bool get_Pendencia() { return this.pg; }
 
-        public static bool New(int Consulta, int Parcela, DateTime Data, double Valor, FormaDePagamento Forma, bool Pendencia)
+        public static bool New(int Consulta, int Parcela, DateTime Data, double Valor, FormaDePagamento Forma, bool Pg)
         {
             try
             {//new Classes.Fatura(novaConsulta.get_Id(), 0, novaConsulta.get_Data(), val, conDetFormaCb.SelectedIndex, conDetParCh.Checked);
@@ -345,7 +349,7 @@ namespace AnamSys
                     if (dt == null)
                     {//novo
                         string novoId = conexao.proximo("fatura", "id"), pg;
-                        if (Pendencia)
+                        if (Pg)
                             pg = "1";
                         else
                             pg = "0";
@@ -370,11 +374,11 @@ namespace AnamSys
                         string erro, pend, query = "update fatura set data='" + Data.ToString("yyyy-MM-dd HH:mm:ss") +
                             "',valor='" + Valor +
                             "',forma='" + Forma.get_Id() + "'";
-                        if (Pendencia)
+                        if (Pg)
                             pend = "1";
                         else
                             pend = "0";
-                        query += ", pendencia ='" + pend + "' WHERE id='" + dt.Rows[0]["id"].ToString() + "' and parcela='" + Parcela.ToString() + "'";
+                        query += ", pg ='" + pend + "' WHERE id='" + dt.Rows[0]["id"].ToString() + "' and parcela='" + Parcela.ToString() + "'";
                         erro = conexao.Comando(query);
                         if (erro != "")
                         {
@@ -393,7 +397,7 @@ namespace AnamSys
             }
         }
 
-        public Fatura(int Consulta, int Parcela, DateTime Data, double Valor, FormaDePagamento Forma, bool Pendencia)
+        public Fatura(int Consulta, int Parcela, DateTime Data, double Valor, FormaDePagamento Forma, bool Pg)
         {
             try
             {//new Classes.Fatura(novaConsulta.get_Id(), 0, novaConsulta.get_Data(), val, conDetFormaCb.SelectedIndex, conDetParCh.Checked);
@@ -403,7 +407,7 @@ namespace AnamSys
                 {//novo
                     DateTime hj = DateTime.Now;
                     string novoId = conexao.proximo("fatura", "id"),pg;
-                    if (pendencia)
+                    if (Pg)
                         pg = "1";
                     else
                         pg = "0";
@@ -423,7 +427,7 @@ namespace AnamSys
                         this.data = Data;
                         this.valor = Valor;
                         this.forma = Forma;
-                        this.pendencia = Pendencia;
+                        this.pg = Pg;
                         this.hoje = hj;
                     }
                     else
@@ -434,11 +438,11 @@ namespace AnamSys
                     string erro,pend,query = "update fatura set data='" + Data.ToString("yyyy-MM-dd HH:mm:ss") + 
                         "',valor='" + Valor + 
                         "',forma='" + Forma.get_Id() + "'";
-                    if (Pendencia)
+                    if (Pg)
                         pend =  "1";
                     else
                         pend = "0";
-                    query += ", pendencia ='"+pend+"' WHERE id='" + dt.Rows[0]["id"].ToString() + "' and parcela='" + parcela.ToString() + "'";
+                    query += ", pg ='"+pend+"' WHERE id='" + dt.Rows[0]["id"].ToString() + "' and parcela='" + parcela.ToString() + "'";
                     erro = conexao.Comando(query);
 
                     DateTime aux = new DateTime(1111, 11, 11);
@@ -449,7 +453,7 @@ namespace AnamSys
                     this.data = Data;
                     this.valor = Valor;
                     this.forma = Forma;
-                    this.pendencia = Pendencia;
+                    this.pg = Pg;
                     this.hoje = aux;
                     if (erro != "")
                     {
@@ -479,7 +483,7 @@ namespace AnamSys
                     this.valor = double.Parse(dt.Rows[0]["valor"].ToString());
                     this.forma = Financeiro.FormaDePagamento.GetFromId(int.Parse(dt.Rows[0]["forma"].ToString()));
                     this.parcela = int.Parse(dt.Rows[0]["parcela"].ToString());
-                    this.pendencia = bool.Parse(dt.Rows[0]["pendendia"].ToString());
+                    this.pg = bool.Parse(dt.Rows[0]["pendendia"].ToString());
                 }
                 else
                     this.id = -1;
@@ -508,7 +512,7 @@ namespace AnamSys
 
                     this.forma = Financeiro.FormaDePagamento.GetFromId(int.Parse(dt.Rows[0]["forma"].ToString()));
                     this.parcela = int.Parse(dt.Rows[0]["parcela"].ToString());
-                    this.pendencia = bool.Parse(dt.Rows[0]["pendendia"].ToString());
+                    this.pg = bool.Parse(dt.Rows[0]["pendendia"].ToString());
                     this.hoje = DateTime.Parse(dt.Rows[0]["hoje"].ToString());
                     return true;
                 }
@@ -534,7 +538,7 @@ namespace AnamSys
                     query += "forma=" + newF.get_Forma() + ",";
                 if (this.parcela != newF.get_Parcela())
                     query += "parcela=" + newF.get_Valor() + ",";
-                if (this.pendencia != newF.get_Pendencia())
+                if (this.pg != newF.get_Pendencia())
                 {
                     if (newF.get_Pendencia())
                         query += "valor=1,";
@@ -597,7 +601,7 @@ namespace AnamSys
                                 this.valor + "','" +
                                 Financeiro.FormaDePagamento.GetId(this.forma) + "'," +
                                 this.parcela.ToString() + ",'";
-                        if (this.pendencia)
+                        if (this.pg)
                             query+="1";
                         else
                             query+="0";
@@ -610,8 +614,8 @@ namespace AnamSys
                             "',valor='" + this.valor +
                             "',forma='" + this.forma.get_Id() +
                             "',consulta='" + this.consulta.ToString() +
-                            "',pendencia='";
-                        if (this.pendencia)
+                            "',pg='";
+                        if (this.pg)
                             query += "1'";
                         else
                             query += "0'";

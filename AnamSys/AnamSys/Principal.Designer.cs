@@ -28,10 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.cadastrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pacienteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,20 +71,20 @@
             this.label1 = new System.Windows.Forms.Label();
             this.conAvalTb = new System.Windows.Forms.TextBox();
             this.conDetailsPn = new System.Windows.Forms.Panel();
+            this.conDetTotalLb = new System.Windows.Forms.Label();
+            this.conDetSubtotalLb = new System.Windows.Forms.Label();
+            this.label71 = new System.Windows.Forms.Label();
+            this.conDetFinDg = new System.Windows.Forms.DataGridView();
+            this.conPacienteTb = new System.Windows.Forms.TextBox();
             this.conDetLpLb = new System.Windows.Forms.Label();
-            this.conDetParCh = new System.Windows.Forms.CheckBox();
             this.conDetXLb = new System.Windows.Forms.Label();
             this.label54 = new System.Windows.Forms.Label();
             this.conPacienteIdLb = new System.Windows.Forms.Label();
             this.conDetIdLb = new System.Windows.Forms.Label();
-            this.conDetParPn = new System.Windows.Forms.Panel();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.conDetParNup = new System.Windows.Forms.NumericUpDown();
-            this.conDetParLbox = new System.Windows.Forms.ListBox();
+            this.conNovoBt = new System.Windows.Forms.Button();
+            this.label52 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.conDetDetTb = new System.Windows.Forms.TextBox();
-            this.conDetParTotTb = new System.Windows.Forms.TextBox();
-            this.conDetParTb = new System.Windows.Forms.TextBox();
             this.panel10 = new System.Windows.Forms.Panel();
             this.conDataDtp = new System.Windows.Forms.DateTimePicker();
             this.conHoraCb = new System.Windows.Forms.ComboBox();
@@ -89,17 +93,8 @@
             this.conMinCb = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label26 = new System.Windows.Forms.Label();
-            this.conDetAddLb = new System.Windows.Forms.Label();
-            this.label55 = new System.Windows.Forms.Label();
-            this.panel12 = new System.Windows.Forms.Panel();
-            this.conDetFormaCb = new System.Windows.Forms.ComboBox();
-            this.conDetPgCh = new System.Windows.Forms.CheckBox();
-            this.label57 = new System.Windows.Forms.Label();
-            this.label56 = new System.Windows.Forms.Label();
-            this.label53 = new System.Windows.Forms.Label();
-            this.label24 = new System.Windows.Forms.Label();
-            this.conDetValorTb = new System.Windows.Forms.TextBox();
-            this.conNovoBt = new System.Windows.Forms.Button();
+            this.label75 = new System.Windows.Forms.Label();
+            this.label74 = new System.Windows.Forms.Label();
             this.conNovaBt = new System.Windows.Forms.Button();
             this.conTodasLb = new System.Windows.Forms.Label();
             this.agentaPn = new System.Windows.Forms.Panel();
@@ -204,10 +199,8 @@
             this.cad1IdLb = new System.Windows.Forms.Label();
             this.cad1CaleLb = new System.Windows.Forms.Label();
             this.consultasPn = new System.Windows.Forms.Panel();
-            this.conPacienteTb = new System.Windows.Forms.TextBox();
             this.consultasXLb = new System.Windows.Forms.Label();
             this.consultasLLb = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             this.label70 = new System.Windows.Forms.Label();
             this.conPesqTb = new System.Windows.Forms.TextBox();
             this.finPn = new System.Windows.Forms.Panel();
@@ -265,13 +258,15 @@
             this.evoXLb = new System.Windows.Forms.Label();
             this.directoryEntry1 = new System.DirectoryServices.DirectoryEntry();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.label52 = new System.Windows.Forms.Label();
+            this.Parcela = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.conDetailsPn.SuspendLayout();
-            this.conDetParPn.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.conDetParNup)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.conDetFinDg)).BeginInit();
             this.panel10.SuspendLayout();
-            this.panel12.SuspendLayout();
             this.agentaPn.SuspendLayout();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.conFinVezesNup)).BeginInit();
@@ -612,35 +607,104 @@
             // conDetailsPn
             // 
             this.conDetailsPn.BackColor = System.Drawing.Color.LightBlue;
+            this.conDetailsPn.Controls.Add(this.conDetTotalLb);
+            this.conDetailsPn.Controls.Add(this.conDetSubtotalLb);
+            this.conDetailsPn.Controls.Add(this.label71);
+            this.conDetailsPn.Controls.Add(this.conDetFinDg);
             this.conDetailsPn.Controls.Add(this.conPacienteTb);
             this.conDetailsPn.Controls.Add(this.conDetLpLb);
-            this.conDetailsPn.Controls.Add(this.conDetParCh);
             this.conDetailsPn.Controls.Add(this.conDetXLb);
             this.conDetailsPn.Controls.Add(this.label54);
             this.conDetailsPn.Controls.Add(this.conPacienteIdLb);
             this.conDetailsPn.Controls.Add(this.conDetIdLb);
+            this.conDetailsPn.Controls.Add(this.conNovoBt);
             this.conDetailsPn.Controls.Add(this.label52);
             this.conDetailsPn.Controls.Add(this.label9);
-            this.conDetailsPn.Controls.Add(this.conDetParPn);
-            this.conDetailsPn.Controls.Add(this.conDetParNup);
-            this.conDetailsPn.Controls.Add(this.conDetParLbox);
             this.conDetailsPn.Controls.Add(this.conDetDetTb);
-            this.conDetailsPn.Controls.Add(this.conDetParTotTb);
-            this.conDetailsPn.Controls.Add(this.conDetParTb);
             this.conDetailsPn.Controls.Add(this.panel10);
             this.conDetailsPn.Controls.Add(this.label26);
-            this.conDetailsPn.Controls.Add(this.conDetAddLb);
-            this.conDetailsPn.Controls.Add(this.label55);
-            this.conDetailsPn.Controls.Add(this.panel12);
-            this.conDetailsPn.Location = new System.Drawing.Point(263, 29);
+            this.conDetailsPn.Controls.Add(this.label75);
+            this.conDetailsPn.Controls.Add(this.label74);
+            this.conDetailsPn.Location = new System.Drawing.Point(27, 14);
             this.conDetailsPn.Name = "conDetailsPn";
-            this.conDetailsPn.Size = new System.Drawing.Size(546, 427);
+            this.conDetailsPn.Size = new System.Drawing.Size(543, 524);
             this.conDetailsPn.TabIndex = 75;
             this.conDetailsPn.Visible = false;
             this.conDetailsPn.VisibleChanged += new System.EventHandler(this.conDetailsPn_VisibleChanged);
             this.conDetailsPn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.control_MouseDown);
             this.conDetailsPn.MouseMove += new System.Windows.Forms.MouseEventHandler(this.control_MouseMove);
             this.conDetailsPn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.control_MouseUp);
+            // 
+            // conDetTotalLb
+            // 
+            this.conDetTotalLb.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.conDetTotalLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.conDetTotalLb.ForeColor = System.Drawing.Color.DarkGreen;
+            this.conDetTotalLb.Location = new System.Drawing.Point(404, 473);
+            this.conDetTotalLb.Name = "conDetTotalLb";
+            this.conDetTotalLb.Size = new System.Drawing.Size(118, 26);
+            this.conDetTotalLb.TabIndex = 0;
+            this.conDetTotalLb.Text = "0,00";
+            this.conDetTotalLb.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // conDetSubtotalLb
+            // 
+            this.conDetSubtotalLb.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.conDetSubtotalLb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.conDetSubtotalLb.ForeColor = System.Drawing.Color.DarkGoldenrod;
+            this.conDetSubtotalLb.Location = new System.Drawing.Point(404, 441);
+            this.conDetSubtotalLb.Name = "conDetSubtotalLb";
+            this.conDetSubtotalLb.Size = new System.Drawing.Size(118, 26);
+            this.conDetSubtotalLb.TabIndex = 0;
+            this.conDetSubtotalLb.Text = "0,00";
+            this.conDetSubtotalLb.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label71
+            // 
+            this.label71.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.label71.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label71.Location = new System.Drawing.Point(18, 291);
+            this.label71.Name = "label71";
+            this.label71.Size = new System.Drawing.Size(504, 26);
+            this.label71.TabIndex = 0;
+            this.label71.Text = "Finança";
+            this.label71.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label71.Visible = false;
+            // 
+            // conDetFinDg
+            // 
+            this.conDetFinDg.AllowUserToResizeColumns = false;
+            this.conDetFinDg.AllowUserToResizeRows = false;
+            this.conDetFinDg.BackgroundColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.conDetFinDg.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.conDetFinDg.ColumnHeadersHeight = 20;
+            this.conDetFinDg.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.conDetFinDg.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Parcela,
+            this.Column3,
+            this.Column1,
+            this.Column2,
+            this.Column4});
+            this.conDetFinDg.Location = new System.Drawing.Point(18, 317);
+            this.conDetFinDg.MultiSelect = false;
+            this.conDetFinDg.Name = "conDetFinDg";
+            this.conDetFinDg.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.conDetFinDg.RowHeadersVisible = false;
+            this.conDetFinDg.Size = new System.Drawing.Size(504, 120);
+            this.conDetFinDg.TabIndex = 82;
+            this.conDetFinDg.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.conDetFinDg_CellEndEdit);
+            this.conDetFinDg.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.conDetFinDg_RowsAdded);
+            // 
+            // conPacienteTb
+            // 
+            this.conPacienteTb.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.conPacienteTb.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.conPacienteTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.conPacienteTb.Location = new System.Drawing.Point(68, 97);
+            this.conPacienteTb.Name = "conPacienteTb";
+            this.conPacienteTb.Size = new System.Drawing.Size(472, 26);
+            this.conPacienteTb.TabIndex = 80;
+            this.conPacienteTb.KeyDown += new System.Windows.Forms.KeyEventHandler(this.conPacienteTb_KeyDown);
             // 
             // conDetLpLb
             // 
@@ -651,17 +715,6 @@
             this.conDetLpLb.TabIndex = 0;
             this.conDetLpLb.Text = "Lp";
             this.conDetLpLb.Click += new System.EventHandler(this.conDetLpLb_Click);
-            // 
-            // conDetParCh
-            // 
-            this.conDetParCh.AutoSize = true;
-            this.conDetParCh.Location = new System.Drawing.Point(605, 155);
-            this.conDetParCh.Name = "conDetParCh";
-            this.conDetParCh.Size = new System.Drawing.Size(41, 17);
-            this.conDetParCh.TabIndex = 81;
-            this.conDetParCh.Text = "PG";
-            this.conDetParCh.UseVisualStyleBackColor = true;
-            this.conDetParCh.Visible = false;
             // 
             // conDetXLb
             // 
@@ -703,102 +756,46 @@
             this.conDetIdLb.TabIndex = 0;
             this.conDetIdLb.Text = "Numero";
             // 
-            // conDetParPn
+            // conNovoBt
             // 
-            this.conDetParPn.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.conDetParPn.Controls.Add(this.button2);
-            this.conDetParPn.Controls.Add(this.button1);
-            this.conDetParPn.Location = new System.Drawing.Point(373, 178);
-            this.conDetParPn.Name = "conDetParPn";
-            this.conDetParPn.Size = new System.Drawing.Size(88, 73);
-            this.conDetParPn.TabIndex = 80;
-            this.conDetParPn.Visible = false;
+            this.conNovoBt.Location = new System.Drawing.Point(18, 449);
+            this.conNovoBt.Name = "conNovoBt";
+            this.conNovoBt.Size = new System.Drawing.Size(322, 50);
+            this.conNovoBt.TabIndex = 8;
+            this.conNovoBt.Text = "Finalizar";
+            this.conNovoBt.UseVisualStyleBackColor = true;
+            this.conNovoBt.Click += new System.EventHandler(this.conSalvarBt_Click);
             // 
-            // button2
+            // label52
             // 
-            this.button2.Location = new System.Drawing.Point(8, 45);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 0;
-            this.button2.Text = "Remover";
-            this.button2.UseVisualStyleBackColor = true;
+            this.label52.AutoSize = true;
+            this.label52.Location = new System.Drawing.Point(6, 83);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(18, 13);
+            this.label52.TabIndex = 0;
+            this.label52.Text = "ID";
             // 
-            // button1
+            // label9
             // 
-            this.button1.Location = new System.Drawing.Point(8, 16);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Pago";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // conDetParNup
-            // 
-            this.conDetParNup.Location = new System.Drawing.Point(555, 152);
-            this.conDetParNup.Maximum = new decimal(new int[] {
-            12,
-            0,
-            0,
-            0});
-            this.conDetParNup.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.conDetParNup.Name = "conDetParNup";
-            this.conDetParNup.Size = new System.Drawing.Size(45, 20);
-            this.conDetParNup.TabIndex = 79;
-            this.conDetParNup.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.conDetParNup.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.conDetParNup.Visible = false;
-            this.conDetParNup.ValueChanged += new System.EventHandler(this.conDetParNup_ValueChanged);
-            // 
-            // conDetParLbox
-            // 
-            this.conDetParLbox.FormattingEnabled = true;
-            this.conDetParLbox.Location = new System.Drawing.Point(555, 178);
-            this.conDetParLbox.MultiColumn = true;
-            this.conDetParLbox.Name = "conDetParLbox";
-            this.conDetParLbox.Size = new System.Drawing.Size(87, 160);
-            this.conDetParLbox.TabIndex = 78;
-            this.conDetParLbox.Visible = false;
-            this.conDetParLbox.SelectedIndexChanged += new System.EventHandler(this.conDetParLbox_SelectedIndexChanged);
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(68, 83);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(49, 13);
+            this.label9.TabIndex = 0;
+            this.label9.Text = "Paciente";
             // 
             // conDetDetTb
             // 
-            this.conDetDetTb.Location = new System.Drawing.Point(6, 178);
+            this.conDetDetTb.Location = new System.Drawing.Point(6, 145);
             this.conDetDetTb.Multiline = true;
             this.conDetDetTb.Name = "conDetDetTb";
             this.conDetDetTb.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.conDetDetTb.Size = new System.Drawing.Size(537, 136);
             this.conDetDetTb.TabIndex = 4;
             // 
-            // conDetParTotTb
-            // 
-            this.conDetParTotTb.Enabled = false;
-            this.conDetParTotTb.Location = new System.Drawing.Point(555, 350);
-            this.conDetParTotTb.Name = "conDetParTotTb";
-            this.conDetParTotTb.Size = new System.Drawing.Size(87, 20);
-            this.conDetParTotTb.TabIndex = 77;
-            this.conDetParTotTb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.conDetParTotTb.Visible = false;
-            // 
-            // conDetParTb
-            // 
-            this.conDetParTb.Location = new System.Drawing.Point(555, 127);
-            this.conDetParTb.Name = "conDetParTb";
-            this.conDetParTb.Size = new System.Drawing.Size(87, 20);
-            this.conDetParTb.TabIndex = 77;
-            this.conDetParTb.Visible = false;
-            this.conDetParTb.KeyDown += new System.Windows.Forms.KeyEventHandler(this.conDetParTb_KeyDown);
-            // 
             // panel10
             // 
-            this.panel10.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.panel10.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.panel10.Controls.Add(this.conDataDtp);
             this.panel10.Controls.Add(this.conHoraCb);
             this.panel10.Controls.Add(this.label14);
@@ -807,7 +804,7 @@
             this.panel10.Controls.Add(this.label11);
             this.panel10.Location = new System.Drawing.Point(0, 27);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(546, 52);
+            this.panel10.Size = new System.Drawing.Size(542, 52);
             this.panel10.TabIndex = 75;
             // 
             // conDataDtp
@@ -849,10 +846,12 @@
             "22",
             "23"});
             this.conHoraCb.Location = new System.Drawing.Point(277, 19);
+            this.conHoraCb.MaxLength = 2;
             this.conHoraCb.Name = "conHoraCb";
             this.conHoraCb.Size = new System.Drawing.Size(42, 28);
             this.conHoraCb.TabIndex = 2;
-            this.conHoraCb.Text = "12";
+            this.conHoraCb.SelectedIndexChanged += new System.EventHandler(this.conMinCb_SelectedIndexChanged);
+            this.conHoraCb.Leave += new System.EventHandler(this.conMinCb_Leave);
             // 
             // label14
             // 
@@ -890,10 +889,13 @@
             "50",
             "55"});
             this.conMinCb.Location = new System.Drawing.Point(325, 19);
+            this.conMinCb.MaxLength = 2;
             this.conMinCb.Name = "conMinCb";
             this.conMinCb.Size = new System.Drawing.Size(42, 28);
             this.conMinCb.TabIndex = 3;
             this.conMinCb.Text = "00";
+            this.conMinCb.SelectedIndexChanged += new System.EventHandler(this.conMinCb_SelectedIndexChanged);
+            this.conMinCb.Leave += new System.EventHandler(this.conMinCb_Leave);
             // 
             // label11
             // 
@@ -907,131 +909,29 @@
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(3, 162);
+            this.label26.Location = new System.Drawing.Point(3, 129);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(176, 13);
             this.label26.TabIndex = 0;
             this.label26.Text = "Detalhes (Abordagem, metas, etc...)";
             // 
-            // conDetAddLb
+            // label75
             // 
-            this.conDetAddLb.AutoSize = true;
-            this.conDetAddLb.Location = new System.Drawing.Point(440, 127);
-            this.conDetAddLb.Name = "conDetAddLb";
-            this.conDetAddLb.Size = new System.Drawing.Size(106, 13);
-            this.conDetAddLb.TabIndex = 0;
-            this.conDetAddLb.Text = "Inserir/Editar Parcela";
-            this.conDetAddLb.Visible = false;
+            this.label75.AutoSize = true;
+            this.label75.Location = new System.Drawing.Point(353, 454);
+            this.label75.Name = "label75";
+            this.label75.Size = new System.Drawing.Size(49, 13);
+            this.label75.TabIndex = 0;
+            this.label75.Text = "Sub total";
             // 
-            // label55
+            // label74
             // 
-            this.label55.AutoSize = true;
-            this.label55.Location = new System.Drawing.Point(553, 339);
-            this.label55.Name = "label55";
-            this.label55.Size = new System.Drawing.Size(27, 13);
-            this.label55.TabIndex = 0;
-            this.label55.Text = "total";
-            this.label55.Visible = false;
-            // 
-            // panel12
-            // 
-            this.panel12.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.panel12.Controls.Add(this.conDetFormaCb);
-            this.panel12.Controls.Add(this.conDetPgCh);
-            this.panel12.Controls.Add(this.label57);
-            this.panel12.Controls.Add(this.label56);
-            this.panel12.Controls.Add(this.label53);
-            this.panel12.Controls.Add(this.label24);
-            this.panel12.Controls.Add(this.conDetValorTb);
-            this.panel12.Controls.Add(this.conNovoBt);
-            this.panel12.Location = new System.Drawing.Point(0, 321);
-            this.panel12.Name = "panel12";
-            this.panel12.Size = new System.Drawing.Size(546, 105);
-            this.panel12.TabIndex = 75;
-            // 
-            // conDetFormaCb
-            // 
-            this.conDetFormaCb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.conDetFormaCb.FormattingEnabled = true;
-            this.conDetFormaCb.Items.AddRange(new object[] {
-            "Dinheiro",
-            "Débito",
-            "Cheque",
-            "Crédito à Vista",
-            "Crédito Parcelado"});
-            this.conDetFormaCb.Location = new System.Drawing.Point(239, 26);
-            this.conDetFormaCb.Name = "conDetFormaCb";
-            this.conDetFormaCb.Size = new System.Drawing.Size(233, 28);
-            this.conDetFormaCb.TabIndex = 6;
-            // 
-            // conDetPgCh
-            // 
-            this.conDetPgCh.AutoSize = true;
-            this.conDetPgCh.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.conDetPgCh.Location = new System.Drawing.Point(481, 27);
-            this.conDetPgCh.Name = "conDetPgCh";
-            this.conDetPgCh.Size = new System.Drawing.Size(59, 29);
-            this.conDetPgCh.TabIndex = 7;
-            this.conDetPgCh.Text = "PG";
-            this.conDetPgCh.UseVisualStyleBackColor = true;
-            // 
-            // label57
-            // 
-            this.label57.AutoSize = true;
-            this.label57.Location = new System.Drawing.Point(467, 33);
-            this.label57.Name = "label57";
-            this.label57.Size = new System.Drawing.Size(16, 13);
-            this.label57.TabIndex = 0;
-            this.label57.Text = "->";
-            this.label57.Visible = false;
-            // 
-            // label56
-            // 
-            this.label56.AutoSize = true;
-            this.label56.Location = new System.Drawing.Point(223, 33);
-            this.label56.Name = "label56";
-            this.label56.Size = new System.Drawing.Size(16, 13);
-            this.label56.TabIndex = 0;
-            this.label56.Text = "->";
-            // 
-            // label53
-            // 
-            this.label53.AutoSize = true;
-            this.label53.Location = new System.Drawing.Point(239, 10);
-            this.label53.Name = "label53";
-            this.label53.Size = new System.Drawing.Size(108, 13);
-            this.label53.TabIndex = 0;
-            this.label53.Text = "Forma de Pagamento";
-            this.label53.Visible = false;
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(6, 9);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(90, 13);
-            this.label24.TabIndex = 0;
-            this.label24.Text = "Valor da Consulta";
-            // 
-            // conDetValorTb
-            // 
-            this.conDetValorTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.conDetValorTb.Location = new System.Drawing.Point(9, 25);
-            this.conDetValorTb.Name = "conDetValorTb";
-            this.conDetValorTb.Size = new System.Drawing.Size(209, 30);
-            this.conDetValorTb.TabIndex = 5;
-            this.conDetValorTb.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.conDetValorTb.KeyDown += new System.Windows.Forms.KeyEventHandler(this.conDetValorTb_KeyDown);
-            // 
-            // conNovoBt
-            // 
-            this.conNovoBt.Location = new System.Drawing.Point(6, 61);
-            this.conNovoBt.Name = "conNovoBt";
-            this.conNovoBt.Size = new System.Drawing.Size(535, 34);
-            this.conNovoBt.TabIndex = 8;
-            this.conNovoBt.Text = "Finalizar";
-            this.conNovoBt.UseVisualStyleBackColor = true;
-            this.conNovoBt.Click += new System.EventHandler(this.conSalvarBt_Click);
+            this.label74.AutoSize = true;
+            this.label74.Location = new System.Drawing.Point(376, 486);
+            this.label74.Name = "label74";
+            this.label74.Size = new System.Drawing.Size(27, 13);
+            this.label74.TabIndex = 0;
+            this.label74.Text = "total";
             // 
             // conNovaBt
             // 
@@ -2210,21 +2110,10 @@
             this.consultasPn.Controls.Add(this.conPesqTb);
             this.consultasPn.Location = new System.Drawing.Point(40, 24);
             this.consultasPn.Name = "consultasPn";
-            this.consultasPn.Size = new System.Drawing.Size(1015, 500);
+            this.consultasPn.Size = new System.Drawing.Size(1015, 549);
             this.consultasPn.TabIndex = 77;
             this.consultasPn.Visible = false;
             this.consultasPn.VisibleChanged += new System.EventHandler(this.consultasPn_VisibleChanged);
-            // 
-            // conPacienteTb
-            // 
-            this.conPacienteTb.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.conPacienteTb.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.conPacienteTb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.conPacienteTb.Location = new System.Drawing.Point(68, 97);
-            this.conPacienteTb.Name = "conPacienteTb";
-            this.conPacienteTb.Size = new System.Drawing.Size(467, 26);
-            this.conPacienteTb.TabIndex = 80;
-            this.conPacienteTb.KeyDown += new System.Windows.Forms.KeyEventHandler(this.conPacienteTb_KeyDown);
             // 
             // consultasXLb
             // 
@@ -2247,15 +2136,6 @@
             this.consultasLLb.TabIndex = 0;
             this.consultasLLb.Text = "Lp";
             this.consultasLLb.Click += new System.EventHandler(this.consultasLLb_Click);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(68, 83);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(49, 13);
-            this.label9.TabIndex = 0;
-            this.label9.Text = "Paciente";
             // 
             // label70
             // 
@@ -2664,28 +2544,28 @@
             // evoChart
             // 
             this.evoChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            chartArea3.AxisX.LabelStyle.Format = "dd/MMM";
-            chartArea3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            chartArea3.Name = "ChartArea1";
-            this.evoChart.ChartAreas.Add(chartArea3);
-            legend3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            legend3.Name = "Legend1";
-            this.evoChart.Legends.Add(legend3);
+            chartArea2.AxisX.LabelStyle.Format = "dd/MMM";
+            chartArea2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            chartArea2.Name = "ChartArea1";
+            this.evoChart.ChartAreas.Add(chartArea2);
+            legend2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            legend2.Name = "Legend1";
+            this.evoChart.Legends.Add(legend2);
             this.evoChart.Location = new System.Drawing.Point(274, 88);
             this.evoChart.Name = "evoChart";
             this.evoChart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright;
-            series5.ChartArea = "ChartArea1";
-            series5.Legend = "Legend1";
-            series5.Name = "Dados";
-            series5.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.String;
-            series6.BorderColor = System.Drawing.Color.Blue;
-            series6.ChartArea = "ChartArea1";
-            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series6.Legend = "Legend1";
-            series6.Name = "Desempenho";
-            series6.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.String;
-            this.evoChart.Series.Add(series5);
-            this.evoChart.Series.Add(series6);
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Dados";
+            series3.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.String;
+            series4.BorderColor = System.Drawing.Color.Blue;
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series4.Legend = "Legend1";
+            series4.Name = "Desempenho";
+            series4.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.String;
+            this.evoChart.Series.Add(series3);
+            this.evoChart.Series.Add(series4);
             this.evoChart.Size = new System.Drawing.Size(590, 245);
             this.evoChart.TabIndex = 7;
             this.evoChart.Text = "chart1";
@@ -2882,14 +2762,66 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
-            // label52
+            // Parcela
             // 
-            this.label52.AutoSize = true;
-            this.label52.Location = new System.Drawing.Point(6, 83);
-            this.label52.Name = "label52";
-            this.label52.Size = new System.Drawing.Size(18, 13);
-            this.label52.TabIndex = 0;
-            this.label52.Text = "ID";
+            this.Parcela.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
+            dataGridViewCellStyle5.Format = "N0";
+            dataGridViewCellStyle5.NullValue = null;
+            this.Parcela.DefaultCellStyle = dataGridViewCellStyle5;
+            this.Parcela.HeaderText = "Parcela";
+            this.Parcela.MaxInputLength = 2;
+            this.Parcela.Name = "Parcela";
+            this.Parcela.ReadOnly = true;
+            this.Parcela.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Parcela.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Parcela.Width = 49;
+            // 
+            // Column3
+            // 
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
+            this.Column3.DefaultCellStyle = dataGridViewCellStyle6;
+            this.Column3.HeaderText = "Forma de Pag.";
+            this.Column3.Items.AddRange(new object[] {
+            "N/A",
+            "Dinheiro",
+            "Débito",
+            "Cheque",
+            "Crédito à Vista",
+            "Crédito Parcelado"});
+            this.Column3.Name = "Column3";
+            this.Column3.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // Column1
+            // 
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
+            dataGridViewCellStyle7.Format = "d";
+            dataGridViewCellStyle7.NullValue = null;
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle7;
+            this.Column1.HeaderText = "Data";
+            this.Column1.Name = "Column1";
+            this.Column1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Column2
+            // 
+            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
+            dataGridViewCellStyle8.Format = "C2";
+            dataGridViewCellStyle8.NullValue = null;
+            this.Column2.DefaultCellStyle = dataGridViewCellStyle8;
+            this.Column2.HeaderText = "Valor";
+            this.Column2.Name = "Column2";
+            this.Column2.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Column4
+            // 
+            this.Column4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.Column4.HeaderText = "PG";
+            this.Column4.Name = "Column4";
+            this.Column4.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Column4.Width = 28;
             // 
             // principalForm
             // 
@@ -2912,12 +2844,9 @@
             this.menuStrip1.PerformLayout();
             this.conDetailsPn.ResumeLayout(false);
             this.conDetailsPn.PerformLayout();
-            this.conDetParPn.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.conDetParNup)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.conDetFinDg)).EndInit();
             this.panel10.ResumeLayout(false);
             this.panel10.PerformLayout();
-            this.panel12.ResumeLayout(false);
-            this.panel12.PerformLayout();
             this.agentaPn.ResumeLayout(false);
             this.agentaPn.PerformLayout();
             this.panel5.ResumeLayout(false);
@@ -3093,37 +3022,19 @@
         private System.Windows.Forms.Label conLimparLb;
         private System.Windows.Forms.Button conPlanoAtualizaBt;
         private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.Label label55;
         private System.Windows.Forms.Panel conDetailsPn;
         private System.Windows.Forms.Label conDetXLb;
         private System.Windows.Forms.Panel panel10;
-        private System.Windows.Forms.NumericUpDown conDetParNup;
-        private System.Windows.Forms.ListBox conDetParLbox;
-        private System.Windows.Forms.TextBox conDetParTb;
-        private System.Windows.Forms.Label conDetAddLb;
         private System.Windows.Forms.Label conDetLpLb;
         private System.Windows.Forms.TextBox conDetDetTb;
         private System.Windows.Forms.Label conDetIdLb;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.Button conNovaBt;
         private System.Windows.Forms.Label conPacienteIdLb;
-        private System.Windows.Forms.TextBox conDetParTotTb;
-        private System.Windows.Forms.CheckBox conDetParCh;
         private System.Windows.Forms.Panel cad1Pn;
         private System.Windows.Forms.DateTimePicker cad1NascDtp;
         private System.Windows.Forms.Label cad1CaleLb;
-        private System.Windows.Forms.Panel conDetParPn;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Panel panel12;
-        private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.TextBox conDetValorTb;
-        private System.Windows.Forms.CheckBox conDetPgCh;
-        private System.Windows.Forms.ComboBox conDetFormaCb;
-        private System.Windows.Forms.Label label53;
         private System.Windows.Forms.Label label54;
-        private System.Windows.Forms.Label label57;
-        private System.Windows.Forms.Label label56;
         private System.Windows.Forms.Label cad1AntLb;
         private System.Windows.Forms.Label cad1ProxLv;
         private System.Windows.Forms.Button cad1ConsultasBt;
@@ -3200,6 +3111,17 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox conPacienteTb;
         private System.Windows.Forms.Label label52;
+        private System.Windows.Forms.DataGridView conDetFinDg;
+        private System.Windows.Forms.Label conDetTotalLb;
+        private System.Windows.Forms.Label conDetSubtotalLb;
+        private System.Windows.Forms.Label label71;
+        private System.Windows.Forms.Label label75;
+        private System.Windows.Forms.Label label74;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Parcela;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn Column4;
     }
 }
 

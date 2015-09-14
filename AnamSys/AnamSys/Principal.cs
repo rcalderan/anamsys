@@ -31,6 +31,7 @@ namespace AnamSys
 
         public principalForm()
         {
+            Thread.CurrentThread.CurrentCulture = pt_Br;
             InitializeComponent();
             Control[] paineis = { consultasPn, cad1Pn, finPn, planoPn, avalPn, conDetailsPn, EvoPn };
             foreach (Control c in paineis)
@@ -419,7 +420,7 @@ namespace AnamSys
         {
             try
             {
-                DataTable dt = db.Query("Select c.id, c.ativa,c.data, p.nome from consulta as c inner join paciente as p where c.paciente=p.id and c.ativa=1 and c.data>='" + DateTime.Today.ToString("yyyy-MM-dd") + "'");
+                DataTable dt = db.Query("Select c.id, c.ativa,c.data, p.nome from consulta as c inner join paciente as p where c.paciente=p.id and ativa=1 and c.data>='" + DateTime.Today.ToString("yyyy-MM-dd") + "'");
                 if (dt != null)
                 {
                     conLv.Items.Clear();
@@ -427,9 +428,10 @@ namespace AnamSys
                     string[] str = new string[5];
                     DateTime dtAux = new DateTime();
                     int compare;
+                    DataTable fin;
                     foreach (DataRow r in dt.Rows)
                     {
-
+                        fin = db.Query("select * from fatura where consulta=" + r["id"].ToString());
                         str[0] = r["id"].ToString();
                         str[1] = r["nome"].ToString();
                         if (!DateTime.TryParse(r["data"].ToString(), out dtAux))
@@ -437,7 +439,8 @@ namespace AnamSys
                         else
                             str[2] = dtAux.ToString("dd/MM/yyyy HH:mm");
                         aux = new ListViewItem(str);
-                        if (r["ativa"].ToString() == "1")
+                        if (fin!=null)
+                            if (fin.Rows[0]["pg"].ToString() == "1")
                         {
                             aux.Checked = true;
                             str[4] = "OK";
@@ -991,18 +994,20 @@ namespace AnamSys
                     MessageBox.Show("Informe o paciente! (ID = 0)");
                     return;
                 }
-                if (string.IsNullOrWhiteSpace(conDetValorTb.Text)||(string.IsNullOrEmpty(conDetValorTb.Text)))
+                foreach(DataGridViewRow r in conDetFinDg.Rows)
                 {
-                    MessageBox.Show("Valor da Consulta incorreto.");
-                    return;
+                    if (Convert.ToBoolean(r.Cells[4].Value)==true)
+                    {
+                        MessageBox.Show(r.Cells.Count.ToString());
+                        if ((string.IsNullOrEmpty(r.Cells[1].Value.ToString())) || (r.Cells[1].Value.ToString() == "N/A"))
+                        {
+                            MessageBox.Show("Informe a forma de pagamento primriro.");
+                            return;
+                        }
+                    }
                 }
-                if (!conDetFormaCb.Items.Contains(conDetFormaCb.Text))
-                {
-                    conDetFormaCb.Text = "";
-                    MessageBox.Show("Selecione a forma de pagamento");
-                    return;
-                }
-                if (null != db.Query("select id from paciente where id=" + conPacienteIdLb.Text))
+                DataTable paciTb = db.Query("select id,nome from paciente where id=" + conPacienteIdLb.Text);
+                if (null != paciTb)
                 {
                     DataTable dt = db.Query("select id from consulta where id=" + conDetIdLb.Text);
                     if (null == dt)
@@ -1013,7 +1018,7 @@ namespace AnamSys
                         DateTime data = new DateTime(conDataDtp.Value.Year, conDataDtp.Value.Month, conDataDtp.Value.Day, int.Parse(conHoraCb.Text), int.Parse(conMinCb.Text), 0);
                         if (conDetPgCh.Checked)
                             data = DateTime.Now;
-                        if (Consulta.New(int.Parse(cad1IdLb.Text),
+                        if (Consulta.New(int.Parse(conPacienteIdLb.Text),
                             0,
                             conDetDetTb.Text,
                             conPlanoTb.Text,
@@ -1025,7 +1030,7 @@ namespace AnamSys
                             conDetPgCh.Checked
                             ))
                         {
-                            MessageBox.Show("A consulta de " + cad1NomeTb.Text + " foi marcada para " + data.ToShortDateString() + " às " + conHoraCb.Text + ":" + conMinCb.Text);
+                            MessageBox.Show("A consulta de " + paciTb.Rows[0]["nome"].ToString() + " foi marcada para " + data.ToShortDateString() + " às " + conHoraCb.Text + ":" + conMinCb.Text);
                             conDetailsPn.Hide();
                             listaConsultas();
                         }
@@ -1104,7 +1109,7 @@ namespace AnamSys
         private void agendaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             mostraGb(consultasPn);
-            limpaConsulta();
+            limpaDetConsulta();
             listaConsultas();
         }
 
@@ -1138,7 +1143,8 @@ namespace AnamSys
 
         private void conTodasLb_Click(object sender, EventArgs e)
         {
-            limpaPaciente();
+            listaConsultas();
+            //limpaPaciente();
         }
 
         private void conLv_ItemActivate(object sender, EventArgs e)
@@ -1594,23 +1600,25 @@ namespace AnamSys
             }
         }
 
+        private void limpaDetConsulta()
+        {
+
+            conDataDtp.Value = DateTime.Now;
+            conHoraCb.Text = "12";
+            conMinCb.Text = "00";
+            conDetDetTb.Clear();
+            conDetIdLb.Text = db.proximo("consulta", "id");
+            conDetFinDg.Rows.Clear();
+            conDetFinDg.Rows[0].Cells[0].Value = 1;
+            conDetFinDg.Rows[0].Cells[2].Value = DateTime.Today.ToString("dd/MM/yyyy");
+            conDetFinDg.Rows[0].Cells[3].Value = "0,00";
+        }
+
         private void conDetLpLb_Click(object sender, EventArgs e)
         {
             try
             {
-                conDataDtp.Value = DateTime.Now;
-                conHoraCb.Text = "12";
-                conMinCb.Text = "00";
-                conDetParTb.Clear();
-                conDetParNup.Value = 1;
-                conDetParNup.Maximum = 1;
-                conDetParLbox.Items.Clear();
-                conDetDetTb.Clear();
-                conDetParCh.Checked = false;
-                conDetValorTb.Text = "0";
-                conDetFormaCb.Text = "";
-                conDetPgCh.Checked = false;
-                conDetIdLb.Text = db.proximo("consulta", "id");
+                limpaDetConsulta();
             }
             catch (Exception err)
             {
@@ -1619,33 +1627,12 @@ namespace AnamSys
             }
         }
 
-        private void limpaConsulta()
-        {
-            try
-            {
-                conDetIdLb.Text = db.proximo("consulta", "id");
-                conPacienteIdLb.Text = "0";
-                conDataDtp.Value = DateTime.Now;
-                conHoraCb.SelectedIndex = conDataDtp.Value.Hour;
-                conDetDetTb.Clear();
-                conDetFormaCb.Text = "Dinheiro";
-                conDetValorTb.Text = "0";
-                conDetParCh.Checked = false;
-                conDetailsPn.Hide();
-
-            }
-            catch (Exception err)
-            {
-                if (debug_mode)
-                    MessageBox.Show(err.Message);
-            }
-        }
 
         private void conNovaBt_Click(object sender, EventArgs e)
         {
             try
             {
-                limpaConsulta();
+                limpaDetConsulta();
                 if (!conDetailsPn.Visible)
                     conDetailsPn.Show();
                 else
@@ -1672,15 +1659,26 @@ namespace AnamSys
                 }
                 if (i != null)
                 {
-                    DataTable dt = db.Query("select * from consulta where id=" + i.SubItems[0].Text);
+                    DataTable dt = db.Query("select * from consulta where id=" + i.SubItems[0].Text),paciTb;
                     if (dt != null)
                     {
                         //limpaConsulta();
-                        if (carregaPaciente(int.Parse(dt.Rows[0]["paciente"].ToString())) != "")
+                        /*if (carregaPaciente(int.Parse(dt.Rows[0]["paciente"].ToString())) != "")
                         {
                             MessageBox.Show("Erro. Paciente (" + i.SubItems[1].Text + ") " + i.SubItems[1].Text + " NÃO não encontrado, favor cadastre novamente!");
                             mostraGb(cad1Pn);
                             return;
+                        }*/
+                        paciTb = db.Query("select * from paciente where id="+dt.Rows[0]["paciente"].ToString());
+                        if (paciTb!=null)
+                        {
+                            conPacienteIdLb.Text = dt.Rows[0]["paciente"].ToString();
+                            conPacienteTb.Text = i.SubItems[1].Text;
+                        }
+                        else
+                        {
+                            conPacienteIdLb.Text = "0";
+                            conPacienteTb.Text = "";
                         }
                         conDetIdLb.Text = i.SubItems[0].Text;
                         conDetDetTb.Text = dt.Rows[0]["detalhes"].ToString();
@@ -1702,18 +1700,11 @@ namespace AnamSys
                                 aux_Valor = 0;
                             if (!int.TryParse(dt.Rows[0]["forma"].ToString(), out index))
                                 index = 0;
-                            if (!bool.TryParse(dt.Rows[0]["pendencia"].ToString(), out pg))
+                            if (!bool.TryParse(dt.Rows[0]["pg"].ToString(), out pg))
                                 pg = false;
-                            conDetValorTb.Text = aux_Valor.ToString("F2");
-                            conDetFormaCb.SelectedIndex = index;
-                            conDetPgCh.Checked = pg;
                         }
                         else
                         {
-                            conDetParNup.Value = 1;
-                            conDetValorTb.Text = "0.0";
-                            conDetFormaCb.SelectedIndex = 0;
-                            conDetPgCh.Checked = false;
                         }
                         conDetailsPn.Show();
                     }
@@ -1726,136 +1717,7 @@ namespace AnamSys
             }
         }
 
-        private void conDetParLbox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                ListBox snd = (ListBox)sender;
-                conDetParNup.Value = snd.SelectedIndex+1;
-                conDetParTb.Text = snd.GetItemText(snd.SelectedItem);
-                double aux,total = 0;
-                foreach(object o in snd.Items)
-                {
-                    if (double.TryParse(o.ToString(),out aux))
-                        total+=aux;
-                }
-                conDetParTotTb.Text = total.ToString("F2");
-            }
-            catch (Exception err)
-            {
-                if (debug_mode)
-                    MessageBox.Show(err.Message);
-            }
-        }
-
-        private void conDetParTb_KeyDown(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                if (e.KeyCode == Keys.Enter)
-                {
-
-                    if (!string.IsNullOrEmpty(conDetParTb.Text) && (!string.IsNullOrWhiteSpace(conDetParTb.Text)))
-                    {
-                        conDetParTb.Text = conDetParTb.Text.Replace(',', '.');
-                        double aux,total = 0;
-                        if (!double.TryParse(conDetParTb.Text, out aux))
-                        {
-                            MessageBox.Show("Formato incorreto!");
-                            return;
-                        }
-                        else
-                        {
-                            conDetParTb.Text = aux.ToString("F2");
-                            if (conDetParLbox.Items.Count < conDetParNup.Value)
-                            {
-                                string txt = conDetParTb.Text;
-                                if (conDetParCh.Checked)
-                                    txt += " (pago)";
-                                conDetParLbox.Items.Add(txt);
-                                conDetParNup.Maximum = conDetParLbox.Items.Count+1;
-                                conDetParNup.Value++;
-                                conDetParTb.Clear();
-
-                            }
-                            else
-                            {
-                                conDetParLbox.SetSelected((int)conDetParNup.Value-1, true);
-                                MessageBox.Show("editado");
-                            }
-                        }
-                        foreach (object o in conDetParLbox.Items)
-                        {
-                            if (double.TryParse(o.ToString(), out aux))
-                                total += aux;
-                        }
-                        conDetParTotTb.Text = total.ToString("F2");
-                    }
-                    else
-                        MessageBox.Show("Formato incorreto!");
-                }
-            }
-            catch (Exception err)
-            {
-                if (debug_mode)
-                    MessageBox.Show(err.Message);
-            }
-        }
-
-
-        private void conDetParNup_ValueChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                conDetParNup.Maximum = conDetParLbox.Items.Count + 1;
-                if (conDetParNup.Value == conDetParNup.Maximum)
-                    conDetParTb.Clear();
-                else
-                {
-                    conDetParLbox.SetSelected((int)conDetParNup.Value-1, true);
-                }
-            }
-            catch (Exception err)
-            {
-                if (debug_mode)
-                    MessageBox.Show(err.Message);
-            }
-        }
-
-        private void conDetValorTb_KeyDown(object sender, KeyEventArgs e)
-        {
-
-            try
-            {
-                if (e.KeyCode == Keys.Enter)
-                {
-                    if (conDetValorTb.Text == "")
-                        conDetValorTb.Text = "0";
-                    if (!string.IsNullOrWhiteSpace(conDetValorTb.Text))
-                    {
-                        conDetValorTb.Text = conDetValorTb.Text.Replace(',', '.');
-                        double aux;
-                        if (!double.TryParse(conDetValorTb.Text, out aux))
-                        {
-                            MessageBox.Show("Formato incorreto!");
-                            return;
-                        }
-                        else
-                        {
-                            conDetValorTb.Text = aux.ToString("F2");
-                        }
-                    }
-                    else
-                        MessageBox.Show("Formato incorreto!");
-                }
-            }
-            catch (Exception err)
-            {
-                if (debug_mode)
-                    MessageBox.Show(err.Message);
-            }
-        }
-
+       
         private void cad1ProxLv_Click(object sender, EventArgs e)
         {
             try
@@ -2205,7 +2067,6 @@ namespace AnamSys
         {
             try
             {
-                limpaConsulta();
                 listaConsultas();
             }
             catch (Exception err)
@@ -3098,6 +2959,105 @@ namespace AnamSys
             Button snd = (Button)sender;
             conPacienteIdLb.Text = Uteis.getIdFromString(snd.Text).ToString();
             snd.Parent.Dispose();
+        }
+
+        private void conMinCb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox snd = (ComboBox)sender;
+            int aux;
+            if (!int.TryParse(snd.Text,out aux))
+            {
+                MessageBox.Show("Formato incorreto...");
+                snd.Text = "00";
+            }
+        }
+
+        private void conMinCb_Leave(object sender, EventArgs e)
+        {
+            ComboBox snd = (ComboBox)sender;
+            int aux;
+            if (!int.TryParse(snd.Text, out aux))
+            {
+                MessageBox.Show("Formato incorreto...");
+                snd.Text = "00";
+            }
+        }
+
+        private void conDetFinDg_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                conDetFinDg.Rows[e.RowIndex].Cells[0].Value = e.RowIndex+1;
+                switch(e.ColumnIndex)
+                {
+                    case 2:
+                        DateTime d;
+                        if (DateTime.TryParse(conDetFinDg.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString(), out d))
+                            conDetFinDg.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = d.ToString("dd/MM/yyyy");
+                        else
+                            conDetFinDg.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "";
+                        break;
+                    case 3:
+                        float f;
+                        if (float.TryParse(conDetFinDg.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString(), out f))
+                            conDetFinDg.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = f.ToString("F2");
+                        else
+                            conDetFinDg.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "0,00";
+                        break;
+                }
+                calculaTotais();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void conDetFinDg_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            try
+            {
+                conDetFinDg.Rows[e.RowIndex].Cells[0].Value = (conDetFinDg.Rows.Count).ToString();
+                conDetFinDg.Rows[e.RowIndex].Cells[3].Value = DateTime.Today.ToString("dd/MM/yyyy");
+                conDetFinDg.Rows[e.RowIndex].Cells[3].Value = "0,00";
+                calculaTotais();
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
+        }
+
+        private void calculaTotais()
+        {
+            try
+            {
+                float sub=0, total=0, aux;
+                bool auxB;
+                foreach(DataGridViewRow r in conDetFinDg.Rows)
+                {
+                    if (Convert.ToBoolean(r.Cells[4].Value) == true)
+                    {
+                        if (float.TryParse(r.Cells[3].Value.ToString(), out aux))
+                            sub += aux;
+                        else
+                            r.Cells[3].Value = "0,00";
+                    }
+                    if (float.TryParse(r.Cells[3].Value.ToString(), out aux))
+                        total += aux;
+                    else
+                        r.Cells[3].Value = "0,00";
+                }
+                conDetSubtotalLb.Text = sub.ToString("F2");
+                conDetTotalLb.Text = total.ToString("F2");
+            }
+            catch (Exception err)
+            {
+                if (debug_mode)
+                    MessageBox.Show(err.Message);
+            }
         }
         /*
          * try
