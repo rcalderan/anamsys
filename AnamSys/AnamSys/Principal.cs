@@ -999,11 +999,17 @@ namespace AnamSys
                     if (Convert.ToBoolean(r.Cells[4].Value)==true)
                     {
                         MessageBox.Show(r.Cells.Count.ToString());
-                        if ((string.IsNullOrEmpty(r.Cells[1].Value.ToString())) || (r.Cells[1].Value.ToString() == "N/A"))
+                        if (string.IsNullOrEmpty(r.Cells[1].Value.ToString()))
                         {
-                            MessageBox.Show("Informe a forma de pagamento primriro.");
+                            MessageBox.Show("Informe a forma de pagamento primeiro.");
                             return;
                         }
+                        else
+                             if (r.Cells[1].Value.ToString() == "N/A")
+                             {
+                                 MessageBox.Show("Informe a forma de pagamento primeiro.");
+                                 return;
+                             }
                     }
                 }
                 DataTable paciTb = db.Query("select id,nome from paciente where id=" + conPacienteIdLb.Text);
@@ -1012,24 +1018,33 @@ namespace AnamSys
                     DataTable dt = db.Query("select id from consulta where id=" + conDetIdLb.Text);
                     if (null == dt)
                     {
-                        double val;
-                        if (!double.TryParse(conDetValorTb.Text, out val))
-                            val = 0;
+                        double val,sum=0;
                         DateTime data = new DateTime(conDataDtp.Value.Year, conDataDtp.Value.Month, conDataDtp.Value.Day, int.Parse(conHoraCb.Text), int.Parse(conMinCb.Text), 0);
-                        if (conDetPgCh.Checked)
-                            data = DateTime.Now;
-                        if (Consulta.New(int.Parse(conPacienteIdLb.Text),
+                        
+                        DataGridViewCheckBoxCell chk;// = roow.Cells[0] as DataGridViewCheckBoxCell;
+                        DataGridViewComboBoxCell cb;
+                        foreach (DataGridViewRow r in conDetFinDg.Rows)
+                        {
+                            chk = r.Cells[4] as DataGridViewCheckBoxCell;
+                            cb = r.Cells[1] as DataGridViewComboBoxCell;
+                            if (Convert.ToBoolean(r.Cells[4].Value) == true)
+                            {
+                                if (double.TryParse(r.Cells[3].Value.ToString(), out val))
+                                    sum += val;
+                                else
+                                    r.Cells[3].Value = "0.00";
+                            }
+                            MessageBox.Show(cb.Value.ToString());
+                        }
+                        /*Consulta last = Consulta.New(int.Parse(conPacienteIdLb.Text),
                             0,
                             conDetDetTb.Text,
                             conPlanoTb.Text,
                             data,
-                            true,
-                            val,
-                            0,
-                            Financeiro.FormaDePagamento.GetFromId(conDetFormaCb.SelectedIndex),
-                            conDetPgCh.Checked
-                            ))
+                            true);
+                        if (last!=null)
                         {
+
                             MessageBox.Show("A consulta de " + paciTb.Rows[0]["nome"].ToString() + " foi marcada para " + data.ToShortDateString() + " às " + conHoraCb.Text + ":" + conMinCb.Text);
                             conDetailsPn.Hide();
                             listaConsultas();
@@ -1040,10 +1055,11 @@ namespace AnamSys
                             return;
                         }
                         listaConsultas();
+                         * */
                     }
                     else
                     {//atualizar consulta
-                        DateTime data = new DateTime(conDataDtp.Value.Year, conDataDtp.Value.Month, conDataDtp.Value.Day, int.Parse(conHoraCb.Text), int.Parse(conMinCb.Text), 0);
+                        /*DateTime data = new DateTime(conDataDtp.Value.Year, conDataDtp.Value.Month, conDataDtp.Value.Day, int.Parse(conHoraCb.Text), int.Parse(conMinCb.Text), 0);
                         Consulta novaConsulta = Consulta.Load(int.Parse(dt.Rows[0]["id"].ToString())), old = Consulta.Load(int.Parse(dt.Rows[0]["id"].ToString()));
 
                         novaConsulta.set_Data(data);
@@ -1069,6 +1085,7 @@ namespace AnamSys
                                 MessageBox.Show("erro aou faturar...");
                             }
                         }
+                         * */
                     }
                     avancaMes(0);
                 }
@@ -1078,7 +1095,6 @@ namespace AnamSys
                     MessageBox.Show("Paciente não encontrado!");
                     return;
                 }
-
             }
             catch (Exception erro)
             {
@@ -3019,6 +3035,7 @@ namespace AnamSys
             try
             {
                 conDetFinDg.Rows[e.RowIndex].Cells[0].Value = (conDetFinDg.Rows.Count).ToString();
+                DataGridViewComboBoxCell cb = conDetFinDg.Rows[e.RowIndex].Cells[3].Cells[1] as DataGridViewComboBoxCell;
                 conDetFinDg.Rows[e.RowIndex].Cells[3].Value = DateTime.Today.ToString("dd/MM/yyyy");
                 conDetFinDg.Rows[e.RowIndex].Cells[3].Value = "0,00";
                 calculaTotais();

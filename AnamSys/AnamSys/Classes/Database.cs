@@ -9,7 +9,7 @@ namespace AnamSys
 {
     class Database
     {
-        private string conectString = @"Data Source=anamsys;Version=3;";
+        private string conectString = @"Data Source=anamsys;Version=3;foreign keys=true;";
 
         private SQLiteConnection conexao;
 
@@ -116,9 +116,9 @@ namespace AnamSys
     class DataBaseCheck : Database
     {
         private static Dictionary<string, string> sqlite_tables = new Dictionary<string, string>(){
-            {"consulta","CREATE TABLE 'consulta' ('id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 'paciente' INTEGER NOT NULL,'hoje' DATETIME NOT NULL DEFAULT CURRENT_DATE,'detalhes' TEXT,'plano' TEXT, 'anamnese' INTEGER, 'ativa' INTEGER NOT NULL DEFAULT 1,'data' DATETIME)"},
             {"paciente","CREATE TABLE 'paciente' ('id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 'nome' TEXT, 'rg' TEXT, 'cpf' TEXT, 'endereco' TEXT, 'bairro' TEXT, 'cidade' TEXT, 'uf' TEXT,'nascimento' DATETIME,'obs' TEXT, 'hoje' DATETIME, 'plano' TEXT DEFAULT '', 'avatar' TEXT DEFAULT 'avatar.png')"},
-            {"fatura","CREATE TABLE 'fatura' ('id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'consulta' INTEGER,'data' DATETIME, 'valor' REAL, 'forma' NUMERIC, 'parcela' INTEGER, 'pg' BOOLEAN, 'hoje' DATETIME)"}
+            {"consulta","CREATE TABLE 'consulta' ('id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 'paciente' INTEGER NOT NULL,'hoje' DATETIME NOT NULL DEFAULT CURRENT_DATE,'detalhes' TEXT,'plano' TEXT, 'anamnese' INTEGER, 'ativa' INTEGER NOT NULL DEFAULT 1,'data' DATETIME, FOREIGN KEY(paciente) REFERENCES paciente(id))"},
+            {"fatura","CREATE TABLE 'fatura' ('id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'consulta' INTEGER,'data' DATETIME, 'valor' REAL, 'forma' NUMERIC, 'parcela' INTEGER, 'pg' BOOLEAN, 'hoje' DATETIME, FOREIGN KEY(consulta) REFERENCES consulta(id))"}
         };
 
         private static Dictionary<string, string> sqlite_FirstInsert = new Dictionary<string, string>(){

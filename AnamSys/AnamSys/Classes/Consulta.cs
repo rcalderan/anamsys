@@ -45,6 +45,37 @@ namespace AnamSys
         {
         }
 
+        public static Consulta LoadLast()
+        {
+            try
+            {
+                Database db = new Database();
+                if (db.getLastState())
+                {
+                    Consulta c = new Consulta();
+                    System.Data.DataTable dt = db.Query("select * from consulta ORDER BY id (desc) LIMIT 1");
+                    if (dt != null)
+                    {
+                        c.id = (int)dt.Rows[0]["id"];
+                        c.set_Anamnese(Convert.ToInt32(dt.Rows[0]["anamnese"]));
+                        c.set_Paciente(Convert.ToInt32(dt.Rows[0]["paciente"]));
+                        c.set_Detalhes(dt.Rows[0]["detalhes"].ToString());
+                        c.set_Plano(dt.Rows[0]["plano"].ToString());
+                        c.set_Hoje(Convert.ToDateTime(dt.Rows[0]["hoje"]));
+                        c.set_Data(Convert.ToDateTime(dt.Rows[0]["data"]));
+                        c.set_Estado(bool.Parse(dt.Rows[0]["ativa"].ToString()));
+                        return c;
+                    }
+                    else
+                        return null;
+                }
+                else
+                    return null;
+            }
+            catch { return null; }
+
+        }
+
         public static Consulta Load(int id)
         {
             try
@@ -99,7 +130,7 @@ namespace AnamSys
             this.ativa = estadoDaConsulta;
         }
 
-        public static bool New(int paciente, int anamnese, string detalhes, string plano, DateTime data, bool estadoDaConsulta,double valor,int parcela,Financeiro.FormaDePagamento forma, bool pg)
+        public static Consulta New(int paciente, int anamnese, string detalhes, string plano, DateTime data, bool estadoDaConsulta)
         {
             try
             {
@@ -111,28 +142,14 @@ namespace AnamSys
                         ativa = "1";
                     string query = "INSERT INTO consulta ('id','paciente','detalhes','plano','anamnese','data','hoje','ativa') VALUES (NULL," + paciente + ",'" + detalhes + "','" + plano + "'," + anamnese + ",'" + data.ToString("yyyy-MM-dd HH:mm:ss") + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "',"+ativa+")";
                     if ("" != conexao.Comando(query))
-                        return false;
+                        return null;
                     else
-                    {// faturar
-                        System.Data.DataTable dt = conexao.Query("Select id from consulta where paciente="+paciente.ToString()+" order by id desc limit 1");
-                        if (dt != null)
-                        {
-                            if (!Fatura.New(int.Parse(dt.Rows[0]["id"].ToString()), parcela, data, valor, forma, pg))
-                            {//////////////
-                                conexao.Comando("delete from consulta where id=" + dt.Rows[0]["id"].ToString());
-                                return false;
-                            }
-                            else
-                                return true;
-                        }
-                        else 
-                            return false;
-                    }
+                        return Consulta.LoadLast();
                 }
                 else
-                    return false;
+                    return null;
             }
-            catch { return false; }
+            catch { return null; }
 
         }
 
